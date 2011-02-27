@@ -11,7 +11,7 @@ use aura\signal\Manager as SignalManager;
 
 /**
  * 
- * The CLI equivalent of a page controller to perform the command action.
+ * The CLI equivalent of a page controller to perform a command.
  * 
  * @package aura.cli
  * 
@@ -20,7 +20,8 @@ abstract class Controller
 {
     /**
      * 
-     * A Getopt object for the Command.
+     * A Getopt object for the Controller; retains the short and long options
+     * passed at the command line.
      * 
      * @var aura\cli\Getopt
      * 
@@ -38,7 +39,9 @@ abstract class Controller
     
     /**
      * 
-     * Should we be strict about which options are passed in?
+     * Should Getopt be strict about how options are processed?  In strict
+     * mode, passing an undefined option will throw an exception; in
+     * non-strict, it will not.
      * 
      * @var bool
      * 
@@ -47,7 +50,7 @@ abstract class Controller
     
     /**
      * 
-     * The numeric parameters passed to the Command.
+     * The positional (numeric) arguments passed at the command line.
      * 
      * @var array
      * 
@@ -89,8 +92,8 @@ abstract class Controller
     
     /**
      * 
-     * Passes the Context arguments to $getopt and retains the numeric
-     * parameters in $params.
+     * Passes the Context arguments to `$getopt` and retains the numeric
+     * parameters in `$params`.
      * 
      * @return void
      * 
@@ -104,15 +107,18 @@ abstract class Controller
     
     /**
      * 
-     * Executes the Command.
+     * Executes the Controller.  In order, it does these things:
      * 
-     * - signals 'pre_action'
-     * - calls action()
-     * - signals 'post_action'
+     * - signals `'pre_action'`
+     * - calls `action()`
+     * - signals `'post_action'`
+     * - resets the terminal to normal colors
      * 
      * @signal 'pre_action'
      * 
      * @signal 'post_action'
+     * 
+     * @see action()
      * 
      * @return void
      * 
@@ -130,9 +136,9 @@ abstract class Controller
     
     /**
      * 
-     * Runs before the action() method.
+     * Runs before `action()` as part of the `'pre_action'` signal.
      * 
-     * @return void
+     * @return mixed
      * 
      */
     public function preAction()
@@ -141,7 +147,7 @@ abstract class Controller
     
     /**
      * 
-     * The main logic for the Command.
+     * The main logic for the Controller.
      * 
      * @return void
      * 
@@ -150,9 +156,9 @@ abstract class Controller
     
     /**
      * 
-     * Runs after the action() method.
+     * Runs after `action()` as part of the `'post_action'` signal.
      * 
-     * @return void
+     * @return mixed
      * 
      */
     public function postAction()

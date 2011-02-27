@@ -1,5 +1,20 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace aura\cli;
+
+/**
+ * 
+ * Defines a single command-line option.
+ * 
+ * @package aura.cli
+ * 
+ */
 class Option
 {
     /**
@@ -64,7 +79,7 @@ class Option
      * @var string
      * 
      */
-    protected $param = Option::PARAM_OPTIONAL;
+    protected $param = self::PARAM_OPTIONAL;
     
     /**
      * 

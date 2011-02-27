@@ -101,19 +101,52 @@ class Context
         return $this->getValue('server', $key, $alt);
     }
     
+    /**
+     * 
+     * Retrieves an **unfiltered** value by position from the `$argv` 
+     * property, or an alternate default value if that position does not
+     * exist.
+     * 
+     * @param int $key The `$argv` positional key to retrieve the value of.
+     * 
+     * @param string $alt The value to return if the key does not exist.
+     * 
+     * @return mixed The value of $server[$key], or the alternate default
+     * value.
+     * 
+     */
     public function getArgv($key = null, $alt = null)
     {
         return $this->getValue('argv', $key, $alt);
     }
     
+    /**
+     * 
+     * Shifts the first value off the `$argv` property and returns it. Note
+     * that this modifies the `$argv` property; if you need the original,
+     * unmodified arguments, call `server('argv')`.
+     * 
+     * @return mixed The value shifted off the beginning of the `$argv` 
+     * property.
+     * 
+     */
     public function shiftArgv()
     {
         return array_shift($this->argv);
     }
     
-    protected function setArgv(array $val)
+    /**
+     * 
+     * Sets the `$argv` property.
+     * 
+     * @param array $argv The new value of `$argv`.
+     * 
+     * @return void
+     * 
+     */
+    protected function setArgv(array $argv)
     {
-        $this->argv = $val;
+        $this->argv = $argv;
     }
     
     /**

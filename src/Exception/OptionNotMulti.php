@@ -10,7 +10,7 @@ namespace aura\cli;
 
 /**
  * 
- * The option requires that no parameter be present.
+ * The option does not allow multiple values.
  * 
  * @package aura.cli
  * 

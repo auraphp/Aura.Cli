@@ -10,9 +10,9 @@ namespace aura\cli;
 
 /**
  * 
- * The specified command was not found.
+ * Generic ControllerFactory exception.
  * 
  * @package aura.cli
  * 
  */
-class Exception_CommandNotFound extends Exception {}
+class Exception_ControllerFactory extends Exception {}

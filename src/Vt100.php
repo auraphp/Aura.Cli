@@ -10,17 +10,15 @@ namespace aura\cli;
 
 /**
  * 
- * Text formatting for VT00 terminals.
+ * Text formatting for VT100 terminals.
  * 
  * @package aura.cli
  * 
  * @author Clay Loveless <clay@killersoft.com>
  * 
- * @author Paul M. Jones <pmjones@auraphp.com>
+ * @author Paul M. Jones <pmjones@paul-m-jones.com>
  * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
- * @version $Id: Vt100.php 4622 2010-06-30 12:53:52Z pmjones $
  * 
  */
 class Vt100
@@ -30,14 +28,10 @@ class Vt100
      * Array of format conversions for use on a variety of pre-set console
      * style combinations.
      * 
-     * Based on ANSI VT100 Color/Style Codes, according to the
-     * [VT100 User Guide][1] and the
-     * [ANSI/VT100 Terminal Control reference][2]. Inspired by
-     * [PEAR Console_Color][3].
-     * 
-     * [1]: http://vt100.net/docs/vt100-ug
-     * [2]: http://www.termsys.demon.co.uk/vtansi.htm
-     * [3]: http://pear.php.net/Console_Color
+     * Based on `ANSI VT100 Color/Style Codes` according to the
+     * [VT100 User Guide](http://vt100.net/docs/vt100-ug) and the
+     * [ANSI/VT100 Terminal Control reference](http://www.termsys.demon.co.uk/vtansi.htm).
+     * Inspired by [PEAR Console_Color](http://pear.php.net/Console_Color).
      * 
      * @var array
      * 

@@ -207,15 +207,6 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($actual);
     }
     
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testLoad_invalid()
-    {
-        $this->testInit();
-        $this->getopt->load(true);
-    }
-    
     public function testLoad_noOptions()
     {
         $this->testInit();

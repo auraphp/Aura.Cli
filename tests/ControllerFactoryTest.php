@@ -64,9 +64,9 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance()
     {
-        $controllers = array('mock' => 'aura\cli\MockController');
+        $map = array('mock' => 'aura\cli\MockController');
         $not_found = null;
-        $factory = new ControllerFactory($this->forge, $controllers, $not_found);
+        $factory = new ControllerFactory($this->forge, $map, $not_found);
         
         $controller = $factory->newInstance('mock');
         $this->assertType('aura\cli\MockController', $controller);
@@ -74,9 +74,9 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testNewInstance_notFound()
     {
-        $controllers = array();
+        $map = array();
         $not_found = 'aura\cli\MockController';
-        $factory = new ControllerFactory($this->forge, $controllers, $not_found);
+        $factory = new ControllerFactory($this->forge, $map, $not_found);
         
         $controller = $factory->newInstance('mock');
         $this->assertType('aura\cli\MockController', $controller);
@@ -87,9 +87,9 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance_notFoundAndNoDefault()
     {
-        $controllers = array();
+        $map = array();
         $not_found = null;
-        $factory = new ControllerFactory($this->forge, $controllers, $not_found);
+        $factory = new ControllerFactory($this->forge, $map, $not_found);
         $controller = $factory->newInstance('mock');
     }
 }

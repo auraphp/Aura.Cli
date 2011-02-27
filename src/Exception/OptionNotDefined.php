@@ -10,7 +10,7 @@ namespace aura\cli;
 
 /**
  * 
- * Generic getopt exception.
+ * Asked for an option that is not defined.
  * 
  * @package aura.cli
  * 

@@ -9,7 +9,7 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OptionFactory
      */
-    protected $object;
+    protected $factory;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -18,7 +18,7 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->object = new OptionFactory();
+        $this->factory = new OptionFactory();
     }
     
     /**
@@ -35,9 +35,12 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $params = array(
+            'name' => 'foo',
         );
+        
+        $option = $this->factory->newInstance($params);
+        
+        $this->assertType('aura\cli\Option', $option);
     }
 }

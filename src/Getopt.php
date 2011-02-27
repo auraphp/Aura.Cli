@@ -18,12 +18,20 @@ namespace aura\cli;
 class Getopt
 {
     /**
+     * 
      * If an option is passed that is not defined, throw an exception.
+     * 
+     * @const bool
+     * 
      */
     const STRICT = true;
     
     /**
+     * 
      * Do not throw exceptions when undefined options are passed.
+     * 
+     * @const bool
+     * 
      */
     const NON_STRICT = false;
     
@@ -77,7 +85,7 @@ class Getopt
     
     /**
      * 
-     * Present option values as magic readonly properties.
+     * Make Option values available as magic readonly properties.
      * 
      * @param string $key The option name.
      * 
@@ -98,6 +106,9 @@ class Getopt
      * 
      * @param array $opts An array of key-value pairs where the key is the
      * option name and the value is the option spec.
+     * 
+     * @param bool $strict Initialize in strict (true) or non-strict (false)
+     * mode?
      * 
      * @return void
      * 
@@ -121,7 +132,7 @@ class Getopt
     
     /**
      * 
-     * Returns all the option definitions.
+     * Returns all the Option definition objects.
      * 
      * @return array An array of Option objects.
      * 
@@ -133,7 +144,7 @@ class Getopt
     
     /**
      * 
-     * Returns a single option definition by its property name.
+     * Returns a single Option definition object by its property name.
      * 
      * @var string $key The property name of the option.
      * 
@@ -153,7 +164,7 @@ class Getopt
     
     /**
      * 
-     * Returns an array of all option names and their values.
+     * Returns an array of all Option names and their values.
      * 
      * @return array
      * 
@@ -169,7 +180,7 @@ class Getopt
     
     /**
      * 
-     * Returns the value of a single option by name.
+     * Returns the value of a single Option by name.
      * 
      * @param string $name The option name to get a value for.
      * 
@@ -198,7 +209,7 @@ class Getopt
     
     /**
      * 
-     * Returns a single option definition by its long-format name.
+     * Returns a single Option definition object by its long-format name.
      * 
      * @var string $key The long-format name of the option.
      * 
@@ -220,7 +231,7 @@ class Getopt
     
     /**
      * 
-     * Returns a single option definition by its short-format name.
+     * Returns a single Option definition object by its short-format name.
      * 
      * @var string $key The long-format name of the option.
      * 
@@ -242,21 +253,17 @@ class Getopt
     
     /**
      * 
-     * Loads option values from an argument array, placing option values
+     * Loads Option values from an argument array, placing option values
      * in the defined Option objects and placing non-option params in a 
-     * $params variable.
+     * `$params` variable.
      * 
      * @param array $argv An argument array, typically from $_SERVER['argv'].
      * 
      * @return void
      * 
      */
-    public function load($argv)
+    public function load(array $argv)
     {
-        if (! is_array($argv)) {
-            throw new \InvalidArgumentException;
-        }
-        
         // hold onto the argv source
         $this->argv = $argv;
         
@@ -297,12 +304,11 @@ class Getopt
     
     /**
      * 
-     * Parse a long-form option.
+     * Parses a long-form option.
      * 
-     * @param string $spec The $argv element, e.g. "--foo" or "--bar=baz".
+     * @param string $spec The `$argv` element, e.g. "--foo" or "--bar=baz".
      * 
-     * @return array An associative array where the key is the option name and
-     * the value is the option value.
+     * @return void
      * 
      */
     protected function loadLong($spec)
@@ -346,14 +352,11 @@ class Getopt
     
     /**
      * 
-     * Parse a short-form option (or cluster of options).
+     * Parses a short-form option (or cluster of options).
      * 
-     * @param string $arg The $argv element, e.g. "-f" or "-fbz".
+     * @param string $arg The `$argv` element, e.g. "-f" or "-fbz".
      * 
-     * @param bool $cluster This option is part of a cluster.
-     * 
-     * @return array An associative array where the key is the option name and
-     * the value is the option value.
+     * @return void
      * 
      */
     protected function loadShort($spec)
@@ -409,7 +412,7 @@ class Getopt
     
     /**
      * 
-     * Parse a cluster of short options.
+     * Parses a cluster of short options.
      * 
      * @param string $spec The short-option cluster (e.g. "-abcd").
      * 
