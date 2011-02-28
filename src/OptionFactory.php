@@ -10,7 +10,7 @@ namespace aura\cli;
 
 /**
  * 
- * Factories Option objects.
+ * A factory to create Option objects.
  * 
  * @package aura.cli
  * 

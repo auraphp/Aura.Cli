@@ -11,7 +11,7 @@ use aura\di\ForgeInterface as ForgeInterface;
 
 /**
  * 
- * Factories a Controller object.
+ * A factory to create Controller objects.
  * 
  * @package aura.cli
  * 
