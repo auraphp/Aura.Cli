@@ -6,11 +6,11 @@ use aura\signal\ResultFactory;
 use aura\signal\ResultCollection;
 
 /**
- * Test class for Controller.
+ * Test class for Command.
  */
-class ControllerTest extends \PHPUnit_Framework_TestCase
+class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    protected function newMockController($argv = array())
+    protected function newMockCommand($argv = array())
     {
         // standard input/output
         $stdin  = fopen('php://memory', 'r');
@@ -24,28 +24,28 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $option_factory = new OptionFactory();
         $getopt = new Getopt($option_factory);
         
-        // controller
+        // Command
         $_SERVER['argv'] = $argv;
         $context = new Context;
-        return new MockController($context, $stdio, $getopt, $signal);
+        return new MockCommand($context, $stdio, $getopt, $signal);
     }
     
     public function testExec()
     {
         $expect = array('foo', 'bar', 'baz', 'dib');
-        $controller = $this->newMockController($expect);
-        $controller->exec();
+        $Command = $this->newMockCommand($expect);
+        $Command->exec();
         
         // did the params get passed in?
-        $actual = $controller->params;
+        $actual = $Command->params;
         $this->assertSame($expect, $actual);
     }
     
     public function testExec_hooks()
     {
-        $controller = $this->newMockController();
-        $controller->exec();
-        $this->assertTrue($controller->_pre_action);
-        $this->assertTrue($controller->_post_action);
+        $Command = $this->newMockCommand();
+        $Command->exec();
+        $this->assertTrue($Command->_pre_action);
+        $this->assertTrue($Command->_post_action);
     }
 }

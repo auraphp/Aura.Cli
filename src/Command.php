@@ -11,16 +11,16 @@ use aura\signal\Manager as SignalManager;
 
 /**
  * 
- * The CLI equivalent of a page controller to perform a command.
+ * The CLI equivalent of a page-controller to perform a single action.
  * 
  * @package aura.cli
  * 
  */
-abstract class Controller
+abstract class Command
 {
     /**
      * 
-     * A Getopt object for the Controller; retains the short and long options
+     * A Getopt object for the Command; retains the short and long options
      * passed at the command line.
      * 
      * @var aura\cli\Getopt
@@ -56,6 +56,16 @@ abstract class Controller
      * 
      */
     protected $params = array();
+    
+    /**
+     * 
+     * When set to `true` before `action()` is called, the `action()` will not
+     * be called after all.
+     * 
+     * @var bool
+     * 
+     */
+    protected $skip_action = false;
     
     /**
      * 
@@ -107,7 +117,7 @@ abstract class Controller
     
     /**
      * 
-     * Executes the Controller.  In order, it does these things:
+     * Executes the Command.  In order, it does these things:
      * 
      * - signals `'pre_action'`
      * - calls `action()`
@@ -126,12 +136,38 @@ abstract class Controller
     public function exec()
     {
         $this->signal->send($this, 'pre_action');
-        $this->action();
+        if (! $this->isSkipAction()) {
+            $this->action();
+        }
         $this->signal->send($this, 'post_action');
         
         // return terminal output to normal colors
         $this->stdio->out("%n");
         $this->stdio->err("%n");
+    }
+    
+    /**
+     * 
+     * Stops `exec()` from calling `action()` if it has not already done so.
+     * 
+     * @return void
+     * 
+     */
+    public function skipAction()
+    {
+        $this->skip_action = true;
+    }
+    
+    /**
+     * 
+     * Should the call to `action()` be skipped?
+     * 
+     * @return bool
+     * 
+     */
+    public function isSkipAction()
+    {
+        return (bool) $this->skip_action;
     }
     
     /**
@@ -147,7 +183,7 @@ abstract class Controller
     
     /**
      * 
-     * The main logic for the Controller.
+     * The main logic for the Command.
      * 
      * @return void
      * 

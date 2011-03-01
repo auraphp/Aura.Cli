@@ -10,7 +10,7 @@ use aura\signal\ResultCollection;
 /**
  * Test class for Dispatcher.
  */
-class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
+class CommandFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -41,7 +41,7 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
         // set up the forge
         $this->forge = new Forge(new Config);
         $params = $this->forge->getConfig()->getParams();
-        $params['aura\cli\Controller'] = array(
+        $params['aura\cli\Command'] = array(
             'context' => $context,
             'stdio'   => $stdio,
             'getopt'  => $getopt,
@@ -64,22 +64,22 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance()
     {
-        $map = array('mock' => 'aura\cli\MockController');
+        $map = array('mock' => 'aura\cli\MockCommand');
         $not_found = null;
-        $factory = new ControllerFactory($this->forge, $map, $not_found);
+        $factory = new CommandFactory($this->forge, $map, $not_found);
         
-        $controller = $factory->newInstance('mock');
-        $this->assertType('aura\cli\MockController', $controller);
+        $Command = $factory->newInstance('mock');
+        $this->assertType('aura\cli\MockCommand', $Command);
     }
     
     public function testNewInstance_notFound()
     {
         $map = array();
-        $not_found = 'aura\cli\MockController';
-        $factory = new ControllerFactory($this->forge, $map, $not_found);
+        $not_found = 'aura\cli\MockCommand';
+        $factory = new CommandFactory($this->forge, $map, $not_found);
         
-        $controller = $factory->newInstance('mock');
-        $this->assertType('aura\cli\MockController', $controller);
+        $Command = $factory->newInstance('mock');
+        $this->assertType('aura\cli\MockCommand', $Command);
     }
     
     /**
@@ -89,7 +89,7 @@ class ControllerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $map = array();
         $not_found = null;
-        $factory = new ControllerFactory($this->forge, $map, $not_found);
-        $controller = $factory->newInstance('mock');
+        $factory = new CommandFactory($this->forge, $map, $not_found);
+        $command = $factory->newInstance('mock');
     }
 }

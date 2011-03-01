@@ -10,9 +10,9 @@ namespace aura\cli;
 
 /**
  * 
- * Generic ControllerFactory exception.
+ * Generic CommandFactory exception.
  * 
  * @package aura.cli
  * 
  */
-class Exception_ControllerFactory extends Exception {}
+class Exception_CommandFactory extends Exception {}

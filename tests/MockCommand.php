@@ -1,8 +1,8 @@
 <?php
 namespace aura\cli;
-use aura\cli\Controller as Controller;
+use aura\cli\Command as Command;
 
-class MockController extends Controller
+class MockCommand extends Command
 {
     private $_action;
     

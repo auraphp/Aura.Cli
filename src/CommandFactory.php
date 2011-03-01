@@ -11,12 +11,12 @@ use aura\di\ForgeInterface as ForgeInterface;
 
 /**
  * 
- * A factory to create Controller objects.
+ * A factory to create Command objects.
  * 
  * @package aura.cli
  * 
  */
-class ControllerFactory
+class CommandFactory
 {
     /**
      * 
@@ -30,7 +30,7 @@ class ControllerFactory
     /**
      * 
      * A map of names (called at the command line) to their corresponding
-     * Controller classes.
+     * Command classes.
      * 
      * @var array
      * 
@@ -39,7 +39,7 @@ class ControllerFactory
     
     /**
      * 
-     * A Controller class to use when no class exists for a mapped name.
+     * A Command class to use when no class exists for a mapped name.
      * 
      * @var string
      * 
@@ -48,13 +48,13 @@ class ControllerFactory
     
     /**
      * 
-     * A Controller class to use when no class exists for a mapped name.
+     * A Command class to use when no class exists for a mapped name.
      * 
      * @param ForgeInterface $forge A Forge to create objects.
      * 
-     * @param array $map A map of command names to controller classes.
+     * @param array $map A map of command names to Command classes.
      * 
-     * @param string $not_found A Controller class to use when no class
+     * @param string $not_found A Command class to use when no class
      * can be found for a mapped name.
      * 
      */
@@ -70,14 +70,14 @@ class ControllerFactory
     
     /**
      * 
-     * Creates and returns a Controller class based on a command name.
+     * Creates and returns a Command class based on a command name.
      * 
-     * @param string $name A command name that maps to a Controller class;
+     * @param string $name A command name that maps to a Command class;
      * if this name is not found in the map, use the `$not_found` class.
      * 
-     * @return Controller
+     * @return Command
      * 
-     * @throws Exception_ControllerFactory when no mapped class can be found
+     * @throws Exception_CommandFactory when no mapped class can be found
      * and no `$not_found` class is specified.
      * 
      */
@@ -88,9 +88,14 @@ class ControllerFactory
         } elseif ($this->not_found) {
             $class = $this->not_found;
         } else {
-            throw new Exception_ControllerFactory("No class found for '$name' and no 'not-found' controller specified.");
+            throw new Exception_CommandFactory("No class found for '$name' and no 'not-found' Command specified.");
         }
         
         return $this->forge->newInstance($class);
+    }
+    
+    public function map($name, $class)
+    {
+        $this->map[$name] = $class;
     }
 }

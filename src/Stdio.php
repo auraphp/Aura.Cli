@@ -114,6 +114,24 @@ class Stdio {
     
     /**
      * 
+     * Gets user input from the command line, optionally after sending a
+     * prompt to standard output.
+     * 
+     * @return void
+     * 
+     */
+    public function in()
+    {
+		return rtrim(fgets($this->stdin), PHP_EOL);
+    }
+    
+    public function inln()
+    {
+        return fgets($this->stdin);
+    }
+    
+    /**
+     * 
      * Prints text to standard output via the Vt100 formatter **without** 
      * a trailing newline.
      * 

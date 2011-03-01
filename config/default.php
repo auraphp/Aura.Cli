@@ -6,11 +6,11 @@
 // Getopt
 $di->params['aura\cli\Getopt']['option_factory'] = $di->lazyNew('aura\cli\OptionFactory');
 
-// Controller
-$di->params['aura\cli\Controller']['context'] = $di->lazyGet('cli_context');
-$di->params['aura\cli\Controller']['stdio']   = $di->lazyGet('cli_stdio');
-$di->params['aura\cli\Controller']['getopt']  = $di->lazyNew('aura\cli\Getopt');
-$di->params['aura\cli\Controller']['signal']  = $di->lazyGet('signal_manager');
+// Command
+$di->params['aura\cli\Command']['context'] = $di->lazyGet('cli_context');
+$di->params['aura\cli\Command']['stdio']   = $di->lazyGet('cli_stdio');
+$di->params['aura\cli\Command']['getopt']  = $di->lazyNew('aura\cli\Getopt');
+$di->params['aura\cli\Command']['signal']  = $di->lazyGet('signal_manager');
 
 /**
  * Dependency services.
@@ -29,8 +29,8 @@ $di->set('cli_stdio', function() use ($di) {
     ));
 });
 
-$di->set('cli_controller_factory', function() use ($di) {
-    return $di->newInstance('aura\cli\ControllerFactory', array(
+$di->set('cli_command_factory', function() use ($di) {
+    return $di->newInstance('aura\cli\CommandFactory', array(
         'forge'  => $di->getForge(),
     ));
 });

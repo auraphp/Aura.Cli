@@ -2,7 +2,7 @@
 namespace aura\cli;
 use aura\cli\Stdio as Stdio;
 use aura\cli\Getopt as Getopt;
-class MockControllerWrong extends MockController
+class MockCommandWrong extends MockCommand
 {
     public function __construct(
         Stdio $stdio,
