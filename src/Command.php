@@ -93,8 +93,10 @@ abstract class Command
         $this->signal  = $signal;
         
         // handle these signals
+        $this->signal->handler($this, 'pre_exec', array($this, 'preExec'));
         $this->signal->handler($this, 'pre_action', array($this, 'preAction'));
         $this->signal->handler($this, 'post_action', array($this, 'postAction'));
+        $this->signal->handler($this, 'post_exec', array($this, 'postExec'));
         
         // load the getopt and params properties
         $this->loadGetoptParams();
@@ -119,14 +121,24 @@ abstract class Command
      * 
      * Executes the Command.  In order, it does these things:
      * 
+     * - signals `'pre_exec'`
+     * 
      * - signals `'pre_action'`
-     * - calls `action()`
-     * - signals `'post_action'`
+     * 
+     * - is the action is not to be skipped, calls `action()` and signals 
+     *   `'post_action'`
+     * 
+     * - signals `'post_exec'`
+     * 
      * - resets the terminal to normal colors
+     * 
+     * @signal 'pre_exec'
      * 
      * @signal 'pre_action'
      * 
      * @signal 'post_action'
+     * 
+     * @signal 'post_exec'
      * 
      * @see action()
      * 
@@ -135,11 +147,13 @@ abstract class Command
      */
     public function exec()
     {
+        $this->signal->send($this, 'pre_exec');
         $this->signal->send($this, 'pre_action');
         if (! $this->isSkipAction()) {
             $this->action();
+            $this->signal->send($this, 'post_action');
         }
-        $this->signal->send($this, 'post_action');
+        $this->signal->send($this, 'post_exec');
         
         // return terminal output to normal colors
         $this->stdio->out("%n");
@@ -172,6 +186,17 @@ abstract class Command
     
     /**
      * 
+     * Runs before `action()` as part of the `'pre_exec'` signal.
+     * 
+     * @return mixed
+     * 
+     */
+    public function preExec()
+    {
+    }
+    
+    /**
+     * 
      * Runs before `action()` as part of the `'pre_action'` signal.
      * 
      * @return mixed
@@ -198,6 +223,17 @@ abstract class Command
      * 
      */
     public function postAction()
+    {
+    }
+    
+    /**
+     * 
+     * Runs after `action()` as part of the `'post_exec'` signal.
+     * 
+     * @return mixed
+     * 
+     */
+    public function postExec()
     {
     }
 }

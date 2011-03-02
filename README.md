@@ -1,106 +1,7 @@
 Introduction
 ============
 
-The Aura CLI package provides a system for creating and executing CLI `Command` objects.
-
-
-Getting Started
-===============
-
-Create an Invoking Script
--------------------------
-
-Before you can run a `Command` object, you need what we will call an invoking script.  It is the equivalent of a boostrap script in a web environment. The invoking script is what you run from the command line; it sets up the execution environment, creates the `Command` object and executes it.
-
-For example, the following code will instantiate a `vendor\package\ExampleCommand` class and execute it.  This is a little long; it it provided as an example of the full manual setup for a `Command`. In regular use, you would provide these services via a dependency injector or other mechanism.
-
-    <?php
-    /** 
-     * Populate and register your autoloader.
-     */
-    // ...
-    
-    /**
-     * Classes we need to use.
-     */
-    use aura\cli\Context;
-    use aura\cli\Stdio;
-    use aura\cli\Getopt;
-    use aura\signal\Manager;
-    use aura\signal\HandlerFactory;
-    use aura\signal\ResultFactory;
-    use aura\signal\ResultCollection;
-    
-    /**
-     * Dependency objects.
-     */
-    // create a cli context object for access to $_ENV, $_SERVER, etc.
-    // remove the first argument from $argv (this is the name of the invoking
-    // script)
-    $context = new Context;
-    $context->shiftArgv();
-    
-    // create a standard input/output object
-    $stdio = new Stdio(
-        fopen('php://stdin', 'r'),
-        fopen('php://stdout', 'w+'),
-        fopen('php://stderr', 'w+'),
-        new Vt100
-    );
-    
-    // create an object to parse options and values
-    $getopt = new Getopt;
-    
-    // create a signal manager
-    $signal = new Manager(
-        new HandlerFactory,
-        new ResultFactory,
-        new ResultCollection
-    );
-    
-    /**
-     * Create an execute a command object.
-     */
-    $command = new vendor\package\Example(
-        $context,
-        $stdio,
-        $getopt,
-        $signal
-    );
-    
-    $command->exec();
-
-Save that as `command.php`.
-
-
-Create A Command Object
------------------------
-
-Here is an example `Command` object to print 'Hello World!' to standard output:
-
-    <?php
-    namespace vendor\package;
-    use aura\cli\Command;
-
-    class Example extends Command
-    {
-        public action()
-        {
-            $this->stdio->outln('Hello World!');
-        }
-    }
-
-Place the class file where your autoloader will find it.
-
-
-Invoke The Command
-------------------
-
-Now that we have both the invoking script and the `Command` object, we can call the invoking script to execute the `Command`.
-
-    $ php /path/to/command.php
-
-The invoking script will load the `Command` command object and execute it; when it runs, it will "Hello World!".
+The Aura CLI package provides a system for creating and executing CLI `Command` objects.  It includes facilities for parsing command-line options and handling standard input/output; it is [signal](https://github.com/auraphp/aura.signal) aware as well.
 
 
 Basic Usage
@@ -109,7 +10,7 @@ Basic Usage
 Action and Input/Output
 -----------------------
 
-The logic for your `Command` goes in the `action()` method. In the example below, we perform some basic input/output.
+The logic for the `Command` goes in the `action()` method. In the example below, we perform some basic input/output.
 
     <?php
     namespace vendor\package;
@@ -122,11 +23,11 @@ The logic for your `Command` goes in the `action()` method. In the example below
             $this->stdio->outln('Hello World!');
             $this->stdio->out('Please enter some text: ');
             $input = $this->stdio->in();
-            $this->stdio->errln('You entered ' . $input);
+            $this->stdio->errln('Input was ' . $input);
         }
     }
 
-When you invoke that `Command`, it will output "Hello World!", ask for some input, and then print that input to the error stream.
+When we invoke that `Command`, it will output "Hello World!", ask for some input, and then print that input to the error stream.
 
 Use the `$stdio` object to work with standard input/output streams.  Its methods are:
 
@@ -137,10 +38,10 @@ Use the `$stdio` object to work with standard input/output streams.  Its methods
 - `inln()` and `in()`: Read from stdin until the user hits enter; `inln()` leaves the trailing line ending in place, whereas `in()` strips it.
 
 
-Pre-Action and Post-Action
---------------------------
+Signal Hooks
+------------
 
-There are two behavioral hooks on the CLI `Command`; these are invoked through the `$signal` signal manager.  Use the pre- and post-action methods to perform logic before and after the action.
+There are four signal hooks on the CLI `Command`; these are invoked through the `$signal` signal manager.  Use the pre- and post-action methods to perform logic before and after the action; use pre- and post-exec methods to perform setup and teardown.
 
     <?php
     namespace vendor\package;
@@ -149,6 +50,11 @@ There are two behavioral hooks on the CLI `Command`; these are invoked through t
     class Example extends Command
     {
         protected $input = 'foo bar baz';
+        
+        public function preExec()
+        {
+            // perform object setup here
+        }
         
         public function preAction()
         {
@@ -164,6 +70,11 @@ There are two behavioral hooks on the CLI `Command`; these are invoked through t
         public function postAction()
         {
             $this->stdio->outln('The input was ' . $this->input);
+        }
+        
+        public function preExec()
+        {
+            // perform object teardown here
         }
     }
 
@@ -187,7 +98,7 @@ We may wish to pass information as part of the invocation.  To read this informa
         }
     }
     
-For example, if you issue ...
+For example, if we issue ...
     
     $ php command.php foo bar baz
 
@@ -234,7 +145,7 @@ To define an option, do something like the following:
         }
     }
 
-When you invoke the above `Command` like this ...
+When we invoke the above `Command` like this ...
 
     $ php command.php --foo-bar=gir
 
@@ -242,11 +153,11 @@ When you invoke the above `Command` like this ...
 
     The value of -f/--foo-bar is gir.
 
-The `$options` array is keyed on what you want as the option name, and each element is an array of option definition keys:
+The `$options` array is keyed on what we want as the option name, and each element is an array of option definition keys:
 
-- `'long'`: The long form of the option, which is passed by prefixing it with two dashes at the command line.  A long-form param value is passed by following it with an equals sign and the value; e.g., `--foo-bar=some_value`. Leave this empty if you do not want a long-form option.
+- `'long'`: The long form of the option, which is passed by prefixing it with two dashes at the command line.  A long-form param value is passed by following it with an equals sign and the value; e.g., `--foo-bar=some_value`. Leave this empty if we do not want a long-form option.
 
-- `'short'`: The short form of the option, which is passed by prefixing it with one dash at the command line.  A short-form param value is passed by following it with a space and the value; e.g., `-f some_value`. Leave this empty if you do not want a short-form option.
+- `'short'`: The short form of the option, which is passed by prefixing it with one dash at the command line.  A short-form param value is passed by following it with a space and the value; e.g., `-f some_value`. Leave this empty if we do not want a short-form option.
 
 - `'param'`: Is a a param value required for the option, is it optional, or is it disallowed?  Use `Option::PARAM_REQUIRED` to force a param value to be passed, `Option::PARAM_OPTIONAL` to allow a value to be passed or not, or `Option::PARAM_REJECTED` to disallow any value from being passed.
 
@@ -254,21 +165,78 @@ The `$options` array is keyed on what you want as the option name, and each elem
 
 - `'default'`: The default value for the option if it is not passed.
 
-After you have defined the options and passed them at the command line, you can read them from the `$getopt` object as magic read-only properties.  Thus, for the above option named as `'foo_bar'`, you can retrieve its value by using `$this->getopt->foo_bar`.
+After we have defined the options and passed them at the command line, we can read them from the `$getopt` object as magic read-only properties.  Thus, for the above option named as `'foo_bar'`, we can retrieve its value by using `$this->getopt->foo_bar`.
 
 
 Signals and Skipping Action
 ---------------------------
 
-Before the `action()` method runs, the `Command` sends a `'pre_action'` signal to the signal manager, with the `Command` object itself as the only parameter.  You can add your own handlers to the signal manager to execute pre-action behaviors from the `Command` sender.  (The `Command` adds its own `preAction()` method to the signal manager at construction time.)
+At `exec()` time, the `Command` sends a `'pre_exec'` signal to the signal manager, with the `Command` object itself as the only parameter. Use this to set up the `Command` object as needed.
 
-If you want to stop the `action()` from being run, a signal handler for `'pre_action'` can call the `skipAction()` method on the `Command`. This will skip the `action()` method and go directly to the `'post_action'` signal.
+Before the `action()` method runs, the `Command` sends a `'pre_action'` signal to the signal manager, with the `Command` object itself as the only parameter.  
 
-After the `action()` method runs or is skipped, the `Command` sends a `'post_action'` signal to the signal manager, with the `Command` object itself as the only parameter.  You can add your own handlers to the signal manager to execute post-action behaviors from the `Command` sender.  (The `Command` adds its own `postAction()` method to the signal manager at construction time.)
+To stop the `action()` from being run, a signal handler for `'pre_action'` can call the `skipAction()` method on the `Command`. This will skip the `action()` method and go directly to the `'post_exec'` signal.
+
+After the `action()` method runs, the `Command` sends a `'post_action'` signal to the signal manager, with the `Command` object itself as the only parameter.  (If the `action()` was skipped, the `'post_action'` signal will not be sent.)
+
+Finally, at the end of `exec()`, the `Command` sends a `'pre_exec'` signal to the signal manager, with the `Command` object itself as the only parameter. Use this to clean up after the `Command` object as needed.
 
 
-Command Factory
-===============
+Invoking Script and Command Factory
+===================================
 
-(implemented; documentation is forthcoming)
+Before we can run a `Command` object, we need what we will call an "invoking script."  It is the equivalent of a web boostrap script, but in a CLI environment. The invoking script is what we run from the command line; it sets up the execution environment, then creates the `Command` object and executes it.
 
+In the invoking script, do not instantiate the `Command` directly. Instead, create an array that maps short command names to their corresponding class names, and use a `CommandFactory` to create the `Command` object based on the short name.
+
+For example, the following code will instantiate a `vendor\package\Example` class and execute it (as long as it is in the include-path).  This is a little long; it makes use of various other Aura packages for necessary functionality.
+
+    <?php
+    // create a map of command names to command classes
+    $command_map = array(
+        'example' => 'vendor\package\Example',
+    );
+    
+    // set the include path
+    set_include_path('/path/to/include');
+    
+    /**
+     * Change '/path/to' entries below to the correct paths.
+     */
+    
+    // set up an autoloader
+    $loader = require '/path/to/aura.autoload/scripts/instance.php';
+    $loader->register();
+    $loader->addPath('aura\di\\',     '/path/to/aura.di/src');
+    $loader->addPath('aura\signal\\', '/path/to/aura.signal/src');
+    $loader->addPath('aura\cli\\',    '/path/to/aura.cli/src');
+    
+    // instantiate and configure the DI container.
+    use aura\di\Container;
+    use aura\di\Forge;
+    use aura\di\Config;
+    $di = new Container(new Forge(new Config));
+    require '/path/to/aura.signal/config/default.php';
+    require '/path/to/aura.cli/config/default.php';
+    
+    // get the cli context object from the DI container, then discard the
+    // invoking script name from the cli context argument values
+    $context = $di->get('cli_context');
+    $context->shiftArgv();
+    
+    // get the command factory from the DI container and add the command map
+    $factory = $di->get('cli_command_factory');
+    foreach ($command_map as $name => $class) {
+        $factory->map($name, $class);
+    }
+    
+    // using first cli context argument as the short command name, 
+    // get a new command object instance and then execute it.
+    try {
+        $command = $factory->newInstance($context->shiftArgv());
+        $command->exec();
+    } catch (Exception $e) {
+        echo $e->getMessage() . PHP_EOL;
+    }
+
+Save the script as `command.php`.  After that, we can issue `php /path/to/command.php example` and it will run the `vendor\package\Example` class.
