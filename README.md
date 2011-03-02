@@ -72,7 +72,7 @@ There are four signal hooks on the CLI `Command`; these are invoked through the 
             $this->stdio->outln('The input was ' . $this->input);
         }
         
-        public function preExec()
+        public function postExec()
         {
             // perform object teardown here
         }
