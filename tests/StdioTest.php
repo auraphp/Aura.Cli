@@ -26,7 +26,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->stdin  = fopen('php://memory', 'r');
+        $this->stdin  = fopen('php://memory', 'r+');
         $this->stdout = fopen('php://memory', 'w+');
         $this->stderr = fopen('php://memory', 'w+');
         $this->vt100  = new Vt100;
@@ -120,5 +120,23 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         rewind($this->stderr);
         $actual = fread($this->stderr, 8192);
         $this->assertSame($expect . PHP_EOL, $actual);
+    }
+    
+    public function testInln()
+    {
+        $expect = 'foo bar baz' . PHP_EOL;
+        fwrite($this->stdin, $expect);
+        rewind($this->stdin);
+        $actual = $this->stdio->inln();
+        $this->assertSame($expect, $actual);
+    }
+    
+    public function testIn()
+    {
+        $expect = 'foo bar baz';
+        fwrite($this->stdin, $expect . PHP_EOL);
+        rewind($this->stdin);
+        $actual = $this->stdio->in();
+        $this->assertSame($expect, $actual);
     }
 }
