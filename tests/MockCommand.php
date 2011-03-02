@@ -6,9 +6,9 @@ class MockCommand extends Command
 {
     private $_action;
     
-    private $_pre_action;
+    private $_pre_action = false;
     
-    private $_post_action;
+    private $_post_action = false;
     
     protected $options = array(
         'option' => array(),

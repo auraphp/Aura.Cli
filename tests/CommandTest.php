@@ -10,7 +10,7 @@ use aura\signal\ResultCollection;
  */
 class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    protected function newMockCommand($argv = array())
+    protected function newMockCommand($argv = array(), $class = 'aura\cli\MockCommand')
     {
         // standard input/output
         $stdin  = fopen('php://memory', 'r');
@@ -27,25 +27,33 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         // Command
         $_SERVER['argv'] = $argv;
         $context = new Context;
-        return new MockCommand($context, $stdio, $getopt, $signal);
+        return new $class($context, $stdio, $getopt, $signal);
     }
     
     public function testExec()
     {
         $expect = array('foo', 'bar', 'baz', 'dib');
-        $Command = $this->newMockCommand($expect);
-        $Command->exec();
+        $command = $this->newMockCommand($expect);
+        $command->exec();
         
         // did the params get passed in?
-        $actual = $Command->params;
+        $actual = $command->params;
         $this->assertSame($expect, $actual);
     }
     
     public function testExec_hooks()
     {
-        $Command = $this->newMockCommand();
-        $Command->exec();
-        $this->assertTrue($Command->_pre_action);
-        $this->assertTrue($Command->_post_action);
+        $command = $this->newMockCommand();
+        $command->exec();
+        $this->assertTrue($command->_pre_action);
+        $this->assertTrue($command->_post_action);
+    }
+    
+    public function testExec_skipAction()
+    {
+        $command = $this->newMockCommand(array(), 'aura\cli\MockCommandSkip');
+        $command->exec();
+        $this->assertTrue($command->_pre_action);
+        $this->assertFalse($command->_post_action);
     }
 }
