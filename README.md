@@ -189,7 +189,7 @@ Before we can run a `Command` object, we need what we will call an "invoking scr
 
 In the invoking script, do not instantiate the `Command` directly. Instead, create an array that maps short command names to their corresponding class names, and use a `CommandFactory` to create the `Command` object based on the short name.
 
-For example, the following code will instantiate a `vendor\package\Example` class and execute it (as long as it is in the include-path).  This is a little long; it makes use of various other Aura packages for necessary functionality.
+For example, the following code will instantiate a `vendor\package\Example` class from the `vendor.package/src` direcotry and execute it.  This is a little long; it makes use of various other Aura packages for necessary functionality.
 
     <?php
     // create a map of command names to command classes
@@ -197,19 +197,16 @@ For example, the following code will instantiate a `vendor\package\Example` clas
         'example' => 'vendor\package\Example',
     );
     
-    // set the include path
-    set_include_path('/path/to/include');
-    
     /**
      * Change '/path/to' entries below to the correct paths.
      */
-    
     // set up an autoloader
     $loader = require '/path/to/aura.autoload/scripts/instance.php';
     $loader->register();
-    $loader->addPath('aura\di\\',     '/path/to/aura.di/src');
-    $loader->addPath('aura\signal\\', '/path/to/aura.signal/src');
-    $loader->addPath('aura\cli\\',    '/path/to/aura.cli/src');
+    $loader->addPath('aura\di\\',        '/path/to/aura.di/src');
+    $loader->addPath('aura\signal\\',    '/path/to/aura.signal/src');
+    $loader->addPath('aura\cli\\',       '/path/to/aura.cli/src');
+    $loader->addPath('vendor\package\\', '/path/to/vendor.package/src');
     
     // instantiate and configure the DI container.
     use aura\di\Container;
