@@ -197,16 +197,13 @@ For example, the following code will instantiate a `vendor\package\Example` clas
         'example' => 'vendor\package\Example',
     );
     
-    /**
-     * Change '/path/to' entries below to the correct paths.
-     */
     // set up an autoloader
     $loader = require '/path/to/aura.autoload/scripts/instance.php';
     $loader->register();
-    $loader->addPath('aura\di\\',        '/path/to/aura.di/src');
-    $loader->addPath('aura\signal\\',    '/path/to/aura.signal/src');
-    $loader->addPath('aura\cli\\',       '/path/to/aura.cli/src');
-    $loader->addPath('vendor\package\\', '/path/to/vendor.package/src');
+    $loader->addPrefix('aura\di\\',        '/path/to/aura.di/src');
+    $loader->addPrefix('aura\signal\\',    '/path/to/aura.signal/src');
+    $loader->addPrefix('aura\cli\\',       '/path/to/aura.cli/src');
+    $loader->addPrefix('vendor\package\\', '/path/to/vendor.package/src');
     
     // instantiate and configure the DI container.
     use aura\di\Container;
@@ -237,3 +234,5 @@ For example, the following code will instantiate a `vendor\package\Example` clas
     }
 
 Save the script as `command.php`.  After that, we can issue `php /path/to/command.php example` and it will run the `vendor\package\Example` class.
+
+Wow that looks like a lot of code.  If you use the aura.system framework package, it does all that for you, but if you want to avoid the system as a whole, that's what you have to do.
