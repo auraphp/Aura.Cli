@@ -147,13 +147,13 @@ abstract class Command
      */
     public function exec()
     {
-        $this->signal->send($this, 'pre_exec');
-        $this->signal->send($this, 'pre_action');
+        $this->signal->send($this, 'pre_exec', $this);
+        $this->signal->send($this, 'pre_action', $this);
         if (! $this->isSkipAction()) {
             $this->action();
-            $this->signal->send($this, 'post_action');
+            $this->signal->send($this, 'post_action', $this);
         }
-        $this->signal->send($this, 'post_exec');
+        $this->signal->send($this, 'post_exec', $this);
         
         // return terminal output to normal colors
         $this->stdio->out("%n");

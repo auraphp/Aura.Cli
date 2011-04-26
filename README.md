@@ -3,6 +3,7 @@ Introduction
 
 The Aura CLI package provides a system for creating and executing CLI `Command` objects.  It includes facilities for parsing command-line options and handling standard input/output; it is [signal](https://github.com/auraphp/aura.signal) aware as well.
 
+The Aura CLI package depends on the [aura.di](http://https://github.com/auraphp/aura.di) and [aura.signal](http://https://github.com/auraphp/aura.signal) packages.
 
 Basic Usage
 ===========
