@@ -1,5 +1,5 @@
 <?php
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * Test class for Option.
@@ -46,7 +46,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionName
+     * @expectedException Aura\Cli\Exception_OptionName
      */
     public function testInit_noName()
     {
@@ -73,7 +73,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     
     
     /**
-     * @expectedException aura\cli\Exception_OptionParam
+     * @expectedException Aura\Cli\Exception_OptionParam
      */
     public function testInit_badParamValue()
     {
@@ -102,7 +102,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception_OptionParamRequired
      */
     public function testSetValue_required()
     {
@@ -119,7 +119,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionNotMulti
+     * @expectedException Aura\Cli\Exception_OptionNotMulti
      */
     public function testSetValue_notMulti()
     {

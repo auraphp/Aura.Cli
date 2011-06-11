@@ -1,16 +1,16 @@
 <?php
-namespace aura\cli;
-use aura\signal\Manager;
-use aura\signal\HandlerFactory;
-use aura\signal\ResultFactory;
-use aura\signal\ResultCollection;
+namespace Aura\Cli;
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 
 /**
  * Test class for Command.
  */
 class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    protected function newMockCommand($argv = array(), $class = 'aura\cli\MockCommand')
+    protected function newMockCommand($argv = array(), $class = 'Aura\Cli\MockCommand')
     {
         // standard input/output
         $stdin  = fopen('php://memory', 'r');
@@ -51,7 +51,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     
     public function testExec_skipAction()
     {
-        $command = $this->newMockCommand(array(), 'aura\cli\MockCommandSkip');
+        $command = $this->newMockCommand(array(), 'Aura\Cli\MockCommandSkip');
         $command->exec();
         $this->assertTrue($command->_pre_action);
         $this->assertFalse($command->_post_action);

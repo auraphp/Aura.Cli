@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * Option objects need to be initialized with a name.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Exception_OptionName extends Exception {}

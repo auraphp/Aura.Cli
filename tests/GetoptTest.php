@@ -1,8 +1,8 @@
 <?php
-namespace aura\cli;
-use aura\di\Config as Config;
-use aura\di\Builder as Builder;
-use aura\di\Forge as Forge;
+namespace Aura\Cli;
+use Aura\Di\Config as Config;
+use Aura\Di\Builder as Builder;
+use Aura\Di\Forge as Forge;
 
 /**
  * Test class for Getopt.
@@ -59,7 +59,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception
+     * @expectedException Aura\Cli\Exception
      */
     public function testInit_alreadyInitialized()
     {
@@ -130,7 +130,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception_OptionNotDefined
      */
     public function testGetOption_optionNotDefined()
     {
@@ -161,7 +161,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException aura\cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception_OptionNotDefined
      */
     public function testGetLongOption_optionNotDefined()
     {
@@ -192,7 +192,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException aura\cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception_OptionNotDefined
      */
     public function testGetShortOption_optionNotDefined()
     {
@@ -422,7 +422,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception_OptionParamRequired
      */
     public function testLoad_longOptionParamRequired()
     {
@@ -444,7 +444,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionParamRejected
+     * @expectedException Aura\Cli\Exception_OptionParamRejected
      */
     public function testLoad_longOptionParamRejected()
     {
@@ -466,7 +466,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception_OptionParamRequired
      */
     public function testLoad_shortOptionParamRequired()
     {
@@ -558,7 +558,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException aura\cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception_OptionParamRequired
      */
     public function testLoad_shortOptionClusterRequired()
     {

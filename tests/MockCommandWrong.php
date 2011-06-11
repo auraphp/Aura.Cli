@@ -1,7 +1,7 @@
 <?php
-namespace aura\cli;
-use aura\cli\Stdio as Stdio;
-use aura\cli\Getopt as Getopt;
+namespace Aura\Cli;
+use Aura\Cli\Stdio as Stdio;
+use Aura\Cli\Getopt as Getopt;
 class MockCommandWrong extends MockCommand
 {
     public function __construct(
