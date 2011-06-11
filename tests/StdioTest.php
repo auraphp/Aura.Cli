@@ -1,5 +1,5 @@
 <?php
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * Test class for Stdio.

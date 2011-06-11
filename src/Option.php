@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * Defines a single command-line option.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Option

@@ -4,24 +4,24 @@
  */
 
 // Getopt
-$di->params['aura\cli\Getopt']['option_factory'] = $di->lazyNew('aura\cli\OptionFactory');
+$di->params['Aura\Cli\Getopt']['option_factory'] = $di->lazyNew('Aura\Cli\OptionFactory');
 
 // Command
-$di->params['aura\cli\Command']['context'] = $di->lazyGet('cli_context');
-$di->params['aura\cli\Command']['stdio']   = $di->lazyGet('cli_stdio');
-$di->params['aura\cli\Command']['getopt']  = $di->lazyNew('aura\cli\Getopt');
-$di->params['aura\cli\Command']['signal']  = $di->lazyGet('signal_manager');
+$di->params['Aura\Cli\Command']['context'] = $di->lazyGet('cli_context');
+$di->params['Aura\Cli\Command']['stdio']   = $di->lazyGet('cli_stdio');
+$di->params['Aura\Cli\Command']['getopt']  = $di->lazyNew('Aura\Cli\Getopt');
+$di->params['Aura\Cli\Command']['signal']  = $di->lazyGet('signal_manager');
 
 /**
  * Dependency services.
  */
 $di->set('cli_context', function() use ($di) {
-    return $di->newInstance('aura\cli\Context');
+    return $di->newInstance('Aura\Cli\Context');
 });
 
 $di->set('cli_stdio', function() use ($di) {
-    $vt100 = $di->newInstance('aura\cli\Vt100');
-    return $di->newInstance('aura\cli\Stdio', array(
+    $vt100 = $di->newInstance('Aura\Cli\Vt100');
+    return $di->newInstance('Aura\Cli\Stdio', array(
         'stdin'  => fopen('php://stdin', 'r'),
         'stdout' => fopen('php://stdout', 'w+'),
         'stderr' => fopen('php://stderr', 'w+'),
@@ -30,7 +30,7 @@ $di->set('cli_stdio', function() use ($di) {
 });
 
 $di->set('cli_command_factory', function() use ($di) {
-    return $di->newInstance('aura\cli\CommandFactory', array(
+    return $di->newInstance('Aura\Cli\CommandFactory', array(
         'forge'  => $di->getForge(),
     ));
 });

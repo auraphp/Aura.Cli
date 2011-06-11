@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * The option 'param' value needs a boolean or a null.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Exception_OptionParam extends Exception {}

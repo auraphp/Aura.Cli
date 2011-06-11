@@ -1,11 +1,11 @@
 <?php
-namespace aura\cli;
-use aura\di\Forge as Forge;
-use aura\di\Config as Config;
-use aura\signal\Manager;
-use aura\signal\HandlerFactory;
-use aura\signal\ResultFactory;
-use aura\signal\ResultCollection;
+namespace Aura\Cli;
+use Aura\Di\Forge as Forge;
+use Aura\Di\Config as Config;
+use Aura\Signal\Manager;
+use Aura\Signal\HandlerFactory;
+use Aura\Signal\ResultFactory;
+use Aura\Signal\ResultCollection;
 
 /**
  * Test class for Dispatcher.
@@ -41,7 +41,7 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
         // set up the forge
         $this->forge = new Forge(new Config);
         $params = $this->forge->getConfig()->getParams();
-        $params['aura\cli\Command'] = array(
+        $params['Aura\Cli\Command'] = array(
             'context' => $context,
             'stdio'   => $stdio,
             'getopt'  => $getopt,
@@ -64,26 +64,26 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance()
     {
-        $map = array('mock' => 'aura\cli\MockCommand');
+        $map = array('mock' => 'Aura\Cli\MockCommand');
         $not_found = null;
         $factory = new CommandFactory($this->forge, $map, $not_found);
         
         $command = $factory->newInstance('mock');
-        $this->assertType('aura\cli\MockCommand', $command);
+        $this->assertType('Aura\Cli\MockCommand', $command);
     }
     
     public function testNewInstance_notFound()
     {
         $map = array();
-        $not_found = 'aura\cli\MockCommand';
+        $not_found = 'Aura\Cli\MockCommand';
         $factory = new CommandFactory($this->forge, $map, $not_found);
         
         $command = $factory->newInstance('mock');
-        $this->assertType('aura\cli\MockCommand', $command);
+        $this->assertType('Aura\Cli\MockCommand', $command);
     }
     
     /**
-     * @expectedException \aura\cli\Exception
+     * @expectedException \Aura\Cli\Exception
      */
     public function testNewInstance_notFoundAndNoDefault()
     {
@@ -98,8 +98,8 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
         $map = array();
         $not_found = null;
         $factory = new CommandFactory($this->forge, $map, $not_found);
-        $factory->map('mock', 'aura\cli\MockCommand');
+        $factory->map('mock', 'Aura\Cli\MockCommand');
         $command = $factory->newInstance('mock');
-        $this->assertType('aura\cli\MockCommand', $command);
+        $this->assertType('Aura\Cli\MockCommand', $command);
     }
 }

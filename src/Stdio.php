@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * Provides a wrapper for standard input/output handles.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Stdio {
@@ -68,7 +68,7 @@ class Stdio {
         $stdin,
         $stdout,
         $stderr,
-        \aura\cli\Vt100  $vt100
+        \Aura\Cli\Vt100  $vt100
     ) {
         $this->stdin  = $stdin;
         $this->stdout = $stdout;
