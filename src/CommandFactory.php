@@ -22,7 +22,7 @@ class CommandFactory
      * 
      * A Forge to create objects.
      * 
-     * @var aura\di\ForgeInterface
+     * @var Aura\Di\ForgeInterface
      * 
      */
     protected $forge;
@@ -77,7 +77,7 @@ class CommandFactory
      * 
      * @return Command
      * 
-     * @throws Exception_CommandFactory when no mapped class can be found
+     * @throws Exception\CommandFactory when no mapped class can be found
      * and no `$not_found` class is specified.
      * 
      */
@@ -88,7 +88,7 @@ class CommandFactory
         } elseif ($this->not_found) {
             $class = $this->not_found;
         } else {
-            throw new Exception_CommandFactory("No class found for '$name' and no 'not-found' Command specified.");
+            throw new Exception\CommandFactory("No class found for '$name' and no 'not-found' Command specified.");
         }
         
         return $this->forge->newInstance($class);

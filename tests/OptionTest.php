@@ -46,7 +46,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionName
+     * @expectedException Aura\Cli\Exception\OptionName
      */
     public function testInit_noName()
     {
@@ -73,7 +73,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParam
+     * @expectedException Aura\Cli\Exception\OptionParam
      */
     public function testInit_badParamValue()
     {
@@ -102,7 +102,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
     public function testSetValue_required()
     {
@@ -119,7 +119,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionNotMulti
+     * @expectedException Aura\Cli\Exception\OptionNotMulti
      */
     public function testSetValue_notMulti()
     {

@@ -77,7 +77,7 @@ abstract class Command
      * 
      * @param Getopt $getopt An options processor and reader.
      * 
-     * @param aura\signal\Manager $signal A signal manager to send signals to.
+     * @param Aura\Signal\Manager $signal A signal manager to send signals to.
      * 
      */
     public function __construct(

@@ -158,7 +158,7 @@ class Getopt
         }
         
         if ($this->strict) {
-            throw new Exception_OptionNotDefined($prop);
+            throw new Exception\OptionNotDefined($prop);
         }
     }
     
@@ -225,7 +225,7 @@ class Getopt
         }
         
         if ($this->strict) {
-            throw new Exception_OptionNotDefined("--$long");
+            throw new Exception\OptionNotDefined("--$long");
         }
     }
     
@@ -247,7 +247,7 @@ class Getopt
         }
         
         if ($this->strict) {
-            throw new Exception_OptionNotDefined("-$char");
+            throw new Exception\OptionNotDefined("-$char");
         }
     }
     
@@ -334,12 +334,12 @@ class Getopt
         
         // if param is required but not present, blow up
         if ($option->isParamRequired() && $value === null) {
-            throw new Exception_OptionParamRequired;
+            throw new Exception\OptionParamRequired;
         }
         
         // if params are rejected and one is present, blow up
         if ($option->isParamRejected() && $value !== null) {
-            throw new Exception_OptionParamRejected;
+            throw new Exception\OptionParamRejected;
         }
         
         // if param is optional but not present, set to true
@@ -399,7 +399,7 @@ class Getopt
         if (! $is_param && $option->isParamRequired()) {
             // the next value is not a param, but a param is required,
             // so blow up.
-            throw new Exception_OptionParamRequired;
+            throw new Exception\OptionParamRequired;
         }
         
         // at this point, the value is a param, and it's optional or required.
@@ -439,7 +439,7 @@ class Getopt
             
             // can't process params in a cluster
             if ($option->isParamRequired()) {
-                throw new Exception_OptionParamRequired;
+                throw new Exception\OptionParamRequired;
             }
             
             // otherwise, set the value as a flag

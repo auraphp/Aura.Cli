@@ -130,7 +130,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
     public function testGetOption_optionNotDefined()
     {
@@ -161,7 +161,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Aura\Cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
     public function testGetLongOption_optionNotDefined()
     {
@@ -192,7 +192,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Aura\Cli\Exception_OptionNotDefined
+     * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
     public function testGetShortOption_optionNotDefined()
     {
@@ -422,7 +422,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
     public function testLoad_longOptionParamRequired()
     {
@@ -444,7 +444,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParamRejected
+     * @expectedException Aura\Cli\Exception\OptionParamRejected
      */
     public function testLoad_longOptionParamRejected()
     {
@@ -466,7 +466,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
     public function testLoad_shortOptionParamRequired()
     {
@@ -558,7 +558,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception_OptionParamRequired
+     * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
     public function testLoad_shortOptionClusterRequired()
     {

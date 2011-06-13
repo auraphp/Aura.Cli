@@ -135,7 +135,7 @@ class Option
         
         // always need a name
         if (! $this->name) {
-            throw new Exception_OptionName;
+            throw new Exception\OptionName;
         }
         
         // always need a long format or a short format.
@@ -150,7 +150,7 @@ class Option
            || $this->param === static::PARAM_OPTIONAL;
            
         if (! $ok) {
-            throw new Exception_OptionParam;
+            throw new Exception\OptionParam;
         }
         
         // preset the value to an array if multiple values are allowed
@@ -173,7 +173,7 @@ class Option
     public function setValue($value)
     {
         if ($this->isParamRequired() && trim($value) === '') {
-            throw new Exception_OptionParamRequired;
+            throw new Exception\OptionParamRequired;
         }
         
         if ($this->isMulti()) {
@@ -182,7 +182,7 @@ class Option
         }
         
         if ($this->value !== null) {
-            throw new Exception_OptionNotMulti;
+            throw new Exception\OptionNotMulti;
         }
         
         $this->value = $value;
