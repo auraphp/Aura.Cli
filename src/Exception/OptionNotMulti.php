@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * The option does not allow multiple values.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Exception_OptionNotMulti extends Exception {}

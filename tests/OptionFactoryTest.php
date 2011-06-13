@@ -1,5 +1,5 @@
 <?php
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * Test class for OptionFactory.
@@ -41,6 +41,6 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
         
         $option = $this->factory->newInstance($params);
         
-        $this->assertType('aura\cli\Option', $option);
+        $this->assertType('Aura\Cli\Option', $option);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-namespace aura\cli;
-use aura\cli\Command as Command;
+namespace Aura\Cli;
+use Aura\Cli\Command as Command;
 
 class MockCommand extends Command
 {

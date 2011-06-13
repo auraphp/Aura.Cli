@@ -6,14 +6,14 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
-use aura\di\ForgeInterface as ForgeInterface;
+namespace Aura\Cli;
+use Aura\Di\ForgeInterface as ForgeInterface;
 
 /**
  * 
  * A factory to create Command objects.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class CommandFactory

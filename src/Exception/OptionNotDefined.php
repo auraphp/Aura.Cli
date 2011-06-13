@@ -6,13 +6,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
+namespace Aura\Cli;
 
 /**
  * 
  * Asked for an option that is not defined.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 class Exception_OptionNotDefined extends Exception {}

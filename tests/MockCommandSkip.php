@@ -1,5 +1,5 @@
 <?php
-namespace aura\cli;
+namespace Aura\Cli;
 class MockCommandSkip extends MockCommand
 {
     public function preAction()

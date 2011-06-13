@@ -6,14 +6,14 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace aura\cli;
-use aura\signal\Manager as SignalManager;
+namespace Aura\Cli;
+use Aura\Signal\Manager as SignalManager;
 
 /**
  * 
  * The CLI equivalent of a page-controller to perform a single action.
  * 
- * @package aura.cli
+ * @package Aura.Cli
  * 
  */
 abstract class Command
@@ -23,7 +23,7 @@ abstract class Command
      * A Getopt object for the Command; retains the short and long options
      * passed at the command line.
      * 
-     * @var aura\cli\Getopt
+     * @var Aura\Cli\Getopt
      * 
      */
     protected $getopt;
