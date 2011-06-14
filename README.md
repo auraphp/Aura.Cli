@@ -1,1 +1,1 @@
-Read Documentation : [http://auraphp.github.com/aura.cli](http://auraphp.github.com/aura.cli)
+Read Documentation : [http://auraphp.github.com/Aura.Cli](http://auraphp.github.com/Aura.Cli)
