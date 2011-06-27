@@ -225,7 +225,11 @@ class Vt100
     protected function isPosix($handle)
     {
         if (is_bool($this->posix)) {
+            // forced to posix
             return $this->posix;
+        } elseif (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
+            // windows is not posix
+            return false;
         } else {
             // silence posix_isatty() errors regarding non-standard handles,
             // e.g. php://memory
