@@ -69,7 +69,7 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new CommandFactory($this->forge, $map, $not_found);
         
         $command = $factory->newInstance('mock');
-        $this->assertType('Aura\Cli\MockCommand', $command);
+        $this->assertInstanceOf('Aura\Cli\MockCommand', $command);
     }
     
     public function testNewInstance_notFound()
@@ -79,7 +79,7 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new CommandFactory($this->forge, $map, $not_found);
         
         $command = $factory->newInstance('mock');
-        $this->assertType('Aura\Cli\MockCommand', $command);
+        $this->assertInstanceOf('Aura\Cli\MockCommand', $command);
     }
     
     /**
@@ -100,6 +100,6 @@ class CommandFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new CommandFactory($this->forge, $map, $not_found);
         $factory->map('mock', 'Aura\Cli\MockCommand');
         $command = $factory->newInstance('mock');
-        $this->assertType('Aura\Cli\MockCommand', $command);
+        $this->assertInstanceOf('Aura\Cli\MockCommand', $command);
     }
 }

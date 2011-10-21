@@ -41,6 +41,6 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
         
         $option = $this->factory->newInstance($params);
         
-        $this->assertType('Aura\Cli\Option', $option);
+        $this->assertInstanceOf('Aura\Cli\Option', $option);
     }
 }
