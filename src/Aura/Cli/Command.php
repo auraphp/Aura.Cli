@@ -7,7 +7,6 @@
  * 
  */
 namespace Aura\Cli;
-use Aura\Signal\Manager as SignalManager;
 
 /**
  * 
@@ -59,16 +58,6 @@ abstract class Command
     
     /**
      * 
-     * When set to `true` before `action()` is called, the `action()` will not
-     * be called after all.
-     * 
-     * @var bool
-     * 
-     */
-    protected $skip_action = false;
-    
-    /**
-     * 
      * Constructor.
      * 
      * @param Context $context The command-line context.
@@ -77,43 +66,41 @@ abstract class Command
      * 
      * @param Getopt $getopt An options processor and reader.
      * 
-     * @param Aura\Signal\Manager $signal A signal manager to send signals to.
-     * 
      */
     public function __construct(
         Context       $context,
         Stdio         $stdio,
-        Getopt        $getopt,
-        SignalManager $signal
+        Getopt        $getopt
     ) {
-        // marshal into properties
         $this->context = $context;
         $this->stdio   = $stdio;
         $this->getopt  = $getopt;
-        $this->signal  = $signal;
-        
-        // handle these signals
-        $this->signal->handler($this, 'pre_exec', array($this, 'preExec'));
-        $this->signal->handler($this, 'pre_action', array($this, 'preAction'));
-        $this->signal->handler($this, 'post_action', array($this, 'postAction'));
-        $this->signal->handler($this, 'post_exec', array($this, 'postExec'));
-        
-        // load the getopt and params properties
-        $this->loadGetoptParams();
+        $this->initGetopt();
+        $this->initParams();
     }
     
     /**
      * 
-     * Passes the Context arguments to `$getopt` and retains the numeric
-     * parameters in `$params`.
+     * Passes the Context arguments to `$getopt`.
      * 
      * @return void
      * 
      */
-    protected function loadGetoptParams()
+    protected function initGetopt()
     {
         $this->getopt->init($this->options, $this->options_strict);
         $this->getopt->load($this->context->getArgv());
+    }
+    
+    /**
+     * 
+     * Loads `$params` from `$getopt`.
+     * 
+     * @return void
+     * 
+     */
+    protected function initParams()
+    {
         $this->params = $this->getopt->getParams();
     }
     
@@ -121,24 +108,15 @@ abstract class Command
      * 
      * Executes the Command.  In order, it does these things:
      * 
-     * - signals `'pre_exec'`
+     * - calls `preExec()`
      * 
-     * - signals `'pre_action'`
+     * - calls `preAction()`
      * 
-     * - is the action is not to be skipped, calls `action()` and signals 
-     *   `'post_action'`
+     * - calles `action()`
      * 
-     * - signals `'post_exec'`
+     * - calls `postAction()`
      * 
-     * - resets the terminal to normal colors
-     * 
-     * @signal 'pre_exec'
-     * 
-     * @signal 'pre_action'
-     * 
-     * @signal 'post_action'
-     * 
-     * @signal 'post_exec'
+     * - calls `postExec()`
      * 
      * @see action()
      * 
@@ -147,13 +125,11 @@ abstract class Command
      */
     public function exec()
     {
-        $this->signal->send($this, 'pre_exec', $this);
-        $this->signal->send($this, 'pre_action', $this);
-        if (! $this->isSkipAction()) {
-            $this->action();
-            $this->signal->send($this, 'post_action', $this);
-        }
-        $this->signal->send($this, 'post_exec', $this);
+        $this->preExec();
+        $this->preAction();
+        $this->action();
+        $this->postAction();
+        $this->postExec();
         
         // return terminal output to normal colors
         $this->stdio->out("%n");
@@ -162,33 +138,9 @@ abstract class Command
     
     /**
      * 
-     * Stops `exec()` from calling `action()` if it has not already done so.
+     * Runs at the beginning of `exec()` before `preAction()`.
      * 
      * @return void
-     * 
-     */
-    public function skipAction()
-    {
-        $this->skip_action = true;
-    }
-    
-    /**
-     * 
-     * Should the call to `action()` be skipped?
-     * 
-     * @return bool
-     * 
-     */
-    public function isSkipAction()
-    {
-        return (bool) $this->skip_action;
-    }
-    
-    /**
-     * 
-     * Runs before `action()` as part of the `'pre_exec'` signal.
-     * 
-     * @return mixed
      * 
      */
     public function preExec()
@@ -197,7 +149,7 @@ abstract class Command
     
     /**
      * 
-     * Runs before `action()` as part of the `'pre_action'` signal.
+     * Runs before `action()` but after `preExec()`.
      * 
      * @return mixed
      * 
@@ -213,11 +165,11 @@ abstract class Command
      * @return void
      * 
      */
-    abstract public function action();
+    abstract protected function action();
     
     /**
      * 
-     * Runs after `action()` as part of the `'post_action'` signal.
+     * Runs after `action()` but before `postExec()`.
      * 
      * @return mixed
      * 
@@ -228,7 +180,7 @@ abstract class Command
     
     /**
      * 
-     * Runs after `action()` as part of the `'post_exec'` signal.
+     * Runs at the end of `exec()` after `postAction()`.
      * 
      * @return mixed
      * 

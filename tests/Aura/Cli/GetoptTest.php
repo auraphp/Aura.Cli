@@ -1,8 +1,5 @@
 <?php
 namespace Aura\Cli;
-use Aura\Di\Config as Config;
-use Aura\Di\Builder as Builder;
-use Aura\Di\Forge as Forge;
 
 /**
  * Test class for Getopt.
@@ -23,9 +20,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $config = new Config;
-        $forge = new Forge($config);
-        $this->option_factory = new OptionFactory($forge);
+        $this->option_factory = new OptionFactory;
         $this->getopt = new Getopt($this->option_factory);
     }
     

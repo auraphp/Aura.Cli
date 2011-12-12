@@ -1,9 +1,5 @@
 <?php
 namespace Aura\Cli;
-use Aura\Signal\Manager;
-use Aura\Signal\HandlerFactory;
-use Aura\Signal\ResultFactory;
-use Aura\Signal\ResultCollection;
 
 /**
  * Test class for Command.
@@ -18,7 +14,6 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $stderr = fopen('php://memory', 'w+');
         $vt100 = new Vt100;
         $stdio = new Stdio($stdin, $stdout, $stderr, $vt100);
-        $signal = new Manager(new HandlerFactory, new ResultFactory, new ResultCollection);
         
         // getopt
         $option_factory = new OptionFactory();
@@ -27,7 +22,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         // Command
         $_SERVER['argv'] = $argv;
         $context = new Context;
-        return new $class($context, $stdio, $getopt, $signal);
+        return new $class($context, $stdio, $getopt);
     }
     
     public function testExec()
@@ -47,13 +42,5 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $command->exec();
         $this->assertTrue($command->_pre_action);
         $this->assertTrue($command->_post_action);
-    }
-    
-    public function testExec_skipAction()
-    {
-        $command = $this->newMockCommand(array(), 'Aura\Cli\MockCommandSkip');
-        $command->exec();
-        $this->assertTrue($command->_pre_action);
-        $this->assertFalse($command->_post_action);
     }
 }
