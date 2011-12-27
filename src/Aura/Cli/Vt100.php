@@ -97,6 +97,8 @@ class Vt100
      */
     protected $posix = null;
     
+    protected $php_os = PHP_OS;
+    
     /**
      * 
      * Forces output to format for POSIX terminals, or to strip for non-POSIX
@@ -128,6 +130,16 @@ class Vt100
     public function getPosix()
     {
         return $this->posix;
+    }
+    
+    public function setPhpOs($php_os)
+    {
+        $this->php_os = $php_os;
+    }
+    
+    public function getPhpOs()
+    {
+        return $this->php_os;
     }
     
     /**
@@ -227,7 +239,7 @@ class Vt100
         if (is_bool($this->posix)) {
             // forced to posix
             return $this->posix;
-        } elseif (strtolower(substr(PHP_OS, 0, 3)) == 'win') {
+        } elseif (strtolower(substr($this->php_os, 0, 3)) == 'win') {
             // windows is not posix
             return false;
         } else {
