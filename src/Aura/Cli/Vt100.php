@@ -97,6 +97,13 @@ class Vt100
      */
     protected $posix = null;
     
+    /**
+     * 
+     * The PHP_OS value. Provided so we can fake the OS as needed.
+     * 
+     * @var string
+     * 
+     */
     protected $php_os = PHP_OS;
     
     /**
@@ -132,11 +139,27 @@ class Vt100
         return $this->posix;
     }
     
+    /**
+     * 
+     * Sets the `$php_os` value.
+     * 
+     * @param string $php_os The new PHP OS value.
+     * 
+     * @return void
+     * 
+     */
     public function setPhpOs($php_os)
     {
         $this->php_os = $php_os;
     }
     
+    /**
+     * 
+     * Gets the `$php_os` value.
+     * 
+     * @return string
+     * 
+     */
     public function getPhpOs()
     {
         return $this->php_os;

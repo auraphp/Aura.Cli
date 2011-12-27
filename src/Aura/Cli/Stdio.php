@@ -114,8 +114,7 @@ class Stdio {
     
     /**
      * 
-     * Gets user input from the command line, optionally after sending a
-     * prompt to standard output.
+     * Gets user input from the command line and trims the end-of-line.
      * 
      * @return void
      * 
@@ -125,6 +124,14 @@ class Stdio {
 		return rtrim(fgets($this->stdin), PHP_EOL);
     }
     
+    /**
+     * 
+     * Gets user input from the command line and leaves the end-of-line in
+     * place.
+     * 
+     * @return void
+     * 
+     */
     public function inln()
     {
         return fgets($this->stdin);
