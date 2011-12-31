@@ -51,7 +51,7 @@ class Getopt
      * @var array
      * 
      */
-    protected $options = array();
+    protected $options = [];
     
     /**
      * 
@@ -60,7 +60,7 @@ class Getopt
      * @var array
      * 
      */
-    protected $params = array();
+    protected $params = [];
     
     /**
      * 
@@ -69,7 +69,7 @@ class Getopt
      * @param array
      * 
      */
-    protected $argv = array();
+    protected $argv = [];
     
     /**
      * 
@@ -171,7 +171,7 @@ class Getopt
      */
     public function getOptionValues()
     {
-        $vals = array();
+        $vals = [];
         foreach ($this->getOptions() as $name => $option) {
             $vals[$name] = $option->getValue();
         }
@@ -268,7 +268,7 @@ class Getopt
         $this->argv = $argv;
         
         // remaining non-option params
-        $params = array();
+        $params = [];
         
         // flag to say when we've reached the end of options
         $done = false;

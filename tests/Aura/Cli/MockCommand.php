@@ -10,9 +10,9 @@ class MockCommand extends Command
     
     private $_post_action = false;
     
-    protected $options = array(
-        'option' => array(),
-    );
+    protected $options = [
+        'option' => [],
+    ];
     
     public function __get($key)
     {

@@ -34,7 +34,7 @@ abstract class Command
      * @var array
      * 
      */
-    protected $options = array();
+    protected $options = [];
     
     /**
      * 
@@ -54,7 +54,7 @@ abstract class Command
      * @var array
      * 
      */
-    protected $params = array();
+    protected $params = [];
     
     /**
      * 

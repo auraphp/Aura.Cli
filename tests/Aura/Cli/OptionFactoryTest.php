@@ -35,9 +35,9 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewInstance()
     {
-        $params = array(
+        $params = [
             'name' => 'foo',
-        );
+        ];
         
         $option = $this->factory->newInstance($params);
         

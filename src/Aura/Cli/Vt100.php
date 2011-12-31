@@ -36,7 +36,7 @@ class Vt100
      * @var array
      * 
      */
-    protected $format = array(
+    protected $format = [
         
         // literal percent sign
         '%%'    => '%',             // percent-sign
@@ -82,7 +82,7 @@ class Vt100
         '%I'    => "\033[7m",       // reverse/inverse
         '%*'    => "\033[1m",       // bold
         '%d'    => "\033[2m",       // dim        
-    );
+    ];
     
     /**
      * 

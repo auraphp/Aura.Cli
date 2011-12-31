@@ -39,10 +39,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetEnv()
     {
         // pre-populate the superglobal with fake values for testing
-        $_ENV = array(
+        $_ENV = [
             'foo' => 'bar',
             'baz' => 'dib',
-        );
+        ];
         
         $context = new Context;
         
@@ -72,10 +72,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetServer()
     {
         // pre-populate the superglobal with fake values for testing
-        $_SERVER = array(
+        $_SERVER = [
             'foo' => 'bar',
             'baz' => 'dib',
-        );
+        ];
         
         $context = new Context;
         
@@ -98,7 +98,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     
     public function testGetArgv()
     {
-        $_SERVER['argv'] = array('foo', 'bar');
+        $_SERVER['argv'] = ['foo', 'bar'];
         $context = new Context;
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
@@ -106,7 +106,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     
     public function testShiftArgv()
     {
-        $_SERVER['argv'] = array('foo', 'bar');
+        $_SERVER['argv'] = ['foo', 'bar'];
         $context = new Context;
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
@@ -115,6 +115,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo', $actual);
         
         $actual = $context->getArgv();
-        $this->assertSame(array('bar'), $actual);
+        $this->assertSame(['bar'], $actual);
     }
 }

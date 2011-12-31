@@ -32,11 +32,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -50,19 +50,19 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInit_noName()
     {
-        $spec = array(
+        $spec = [
             'long' => 'foo-bar',
             'short' => 'f',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
     }
     
     public function testInit_noLongOrShort()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -77,10 +77,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInit_badParamValue()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'param' => 'no_such_type',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
     }
@@ -88,11 +88,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     
     public function testSetValue()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -106,12 +106,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetValue_required()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'param' => Option::PARAM_REQUIRED,
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -123,11 +123,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetValue_notMulti()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -137,28 +137,28 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     
     public function testIsMulti()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'multi' => true,
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
         $option->setValue('zim');
         $option->setValue('gir');
         
-        $this->assertSame(array('zim', 'gir'), $option->getValue());
+        $this->assertSame(['zim', 'gir'], $option->getValue());
     }
     
     public function testGetValue()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -169,12 +169,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue_default()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'default' => 'default_value'
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -183,12 +183,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefault()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'default' => 'default_value'
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -197,12 +197,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsParamRequired()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'param' => Option::PARAM_REQUIRED,
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -213,12 +213,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsParamRejected()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'param' => Option::PARAM_REJECTED,
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         
@@ -229,12 +229,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsParamOptional()
     {
-        $spec = array(
+        $spec = [
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
             'param' => Option::PARAM_OPTIONAL,
-        );
+        ];
         
         $option = $this->factory->newInstance($spec);
         

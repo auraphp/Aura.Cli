@@ -155,7 +155,7 @@ class Option
         
         // preset the value to an array if multiple values are allowed
         if ($this->multi) {
-            $this->value = array();
+            $this->value = [];
         } else {
             $this->value = null;
         }

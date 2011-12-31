@@ -51,7 +51,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     
     public function testSetAndGetPosix()
     {
-        $list = array(true, false, null);
+        $list = [true, false, null];
         foreach ($list as $flag) {
             $this->vt100->setPosix($flag);
             $this->assertSame($flag, $this->vt100->getPosix());

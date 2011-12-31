@@ -35,16 +35,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testInit($strict = Getopt::STRICT)
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
-            ),
-            'baz_dib' => array(
+            ],
+            'baz_dib' => [
                 'long' => 'baz-dib',
                 'short' => 'b',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts, $strict);
         
@@ -58,16 +58,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testInit_alreadyInitialized()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
-            ),
-            'baz_dib' => array(
+            ],
+            'baz_dib' => [
                 'long' => 'baz-dib',
                 'short' => 'b',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         $this->getopt->init($opts);
@@ -78,10 +78,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testInit_unexpected()
     {
-        $opts = array(
+        $opts = [
             'foo_bar' => true,
             'baz_dib' => true,
-        );
+        ];
         
         $this->getopt->init($opts);
     }
@@ -90,18 +90,18 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $expect = array();
-        $expect['foo_bar'] = $this->option_factory->newInstance(array(
+        $expect = [];
+        $expect['foo_bar'] = $this->option_factory->newInstance([
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        ));
+        ]);
         
-        $expect['baz_dib'] = $this->option_factory->newInstance(array(
+        $expect['baz_dib'] = $this->option_factory->newInstance([
             'name' => 'baz_dib',
             'long' => 'baz-dib',
             'short' => 'b',
-        ));
+        ]);
         
         $actual = $this->getopt->getOptions();
         
@@ -113,11 +113,11 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $expect = $this->option_factory->newInstance(array(
+        $expect = $this->option_factory->newInstance([
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        ));
+        ]);
         
         $actual = $this->getopt->getOption('foo_bar');
         
@@ -144,11 +144,11 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $expect = $this->option_factory->newInstance(array(
+        $expect = $this->option_factory->newInstance([
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        ));
+        ]);
         
         $actual = $this->getopt->getLongOption('foo-bar');
         
@@ -175,11 +175,11 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $expect = $this->option_factory->newInstance(array(
+        $expect = $this->option_factory->newInstance([
             'name' => 'foo_bar',
             'long' => 'foo-bar',
             'short' => 'f',
-        ));
+        ]);
         
         $actual = $this->getopt->getShortOption('f');
         
@@ -206,25 +206,25 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             'def',
-        ));
+        ]);
         
         // check options
-        $expect = array(
+        $expect = [
             'foo_bar' => null,
             'baz_dib' => null,
-        );
+        ];
         
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
         
         // check params
-        $expect = array(
+        $expect = [
             'abc',
             'def',
-        );
+        ];
         $actual = $this->getopt->getParams();
         $this->assertSame($expect, $actual);
     }
@@ -233,18 +233,18 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar=zim',
             'def',
             '--baz-dib=gir',
-        ));
+        ]);
         
         // check options
-        $expect = array(
+        $expect = [
             'foo_bar' => 'zim',
             'baz_dib' => 'gir',
-        );
+        ];
         
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
@@ -259,10 +259,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
         
         // check params
-        $expect = array(
+        $expect = [
             'abc',
             'def',
-        );
+        ];
         $actual = $this->getopt->getParams();
         $this->assertSame($expect, $actual);
     }
@@ -271,10 +271,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit(Getopt::NON_STRICT);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--no-such-option=zim',
-        ));
+        ]);
         
         // check single option values
         $actual = $this->getopt->getOptionValue('no_such_option');
@@ -285,20 +285,20 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-f',
             'zim',
             'def',
             '-b',
             'gir',
-        ));
+        ]);
         
         // check options
-        $expect = array(
+        $expect = [
             'foo_bar' => 'zim',
             'baz_dib' => 'gir',
-        );
+        ];
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
         
@@ -312,10 +312,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
         
         // check params
-        $expect = array(
+        $expect = [
             'abc',
             'def',
-        );
+        ];
         $actual = $this->getopt->getParams();
         $this->assertSame($expect, $actual);
     }
@@ -324,10 +324,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit(Getopt::NON_STRICT);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-z',
-        ));
+        ]);
         
         // check single option values
         $actual = $this->getopt->getOptionValue('no_such_option');
@@ -338,7 +338,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar=zim',
             'def',
@@ -349,13 +349,13 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             '-n',
             '456',
             'ghi',
-        ));
+        ]);
         
         // check options
-        $expect = array(
+        $expect = [
             'foo_bar' => 'zim',
             'baz_dib' => 'gir',
-        );
+        ];
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
         
@@ -369,14 +369,14 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
         
         // check params
-        $expect = array(
+        $expect = [
             'abc',
             'def',
             '--no-such-option=123',
             '-n',
             '456',
             'ghi',
-        );
+        ];
         $actual = $this->getopt->getParams();
         $this->assertSame($expect, $actual);
     }
@@ -385,18 +385,18 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $this->testInit();
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar',
             'def',
             '-b',
-        ));
+        ]);
         
         // check options
-        $expect = array(
+        $expect = [
             'foo_bar' => true,
             'baz_dib' => true,
-        );
+        ];
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
         
@@ -408,10 +408,10 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($actual);
         
         // check params
-        $expect = array(
+        $expect = [
             'abc',
             'def',
-        );
+        ];
         $actual = $this->getopt->getParams();
         $this->assertSame($expect, $actual);
     }
@@ -421,21 +421,21 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad_longOptionParamRequired()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
                 'param' => Option::PARAM_REQUIRED,
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar', // no param, should fail
             'def',
-        ));
+        ]);
     }
     
     /**
@@ -443,21 +443,21 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad_longOptionParamRejected()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
                 'param' => Option::PARAM_REJECTED,
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar=zim', // has param, should fail
             'def',
-        ));
+        ]);
     }
     
     /**
@@ -465,40 +465,40 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad_shortOptionParamRequired()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
                 'param' => Option::PARAM_REQUIRED,
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             'def',
             '-f', // no param, should fail
-        ));
+        ]);
     }
     
     public function testLoad_shortOptionParamRejected()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
                 'param' => Option::PARAM_REJECTED,
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-f', // has param, should flag as true
             'def',
-        ));
+        ]);
         
         $actual = $this->getopt->getOptionValue('foo_bar');
         $this->assertTrue($actual);
@@ -506,31 +506,31 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testLoad_shortOptionCluster()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'short' => 'f',
-            ),
-            'baz_dib' => array(
+            ],
+            'baz_dib' => [
                 'short' => 'b',
-            ),
-            'zim_gir' => array(
+            ],
+            'zim_gir' => [
                 'short' => 'z',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-fbz', // should flag each as true
             'def',
-        ));
+        ]);
         
-        $expect = array(
+        $expect = [
             'foo_bar' => true,
             'baz_dib' => true,
             'zim_gir' => true,
-        );
+        ];
         
         $actual = $this->getopt->getOptionValues();
         
@@ -539,15 +539,15 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testLoad_shortOptionCluster_nonStrict()
     {
-        $this->getopt->init(array(), Getopt::NON_STRICT);
+        $this->getopt->init([], Getopt::NON_STRICT);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-fbz', // should flag each as true
             'def',
-        ));
+        ]);
         
-        $expect = array();
+        $expect = [];
         $actual = $this->getopt->getOptionValues();
         $this->assertSame($expect, $actual);
     }
@@ -557,44 +557,44 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad_shortOptionClusterRequired()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'short' => 'f',
-            ),
-            'baz_dib' => array(
+            ],
+            'baz_dib' => [
                 'short' => 'b',
                 'param' => Option::PARAM_REQUIRED,
-            ),
-            'zim_gir' => array(
+            ],
+            'zim_gir' => [
                 'short' => 'z',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '-fbz', // -b requires a param
             'def',
-        ));
+        ]);
     }
     
     public function testMagicGet()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar=zim', // has param, should flag as true
             'def',
-        ));
+        ]);
         
         $expect = 'zim';
         $actual = $this->getopt->__get('foo_bar');
@@ -603,20 +603,20 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testMagicGetNonStrict()
     {
-        $opts = array(
-            'foo_bar' => array(
+        $opts = [
+            'foo_bar' => [
                 'long' => 'foo-bar',
                 'short' => 'f',
-            ),
-        );
+            ],
+        ];
         
         $this->getopt->init($opts, Getopt::NON_STRICT);
         
-        $this->getopt->load(array(
+        $this->getopt->load([
             'abc',
             '--foo-bar=zim', // has param, should flag as true
             'def',
-        ));
+        ]);
         
         $actual = $this->getopt->__get('no_such_option');
         $this->assertNull($actual);

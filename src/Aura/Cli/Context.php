@@ -53,16 +53,16 @@ class Context
      */
     public function __construct()
     {
-        $vars = array('env', 'server');
+        $vars = ['env', 'server'];
         foreach ($vars as $key) {
-            $this->$key = array();
+            $this->$key = [];
             $var = '_' . strtoupper($key);
             if (isset($GLOBALS[$var])) {
                 $this->$key = $GLOBALS[$var];
             }
         }
         
-        $this->setArgv($this->getServer('argv', array()));
+        $this->setArgv($this->getServer('argv', []));
     }
     
     /**

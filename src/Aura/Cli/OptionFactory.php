@@ -24,14 +24,14 @@ class OptionFactory
      * @var array
      * 
      */
-    protected $params = array(
+    protected $params = [
         'name'    => null,
         'long'    => null,
         'short'   => null,
         'param'   => null,
         'multi'   => null,
         'default' => null,
-    );
+    ];
     
     /**
      * 

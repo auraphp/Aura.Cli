@@ -6,7 +6,7 @@ namespace Aura\Cli;
  */
 class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    protected function newMockCommand($argv = array(), $class = 'Aura\Cli\MockCommand')
+    protected function newMockCommand($argv = [], $class = 'Aura\Cli\MockCommand')
     {
         // standard input/output
         $stdin  = fopen('php://memory', 'r');
@@ -27,7 +27,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     
     public function testExec()
     {
-        $expect = array('foo', 'bar', 'baz', 'dib');
+        $expect = ['foo', 'bar', 'baz', 'dib'];
         $command = $this->newMockCommand($expect);
         $command->exec();
         

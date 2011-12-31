@@ -26,16 +26,16 @@ $di->set('cli_context', function() use ($di) {
 
 $di->set('cli_stdio', function() use ($di) {
     $vt100 = $di->newInstance('Aura\Cli\Vt100');
-    return $di->newInstance('Aura\Cli\Stdio', array(
+    return $di->newInstance('Aura\Cli\Stdio', [
         'stdin'  => fopen('php://stdin', 'r'),
         'stdout' => fopen('php://stdout', 'w+'),
         'stderr' => fopen('php://stderr', 'w+'),
         'vt100'  => $vt100,
-    ));
+    ]);
 });
 
 $di->set('cli_command_factory', function() use ($di) {
-    return $di->newInstance('Aura\Cli\CommandFactory', array(
+    return $di->newInstance('Aura\Cli\CommandFactory', [
         'forge'  => $di->getForge(),
-    ));
+    ]);
 });
