@@ -12,10 +12,10 @@ $loader->add('Aura\Cli\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 $di->params['Aura\Cli\Getopt']['option_factory'] = $di->lazyNew('Aura\Cli\OptionFactory');
 
 // Command
-$di->params['Aura\Cli\Command']['context'] = $di->lazyGet('cli_context');
-$di->params['Aura\Cli\Command']['stdio']   = $di->lazyGet('cli_stdio');
-$di->params['Aura\Cli\Command']['getopt']  = $di->lazyNew('Aura\Cli\Getopt');
-$di->params['Aura\Cli\Command']['signal']  = $di->lazyGet('signal_manager');
+$di->params['Aura\Cli\AbstractCommand']['context'] = $di->lazyGet('cli_context');
+$di->params['Aura\Cli\AbstractCommand']['stdio']   = $di->lazyGet('cli_stdio');
+$di->params['Aura\Cli\AbstractCommand']['getopt']  = $di->lazyNew('Aura\Cli\Getopt');
+$di->params['Aura\Cli\AbstractCommand']['signal']  = $di->lazyGet('signal_manager');
 
 /**
  * Dependency services.
@@ -31,11 +31,5 @@ $di->set('cli_stdio', function() use ($di) {
         'stdout' => fopen('php://stdout', 'w+'),
         'stderr' => fopen('php://stderr', 'w+'),
         'vt100'  => $vt100,
-    ]);
-});
-
-$di->set('cli_command_factory', function() use ($di) {
-    return $di->newInstance('Aura\Cli\CommandFactory', [
-        'forge'  => $di->getForge(),
     ]);
 });

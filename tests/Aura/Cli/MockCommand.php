@@ -1,8 +1,8 @@
 <?php
 namespace Aura\Cli;
-use Aura\Cli\Command as Command;
+use Aura\Cli\AbstractCommand;
 
-class MockCommand extends Command
+class MockCommand extends AbstractCommand
 {
     private $_action;
     

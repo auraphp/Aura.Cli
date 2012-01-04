@@ -15,7 +15,7 @@ namespace Aura\Cli;
  * @package Aura.Cli
  * 
  */
-abstract class Command
+abstract class AbstractCommand
 {
     /**
      * 
