@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/src/Aura/Cli/Command.php';
+require_once __DIR__ . '/src/Aura/Cli/AbstractCommand.php';
 require_once __DIR__ . '/src/Aura/Cli/CommandFactory.php';
 require_once __DIR__ . '/src/Aura/Cli/Context.php';
 require_once __DIR__ . '/src/Aura/Cli/Exception.php';
