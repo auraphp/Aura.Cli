@@ -12,10 +12,14 @@ Action and Input/Output
 The logic for the `Command` goes in the `action()` method. In the example below, we perform some basic input/output.
 
     <?php
+    //file cli.php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
 
-    class Example extends Command
+    require_once 'path/to/Aura.Cli/scripts/instance.php';
+
+    use Aura\Cli\AbstractCommand;
+
+    class Example extends AbstractCommand
     {
         public function action()
         {
@@ -25,8 +29,17 @@ The logic for the `Command` goes in the `action()` method. In the example below,
             $this->stdio->errln('Input was ' . $input);
         }
     }
+    // Create instance of the Class
+    $cmd = new Example($context, $stdio, $getopt);
+    $cmd->exec();
 
-When we invoke that `Command`, it will output "Hello World!", ask for some input, and then print that input to the error stream.
+The `Aura\Cli\AbstractCommand` accepts the objects of `Aura\Cli\Context` , `Aura\Cli\Stdio`, `Aura\Cli\Getopt` on instantiation.
+
+We can invoke the `Command`, from cli as 
+
+    $ php cli.php
+
+it will output "Hello World!", ask for some input, and then print that input to the error stream.
 
 Use the `$stdio` object to work with standard input/output streams.  Its methods are:
 
@@ -36,6 +49,18 @@ Use the `$stdio` object to work with standard input/output streams.  Its methods
 
 - `inln()` and `in()`: Read from stdin until the user hits enter; `inln()` leaves the trailing line ending in place, whereas `in()` strips it.
 
+If you are not using `instance.php` file you need to use to do the few lines of code 
+
+    require_once dirname(__DIR__) . '/src.php';
+    $context = new Aura\Cli\Context();
+    $vt100 = new Aura\Cli\Vt100();
+    $stdio = new Aura\Cli\Stdio( 
+        fopen('php://stdin', 'r'),
+        fopen('php://stdout', 'w+'),
+        fopen('php://stderr', 'w+'),
+        $vt100
+    );
+    $getopt  = new Aura\Cli\Getopt( new Aura\Cli\OptionFactory());
 
 Method Hooks
 ------------
@@ -44,9 +69,9 @@ There are four method hooks on the CLI `Command`.  Use the pre- and post-action 
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
 
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         protected $input = 'foo bar baz';
         
@@ -68,7 +93,7 @@ There are four method hooks on the CLI `Command`.  Use the pre- and post-action 
         
         public function postAction()
         {
-            $this->stdio->outln('The input was ' . $this->input);
+            $this->stdio->outln('The input was %r%2' . $this->input . '%n');
         }
         
         public function postExec()
@@ -77,6 +102,7 @@ There are four method hooks on the CLI `Command`.  Use the pre- and post-action 
         }
     }
 
+Did you noticed anything ? Yes we can set the background and font colors. For more have a look into the [formats of Vt100](https://github.com/auraphp/Aura.Cli/blob/master/src/Aura/Cli/Vt100.php)
 
 Argument Params
 ---------------
@@ -85,9 +111,9 @@ We may wish to pass information as part of the invocation.  To read this informa
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
 
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         public function action()
         {
@@ -103,9 +129,10 @@ For example, if we issue ...
 
 ... then the `action()` will output:
 
-    Param 0 is 'foo'.
-    Param 1 is 'bar'.
-    Param 2 is 'baz'.
+    Param 0 is 'command.php'
+    Param 1 is 'foo'.
+    Param 2 is 'bar'.
+    Param 3 is 'baz'.
 
 
 Advanced Usage
@@ -122,10 +149,10 @@ To define an option, do something like the following:
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
     use Aura\Cli\Option;
     
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         protected $options = [
             'foo_bar' => [
@@ -139,7 +166,7 @@ To define an option, do something like the following:
         
         public function action()
         {
-            $this->stdio->out("The value of -f/--foo-bar is ")
+            $this->stdio->out("The value of -f/--foo-bar is ");
             $this->stdio->outln($this->getopt->foo_bar);
         }
     }
