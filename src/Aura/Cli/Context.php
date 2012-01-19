@@ -48,17 +48,19 @@ class Context
      * 
      * Constructor.
      * 
+     * @param array $globals Globals provided by PHP, typically `$GLOBALS`.
+     * 
      * @return void
      * 
      */
-    public function __construct()
+    public function __construct(array $globals)
     {
         $vars = ['env', 'server'];
         foreach ($vars as $key) {
             $this->$key = [];
             $var = '_' . strtoupper($key);
-            if (isset($GLOBALS[$var])) {
-                $this->$key = $GLOBALS[$var];
+            if (isset($globals[$var])) {
+                $this->$key = $globals[$var];
             }
         }
         

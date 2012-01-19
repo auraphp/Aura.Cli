@@ -18,7 +18,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->object = new Context;
+        $this->object = new Context($GLOBALS);
     }
 
     /**
@@ -44,7 +44,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'baz' => 'dib',
         ];
         
-        $context = new Context;
+        $context = new Context($GLOBALS);
         
         // get a key
         $actual = $context->getEnv('foo');
@@ -77,7 +77,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'baz' => 'dib',
         ];
         
-        $context = new Context;
+        $context = new Context($GLOBALS);
         
         // get a key
         $actual = $context->getServer('foo');
@@ -99,7 +99,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetArgv()
     {
         $_SERVER['argv'] = ['foo', 'bar'];
-        $context = new Context;
+        $context = new Context($GLOBALS);
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
     }
@@ -107,7 +107,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testShiftArgv()
     {
         $_SERVER['argv'] = ['foo', 'bar'];
-        $context = new Context;
+        $context = new Context($GLOBALS);
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
         

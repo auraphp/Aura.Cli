@@ -21,7 +21,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         
         // Command
         $_SERVER['argv'] = $argv;
-        $context = new Context;
+        $context = new Context($GLOBALS);
         return new $class($context, $stdio, $getopt);
     }
     
