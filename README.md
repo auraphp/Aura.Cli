@@ -1,7 +1,7 @@
 Aura CLI
 ========
 
-The Aura CLI package provides a system for creating and executing CLI `Command` objects.  It includes facilities for parsing command-line options and handling standard input/output.
+The Aura CLI package provides a system for creating and executing CLI command objects.  It includes facilities for parsing command-line options and handling standard input/output.
 
 Basic Usage
 ===========
@@ -9,13 +9,13 @@ Basic Usage
 Action and Input/Output
 -----------------------
 
-The logic for the `Command` goes in the `action()` method. In the example below, we perform some basic input/output.
+The logic for the command goes in the `action()` method. In the example below, we perform some basic input/output.
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
 
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         public function action()
         {
@@ -26,7 +26,7 @@ The logic for the `Command` goes in the `action()` method. In the example below,
         }
     }
 
-When we invoke that `Command`, it will output "Hello World!", ask for some input, and then print that input to the error stream.
+When we invoke that command, it will output "Hello World!", ask for some input, and then print that input to the error stream.
 
 Use the `$stdio` object to work with standard input/output streams.  Its methods are:
 
@@ -40,13 +40,13 @@ Use the `$stdio` object to work with standard input/output streams.  Its methods
 Method Hooks
 ------------
 
-There are four method hooks on the CLI `Command`.  Use the pre- and post-action methods to perform logic before and after the action; use pre- and post-exec methods to perform setup and teardown.
+There are four method hooks on the CLI command.  Use the pre- and post-action methods to perform logic before and after the action; use pre- and post-exec methods to perform setup and teardown.
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
-
-    class Example extends Command
+    use Aura\Cli\AbstractCommand;
+    
+    class Example extends AbstractCommand
     {
         protected $input = 'foo bar baz';
         
@@ -81,13 +81,13 @@ There are four method hooks on the CLI `Command`.  Use the pre- and post-action 
 Argument Params
 ---------------
 
-We may wish to pass information as part of the invocation.  To read this information while in the `Command`, use `$this->params`.
+We may wish to pass information as part of the invocation.  To read this information while in the command, use `$this->params`.
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
 
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         public function action()
         {
@@ -116,16 +116,16 @@ Long And Short Options
 
 In addition to argument params, we may wish to pass certain short switches or long options as part of the invocation.  These are the `-a` and `--option=value` portions of the invocation.
 
-To work with options, we first define them in the `$options` array of the `Command`.  Then we can retrieve the option values through the `$getopt` object.
+To work with options, we first define them in the `$options` array of the command.  Then we can retrieve the option values through the `$getopt` object.
 
 To define an option, do something like the following:
 
     <?php
     namespace Vendor\Package;
-    use Aura\Cli\Command;
+    use Aura\Cli\AbstractCommand;
     use Aura\Cli\Option;
     
-    class Example extends Command
+    class Example extends AbstractCommand
     {
         protected $options = [
             'foo_bar' => [
@@ -144,7 +144,7 @@ To define an option, do something like the following:
         }
     }
 
-When we invoke the above `Command` like this ...
+When we invoke the above command like this ...
 
     $ php command.php --foo-bar=gir
 
