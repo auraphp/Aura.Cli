@@ -1,1 +1,1 @@
-Create and execute CLI commands
+A system for creating and executing CLI commands
