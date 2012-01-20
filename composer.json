@@ -9,14 +9,14 @@
         "getopt",
         "options"
     ],
-    "homepage": "http://auraphp.github.com",
+    "homepage": "http://auraphp.github.com/Aura.Cli",
     "version": "1.0.0-dev",
     "license": "BSD",
     "authors": [
         {
             "name": "Aura Contributors",
             "homepage": "https://github.com/auraphp/Aura.Cli/contributors"
-        },
+        }
     ],
     "require": {
         "php": ">=5.4.0"
