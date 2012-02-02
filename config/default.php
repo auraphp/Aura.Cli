@@ -21,7 +21,9 @@ $di->params['Aura\Cli\AbstractCommand']['signal']  = $di->lazyGet('signal_manage
  * Dependency services.
  */
 $di->set('cli_context', function() use ($di) {
-    return $di->newInstance('Aura\Cli\Context');
+    return $di->newInstance('Aura\Cli\Context', array(
+        'globals' => $GLOBALS,
+    ));
 });
 
 $di->set('cli_stdio', function() use ($di) {
