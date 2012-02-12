@@ -1,0 +1,14 @@
+- rename Command to AbstractCommand, to keep with naming conventions
+
+- update reference to Command.php to AbstractCommand.php in src.php
+
+- Fix some of the examples in Readme, create an instance script, remove
+  unwanted files in src.php
+
+- fix src.php to include the right files
+
+- the Context object now takes one param at construction time, an array of
+  globals. This puts it in line with the Aura Web Context object. Also, update
+  README with better examples and more information.
+
+- for di config, pass globals
