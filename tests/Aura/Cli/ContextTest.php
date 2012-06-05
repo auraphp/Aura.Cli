@@ -31,10 +31,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * 
-     * Test -- Retrieves an **unfiltered** value by key from the [[$env]] 
+     *
+     * Test -- Retrieves an **unfiltered** value by key from the [[$env]]
      * property, or an alternate default value if that key does not exist.
-     * 
+     *
      */
     public function testGetEnv()
     {
@@ -43,31 +43,31 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
             'baz' => 'dib',
         ];
-        
+
         $context = new Context($GLOBALS);
-        
+
         // get a key
         $actual = $context->getEnv('foo');
         $this->assertSame('bar', $actual);
-        
+
         // get a non-existent key
         $actual = $context->getEnv('zim');
         $this->assertNull($actual);
-        
+
         // get a non-existent key with default value
         $actual = $context->getEnv('zim', 'gir');
         $this->assertSame('gir', $actual);
-        
+
         // get the whole env
         $actual = $context->getEnv();
         $this->assertSame($_ENV, $actual);
     }
 
     /**
-     * 
-     * Test -- Retrieves an **unfiltered** value by key from the [[$server]] 
+     *
+     * Test -- Retrieves an **unfiltered** value by key from the [[$server]]
      * property, or an alternate default value if that key does not exist.
-     * 
+     *
      */
     public function testGetServer()
     {
@@ -76,26 +76,26 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
             'baz' => 'dib',
         ];
-        
+
         $context = new Context($GLOBALS);
-        
+
         // get a key
         $actual = $context->getServer('foo');
         $this->assertSame('bar', $actual);
-        
+
         // get a non-existent key
         $actual = $context->getServer('zim');
         $this->assertNull($actual);
-        
+
         // get a non-existent key with default value
         $actual = $context->getServer('zim', 'gir');
         $this->assertSame('gir', $actual);
-        
+
         // get the whole env
         $actual = $context->getServer();
         $this->assertSame($_SERVER, $actual);
     }
-    
+
     public function testGetArgv()
     {
         $_SERVER['argv'] = ['foo', 'bar'];
@@ -103,17 +103,17 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
     }
-    
+
     public function testShiftArgv()
     {
         $_SERVER['argv'] = ['foo', 'bar'];
         $context = new Context($GLOBALS);
         $actual = $context->getArgv();
         $this->assertSame($_SERVER['argv'], $actual);
-        
+
         $actual = $context->shiftArgv();
         $this->assertSame('foo', $actual);
-        
+
         $actual = $context->getArgv();
         $this->assertSame(['bar'], $actual);
     }

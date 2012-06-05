@@ -20,7 +20,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->factory = new OptionFactory();
     }
-    
+
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
@@ -37,14 +37,14 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'long' => 'foo-bar',
             'short' => 'f',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertSame('foo_bar',    $option->getName());
         $this->assertSame('foo-bar',    $option->getLong());
         $this->assertSame('f',          $option->getShort());
     }
-    
+
     /**
      * @expectedException Aura\Cli\Exception\OptionName
      */
@@ -54,24 +54,24 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'long' => 'foo-bar',
             'short' => 'f',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
     }
-    
+
     public function testInit_noLongOrShort()
     {
         $spec = [
             'name' => 'foo_bar',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertSame('foo_bar',    $option->getName());
         $this->assertSame('foo-bar',    $option->getLong());
         $this->assertSame('',           $option->getShort());
     }
-    
-    
+
+
     /**
      * @expectedException Aura\Cli\Exception\OptionParam
      */
@@ -81,11 +81,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'name' => 'foo_bar',
             'param' => 'no_such_type',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
     }
-    
-    
+
+
     public function testSetValue()
     {
         $spec = [
@@ -93,14 +93,14 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'long' => 'foo-bar',
             'short' => 'f',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $option->setValue('zim');
-        
+
         $this->assertSame('zim', $option->getValue());
     }
-    
+
     /**
      * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
@@ -112,12 +112,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'param' => Option::PARAM_REQUIRED,
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $option->setValue('');
     }
-    
+
     /**
      * @expectedException Aura\Cli\Exception\OptionNotMulti
      */
@@ -128,13 +128,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'long' => 'foo-bar',
             'short' => 'f',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $option->setValue('zim');
         $option->setValue('gir');
     }
-    
+
     public function testIsMulti()
     {
         $spec = [
@@ -143,15 +143,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'multi' => true,
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $option->setValue('zim');
         $option->setValue('gir');
-        
+
         $this->assertSame(['zim', 'gir'], $option->getValue());
     }
-    
+
     public function testGetValue()
     {
         $spec = [
@@ -159,11 +159,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'long' => 'foo-bar',
             'short' => 'f',
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $option->setValue('zim');
-        
+
         $this->assertSame('zim', $option->getValue());
     }
 
@@ -175,9 +175,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'default' => 'default_value'
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertSame('default_value', $option->getValue());
     }
 
@@ -189,9 +189,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'default' => 'default_value'
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertSame('default_value', $option->getDefault());
     }
 
@@ -203,9 +203,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'param' => Option::PARAM_REQUIRED,
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertTrue($option->isParamRequired());
         $this->assertFalse($option->isParamRejected());
         $this->assertFalse($option->isParamOptional());
@@ -219,9 +219,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'param' => Option::PARAM_REJECTED,
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertFalse($option->isParamRequired());
         $this->assertTrue($option->isParamRejected());
         $this->assertFalse($option->isParamOptional());
@@ -235,9 +235,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'short' => 'f',
             'param' => Option::PARAM_OPTIONAL,
         ];
-        
+
         $option = $this->factory->newInstance($spec);
-        
+
         $this->assertFalse($option->isParamRequired());
         $this->assertFalse($option->isParamRejected());
         $this->assertTrue($option->isParamOptional());

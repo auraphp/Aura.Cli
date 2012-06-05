@@ -48,7 +48,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $actual = $this->vt100->strip($text);
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testSetAndGetPosix()
     {
         $list = [true, false, null];
@@ -57,109 +57,109 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
             $this->assertSame($flag, $this->vt100->getPosix());
         }
     }
-    
+
     public function testSetAndGetPhpOs()
     {
         $actual = $this->vt100->getPhpOs();
         $this->assertSame(PHP_OS, $actual);
-        
+
         $this->vt100->setPhpOs('win');
         $actual = $this->vt100->getPhpOs();
         $this->assertSame('win', $actual);
     }
-    
+
     public function testWrite()
     {
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->write($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testWriteln()
     {
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->writeln($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testWrite_posix()
     {
         $this->vt100->setPosix(true);
-        
+
         $text   = '%Kbold%%percent%n';
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m";
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->write($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testWriteln_posix()
     {
         $this->vt100->setPosix(true);
-        
+
         $text   = '%Kbold%%percent%n';
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m" . PHP_EOL;
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->writeln($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testWrite_win()
     {
         $this->vt100->setPhpOs('win');
-        
+
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->write($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testWriteln_win()
     {
         $this->vt100->setPhpOs('win');
-        
+
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
-        
+
         $handle = fopen('php://memory', 'w+');
         $this->vt100->writeln($handle, $text);
         rewind($handle);
         $actual = fread($handle, 8192);
         fclose($handle);
-        
+
         $this->assertSame($expect, $actual);
     }
-    
+
 }
