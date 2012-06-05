@@ -20,7 +20,7 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->factory = new OptionFactory();
     }
-    
+
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
@@ -38,9 +38,9 @@ class OptionFactoryTest extends \PHPUnit_Framework_TestCase
         $params = [
             'name' => 'foo',
         ];
-        
+
         $option = $this->factory->newInstance($params);
-        
+
         $this->assertInstanceOf('Aura\Cli\Option', $option);
     }
 }

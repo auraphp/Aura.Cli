@@ -10,15 +10,15 @@ class StdioTest extends \PHPUnit_Framework_TestCase
      * @var Stdio
      */
     protected $stdio;
-    
+
     protected $stdin;
-    
+
     protected $stdout;
-    
+
     protected $stderr;
-    
+
     protected $vt100;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -121,7 +121,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         $actual = fread($this->stderr, 8192);
         $this->assertSame($expect . PHP_EOL, $actual);
     }
-    
+
     public function testInln()
     {
         $expect = 'foo bar baz' . PHP_EOL;
@@ -130,7 +130,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         $actual = $this->stdio->inln();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testIn()
     {
         $expect = 'foo bar baz';

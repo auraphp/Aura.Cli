@@ -1,28 +1,28 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 /**
- * 
+ *
  * A factory to create Option objects.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class OptionFactory
 {
     /**
-     * 
+     *
      * An array of default parameters for Option objects.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params = [
         'name'    => null,
@@ -32,16 +32,16 @@ class OptionFactory
         'multi'   => null,
         'default' => null,
     ];
-    
+
     /**
-     * 
+     *
      * Creates and returns a new Option object.
-     * 
+     *
      * @param array $params An array of key-value pairs corresponding to
      * Option constructor params.
-     * 
+     *
      * @return Option
-     * 
+     *
      */
     public function newInstance(array $params)
     {
