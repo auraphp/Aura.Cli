@@ -114,7 +114,17 @@ class Option
      * 
      * Initialized the object with an option definition array.
      * 
-     * @param array $data The option definition.
+     * @param string $name The option property name.
+     * 
+     * @param string $long The long form of the option flag.
+     * 
+     * @param string $short The short form of the option flag.
+     * 
+     * @param string $param Whether a param is required, optional, or rejected.
+     * 
+     * @param bool $multi Can the option be specified multiple times?
+     * 
+     * @param string $default The default value of the option param.
      * 
      * @return void
      * 

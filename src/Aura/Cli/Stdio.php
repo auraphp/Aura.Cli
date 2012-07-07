@@ -10,6 +10,8 @@
  */
 namespace Aura\Cli;
 
+use Aura\Cli\Vt100;
+
 /**
  * 
  * Provides a wrapper for standard input/output handles.
@@ -65,12 +67,14 @@ class Stdio {
      * 
      * @param resource $stderr A handle for standard error.
      * 
+     * @param Vt100 $vt100 A VT100 formatting object.
+     * 
      */
     public function __construct (
         $stdin,
         $stdout,
         $stderr,
-        \Aura\Cli\Vt100  $vt100
+        Vt100 $vt100
     ) {
         $this->stdin  = $stdin;
         $this->stdout = $stdout;

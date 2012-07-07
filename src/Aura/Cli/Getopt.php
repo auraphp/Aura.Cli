@@ -148,7 +148,7 @@ class Getopt
      * 
      * Returns a single Option definition object by its property name.
      * 
-     * @var string $key The property name of the option.
+     * @param string $prop The property name of the option.
      * 
      * @return Option
      * 
@@ -213,7 +213,7 @@ class Getopt
      * 
      * Returns a single Option definition object by its long-format name.
      * 
-     * @var string $key The long-format name of the option.
+     * @param string $long The long-format name of the option.
      * 
      * @return Option
      * 
@@ -235,7 +235,7 @@ class Getopt
      * 
      * Returns a single Option definition object by its short-format name.
      * 
-     * @var string $key The long-format name of the option.
+     * @param string $char The long-format name of the option.
      * 
      * @return Option
      * 
@@ -356,7 +356,7 @@ class Getopt
      * 
      * Parses a short-form option (or cluster of options).
      * 
-     * @param string $arg The `$argv` element, e.g. "-f" or "-fbz".
+     * @param string $spec The `$argv` element, e.g. "-f" or "-fbz".
      * 
      * @return void
      * 

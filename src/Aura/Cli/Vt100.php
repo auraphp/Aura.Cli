@@ -130,8 +130,7 @@ class Vt100
      * 
      * Gets the value of the POSIX terminal flag.
      * 
-     * @param mixed $flag True to force formatting, false to force stripping,
-     * or null to auto-determine.
+     * @return bool
      * 
      */
     public function getPosix()

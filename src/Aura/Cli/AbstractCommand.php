@@ -62,11 +62,11 @@ abstract class AbstractCommand
      * 
      * Constructor.
      * 
-     * @param Context $context The command-line context.
+     * @param \Aura\Cli\Context $context The command-line context.
      * 
-     * @param Stdio $stdio Standard input/output streams.
+     * @param \Aura\Cli\Stdio $stdio Standard input/output streams.
      * 
-     * @param Getopt $getopt An options processor and reader.
+     * @param \Aura\Cli\Getopt $getopt An options processor and reader.
      * 
      */
     public function __construct(
