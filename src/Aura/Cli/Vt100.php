@@ -30,17 +30,18 @@ class Vt100
      * 
      * Based on `ANSI VT100 Color/Style Codes` according to the
      * [VT100 User Guide](http://vt100.net/docs/vt100-ug) and the
-     * [ANSI/VT100 Terminal Control reference](http://www.termsys.demon.co.uk/vtansi.htm).
+     * [ANSI/VT100 Terminal Control reference](
+     * http://www.termsys.demon.co.uk/vtansi.htm).
      * Inspired by [PEAR Console_Color](http://pear.php.net/Console_Color).
      * 
      * @var array
      * 
      */
     protected $format = [
-        
+
         // literal percent sign
         '%%'    => '%',             // percent-sign
-        
+
         // color, normal weight
         '%k'    => "\033[30m",      // black
         '%r'    => "\033[31m",      // red
@@ -52,7 +53,7 @@ class Vt100
         '%c'    => "\033[36m",      // cyan/light blue
         '%w'    => "\033[37m",      // white
         '%n'    => "\033[0m",       // reset to terminal default
-        
+
         // color, bold
         '%K'    => "\033[30;1m",    // black, bold
         '%R'    => "\033[31;1m",    // red, bold
@@ -64,7 +65,7 @@ class Vt100
         '%C'    => "\033[36;1m",    // cyan/light blue, bold
         '%W'    => "\033[37;1m",    // white, bold
         '%N'    => "\033[0;1m",     // terminal default, bold
-        
+
         // background color
         '%0'    => "\033[40m",      // black background
         '%1'    => "\033[41m",      // red background
@@ -74,16 +75,16 @@ class Vt100
         '%5'    => "\033[45m",      // magenta/purple background
         '%6'    => "\033[46m",      // cyan/light blue background
         '%7'    => "\033[47m",      // white background
-        
+
         // assorted style shortcuts
         '%F'    => "\033[5m",       // blink/flash
         '%_'    => "\033[5m",       // blink/flash
         '%U'    => "\033[4m",       // underline
         '%I'    => "\033[7m",       // reverse/inverse
         '%*'    => "\033[1m",       // bold
-        '%d'    => "\033[2m",       // dim        
+        '%d'    => "\033[2m",       // dim
     ];
-    
+
     /**
      * 
      * The POSIX terminal flag.
@@ -96,7 +97,7 @@ class Vt100
      * 
      */
     protected $posix = null;
-    
+
     /**
      * 
      * The PHP_OS value. Provided so we can fake the OS as needed.
@@ -105,7 +106,7 @@ class Vt100
      * 
      */
     protected $php_os = PHP_OS;
-    
+
     /**
      * 
      * Forces output to format for POSIX terminals, or to strip for non-POSIX
@@ -125,7 +126,7 @@ class Vt100
             $this->posix = (bool) $flag;
         }
     }
-    
+
     /**
      * 
      * Gets the value of the POSIX terminal flag.
@@ -137,7 +138,7 @@ class Vt100
     {
         return $this->posix;
     }
-    
+
     /**
      * 
      * Sets the `$php_os` value.
@@ -151,7 +152,7 @@ class Vt100
     {
         $this->php_os = $php_os;
     }
-    
+
     /**
      * 
      * Gets the `$php_os` value.
@@ -163,7 +164,7 @@ class Vt100
     {
         return $this->php_os;
     }
-    
+
     /**
      * 
      * Converts VT100 %-markup in text to control codes.
@@ -177,7 +178,7 @@ class Vt100
     {
         return strtr($text, $this->format);
     }
-    
+
     /**
      * 
      * Strips VT100 %-markup from text.
@@ -196,10 +197,10 @@ class Vt100
             }
             $strip['%%'] = '%';
         }
-        
+
         return strtr($text, $strip);
     }
-    
+
     /**
      * 
      * Writes text to a file handle, converting to control codes if the handle
@@ -225,7 +226,7 @@ class Vt100
             fwrite($handle, $this->strip($text));
         }
     }
-    
+
     /**
      * 
      * Writes text to a file handle, converting to control codes if the handle
@@ -246,7 +247,7 @@ class Vt100
         $this->write($handle, $text);
         fwrite($handle, PHP_EOL);
     }
-    
+
     /**
      * 
      * Determines if a stream handle should be treated as a POSIX terminal.
@@ -271,3 +272,4 @@ class Vt100
         }
     }
 }
+ 

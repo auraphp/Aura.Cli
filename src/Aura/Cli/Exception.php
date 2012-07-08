@@ -17,4 +17,7 @@ namespace Aura\Cli;
  * @package Aura.Cli
  * 
  */
-class Exception extends \Exception {}
+class Exception extends \Exception
+{
+}
+ 
