@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception;
+use Aura\Cli\Exception as Exception;
 /**
  * 
  * The option requires that no parameter be present.

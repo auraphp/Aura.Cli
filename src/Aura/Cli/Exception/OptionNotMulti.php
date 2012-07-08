@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception;
+use Aura\Cli\Exception as Exception;
 /**
  * 
  * The option does not allow multiple values.

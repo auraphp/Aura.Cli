@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception;
+use Aura\Cli\Exception as Exception;
 /**
  * 
  * The option 'param' value needs a boolean or a null.
