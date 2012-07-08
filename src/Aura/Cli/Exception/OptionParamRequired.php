@@ -10,6 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
+use Aura\Cli\Exception;
 /**
  * 
  * The option requires a non-blank parameter.
@@ -17,4 +18,7 @@ namespace Aura\Cli\Exception;
  * @package Aura.Cli
  * 
  */
-class OptionParamRequired extends \Aura\Cli\Exception {}
+class OptionParamRequired extends Exception
+{
+}
+ 

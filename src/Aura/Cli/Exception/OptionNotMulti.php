@@ -10,6 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
+use Aura\Cli\Exception;
 /**
  * 
  * The option does not allow multiple values.
@@ -17,4 +18,7 @@ namespace Aura\Cli\Exception;
  * @package Aura.Cli
  * 
  */
-class OptionNotMulti extends \Aura\Cli\Exception {}
+class OptionNotMulti extends Exception
+{
+}
+ 

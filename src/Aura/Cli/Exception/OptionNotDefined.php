@@ -10,6 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
+use Aura\Cli\Exception;
 /**
  * 
  * Asked for an option that is not defined.
@@ -17,4 +18,7 @@ namespace Aura\Cli\Exception;
  * @package Aura.Cli
  * 
  */
-class OptionNotDefined extends \Aura\Cli\Exception {}
+class OptionNotDefined extends extends Exception
+{
+}
+ 
