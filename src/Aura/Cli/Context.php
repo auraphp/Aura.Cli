@@ -27,7 +27,7 @@ class Context
      * 
      */
     protected $argv;
-    
+
     /**
      * 
      * Imported $_ENV values.
@@ -36,7 +36,7 @@ class Context
      * 
      */
     protected $env;
-    
+
     /**
      * 
      * Imported $_SERVER values.
@@ -45,7 +45,7 @@ class Context
      * 
      */
     protected $server;
-    
+
     /**
      * 
      * Constructor.
@@ -65,10 +65,10 @@ class Context
                 $this->$key = $globals[$var];
             }
         }
-        
+
         $this->setArgv($this->getServer('argv', []));
     }
-    
+
     /**
      * 
      * Retrieves an **unfiltered** value by key from the $env property, or an 
@@ -86,7 +86,7 @@ class Context
     {
         return $this->getValue('env', $key, $alt);
     }
-    
+
     /**
      * 
      * Retrieves an **unfiltered** value by key from the $server property, or
@@ -104,7 +104,7 @@ class Context
     {
         return $this->getValue('server', $key, $alt);
     }
-    
+
     /**
      * 
      * Retrieves an **unfiltered** value by position from the `$argv` 
@@ -123,7 +123,7 @@ class Context
     {
         return $this->getValue('argv', $key, $alt);
     }
-    
+
     /**
      * 
      * Shifts the first value off the `$argv` property and returns it. Note
@@ -138,7 +138,7 @@ class Context
     {
         return array_shift($this->argv);
     }
-    
+
     /**
      * 
      * Sets the `$argv` property.
@@ -152,7 +152,7 @@ class Context
     {
         $this->argv = $argv;
     }
-    
+
     /**
      * 
      * Common method to get a property value and return it.
@@ -187,3 +187,4 @@ class Context
         }
     }
 }
+ 

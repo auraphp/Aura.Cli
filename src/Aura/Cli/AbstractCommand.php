@@ -28,7 +28,7 @@ abstract class AbstractCommand
      * 
      */
     protected $getopt;
-    
+
     /**
      * 
      * The option definitions for the Getopt object.
@@ -37,7 +37,7 @@ abstract class AbstractCommand
      * 
      */
     protected $options = [];
-    
+
     /**
      * 
      * Should Getopt be strict about how options are processed?  In strict
@@ -48,7 +48,7 @@ abstract class AbstractCommand
      * 
      */
     protected $options_strict = Getopt::STRICT;
-    
+
     /**
      * 
      * The positional (numeric) arguments passed at the command line.
@@ -57,7 +57,7 @@ abstract class AbstractCommand
      * 
      */
     protected $params = [];
-    
+
     /**
      * 
      * Constructor.
@@ -80,7 +80,7 @@ abstract class AbstractCommand
         $this->initGetopt();
         $this->initParams();
     }
-    
+
     /**
      * 
      * Passes the Context arguments to `$getopt`.
@@ -93,7 +93,7 @@ abstract class AbstractCommand
         $this->getopt->init($this->options, $this->options_strict);
         $this->getopt->load($this->context->getArgv());
     }
-    
+
     /**
      * 
      * Loads `$params` from `$getopt`.
@@ -105,7 +105,7 @@ abstract class AbstractCommand
     {
         $this->params = $this->getopt->getParams();
     }
-    
+
     /**
      * 
      * Executes the Command.  In order, it does these things:
@@ -132,12 +132,12 @@ abstract class AbstractCommand
         $this->action();
         $this->postAction();
         $this->postExec();
-        
+
         // return terminal output to normal colors
         $this->stdio->out("%n");
         $this->stdio->err("%n");
     }
-    
+
     /**
      * 
      * Runs at the beginning of `exec()` before `preAction()`.
@@ -148,7 +148,7 @@ abstract class AbstractCommand
     public function preExec()
     {
     }
-    
+
     /**
      * 
      * Runs before `action()` but after `preExec()`.
@@ -159,7 +159,7 @@ abstract class AbstractCommand
     public function preAction()
     {
     }
-    
+
     /**
      * 
      * The main logic for the Command.
@@ -168,7 +168,7 @@ abstract class AbstractCommand
      * 
      */
     abstract protected function action();
-    
+
     /**
      * 
      * Runs after `action()` but before `postExec()`.
@@ -179,7 +179,7 @@ abstract class AbstractCommand
     public function postAction()
     {
     }
-    
+
     /**
      * 
      * Runs at the end of `exec()` after `postAction()`.
@@ -191,3 +191,4 @@ abstract class AbstractCommand
     {
     }
 }
+ 

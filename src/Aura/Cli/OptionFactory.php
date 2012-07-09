@@ -34,7 +34,7 @@ class OptionFactory
         'multi'   => null,
         'default' => null,
     ];
-    
+
     /**
      * 
      * Creates and returns a new Option object.
@@ -58,3 +58,4 @@ class OptionFactory
         );
     }
 }
+ 
