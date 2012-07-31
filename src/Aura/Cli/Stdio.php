@@ -3,10 +3,14 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Cli
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
 namespace Aura\Cli;
+
+use Aura\Cli\Vt100;
 
 /**
  * 
@@ -15,8 +19,8 @@ namespace Aura\Cli;
  * @package Aura.Cli
  * 
  */
-class Stdio {
-    
+class Stdio
+{
     /**
      * 
      * A handle for standard input.
@@ -25,7 +29,7 @@ class Stdio {
      * 
      */
     protected $stdin;
-    
+
     /**
      * 
      * A handle for standard output.
@@ -34,7 +38,7 @@ class Stdio {
      * 
      */
     protected $stdout;
-    
+
     /**
      * 
      * A handle for standard error.
@@ -43,7 +47,7 @@ class Stdio {
      * 
      */
     protected $stderr;
-    
+
     /**
      * 
      * A Vt100 object to format output.
@@ -52,7 +56,7 @@ class Stdio {
      * 
      */
     protected $vt100;
-    
+
     /**
      * 
      * Constructor.
@@ -63,19 +67,21 @@ class Stdio {
      * 
      * @param resource $stderr A handle for standard error.
      * 
+     * @param Vt100 $vt100 A VT100 formatting object.
+     * 
      */
     public function __construct (
         $stdin,
         $stdout,
         $stderr,
-        \Aura\Cli\Vt100  $vt100
+        Vt100 $vt100
     ) {
         $this->stdin  = $stdin;
         $this->stdout = $stdout;
         $this->stderr = $stderr;
         $this->vt100  = $vt100;
     }
-    
+
     /**
      * 
      * Returns the standard input handle.
@@ -87,7 +93,7 @@ class Stdio {
     {
         return $this->stdin;
     }
-    
+
     /**
      * 
      * Returns the standard output handle.
@@ -99,7 +105,7 @@ class Stdio {
     {
         return $this->stdout;
     }
-    
+
     /**
      * 
      * Returns the standard error handle.
@@ -111,7 +117,7 @@ class Stdio {
     {
         return $this->stderr;
     }
-    
+
     /**
      * 
      * Gets user input from the command line and trims the end-of-line.
@@ -121,9 +127,9 @@ class Stdio {
      */
     public function in()
     {
-		return rtrim(fgets($this->stdin), PHP_EOL);
+        return rtrim(fgets($this->stdin), PHP_EOL);
     }
-    
+
     /**
      * 
      * Gets user input from the command line and leaves the end-of-line in
@@ -136,7 +142,7 @@ class Stdio {
     {
         return fgets($this->stdin);
     }
-    
+
     /**
      * 
      * Prints text to standard output via the Vt100 formatter **without** 
@@ -151,7 +157,7 @@ class Stdio {
     {
         $this->vt100->write($this->stdout, $string);
     }
-    
+
     /**
      * 
      * Prints text to standard output via the Vt100 formatter **with** 
@@ -166,7 +172,7 @@ class Stdio {
     {
         $this->vt100->writeln($this->stdout, $string);
     }
-    
+
     /**
      * 
      * Prints text to standard error via the Vt100 formatter **without** 
@@ -181,7 +187,7 @@ class Stdio {
     {
         $this->vt100->write($this->stderr, $string);
     }
-    
+
     /**
      * 
      * Prints text to standard error via the Vt100 formatter **without** 
@@ -197,3 +203,4 @@ class Stdio {
         $this->vt100->writeln($this->stderr, $string);
     }
 }
+ 

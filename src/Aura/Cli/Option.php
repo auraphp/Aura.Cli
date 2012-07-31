@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Cli
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -25,7 +27,7 @@ class Option
      * 
      */
     const PARAM_REQUIRED = 'required';
-    
+
     /**
      * 
      * Any parameter value on this option will be rejected.
@@ -34,7 +36,7 @@ class Option
      * 
      */
     const PARAM_REJECTED = 'rejected';
-    
+
     /**
      * 
      * A parameter value may or may not be present on this option.
@@ -43,7 +45,7 @@ class Option
      * 
      */
     const PARAM_OPTIONAL = 'optional';
-    
+
     /**
      * 
      * The property name of the option.
@@ -52,7 +54,7 @@ class Option
      * 
      */
     protected $name = null;
-    
+
     /**
      * 
      * The long name of the option.
@@ -61,7 +63,7 @@ class Option
      * 
      */
     protected $long = null;
-    
+
     /**
      * 
      * The short name of the option.
@@ -70,7 +72,7 @@ class Option
      * 
      */
     protected $short = null;
-    
+
     /**
      * 
      * When the option is present, will a be parameter required, optional, or
@@ -80,7 +82,7 @@ class Option
      * 
      */
     protected $param = self::PARAM_OPTIONAL;
-    
+
     /**
      * 
      * Can the option be specified multiple times?
@@ -89,7 +91,7 @@ class Option
      * 
      */
     protected $multi = null;
-    
+
     /**
      * 
      * The default value for the option param.
@@ -98,7 +100,7 @@ class Option
      * 
      */
     protected $default = null;
-    
+
     /**
      * 
      * The option value as set from the command line.
@@ -107,12 +109,22 @@ class Option
      * 
      */
     protected $value = null;
-    
+
     /**
      * 
      * Initialized the object with an option definition array.
      * 
-     * @param array $data The option definition.
+     * @param string $name The option property name.
+     * 
+     * @param string $long The long form of the option flag.
+     * 
+     * @param string $short The short form of the option flag.
+     * 
+     * @param string $param Whether a param is required, optional, or rejected.
+     * 
+     * @param bool $multi Can the option be specified multiple times?
+     * 
+     * @param string $default The default value of the option param.
      * 
      * @return void
      * 
@@ -132,27 +144,27 @@ class Option
         $this->param   = $param ?: static::PARAM_OPTIONAL;
         $this->multi   = (bool) $multi;
         $this->default = $default;
-        
+
         // always need a name
         if (! $this->name) {
             throw new Exception\OptionName;
         }
-        
+
         // always need a long format or a short format.
         if (! $this->long && ! $this->short) {
             // auto-add a long format
             $this->long = str_replace('_', '-', $this->name);
         }
-        
+
         // param has to be boolean or null
         $ok = $this->param === static::PARAM_REQUIRED
            || $this->param === static::PARAM_REJECTED
            || $this->param === static::PARAM_OPTIONAL;
-           
+
         if (! $ok) {
             throw new Exception\OptionParam;
         }
-        
+
         // preset the value to an array if multiple values are allowed
         if ($this->multi) {
             $this->value = [];
@@ -160,7 +172,7 @@ class Option
             $this->value = null;
         }
     }
-    
+
     /**
      * 
      * Sets the option value.
@@ -175,19 +187,19 @@ class Option
         if ($this->isParamRequired() && trim($value) === '') {
             throw new Exception\OptionParamRequired;
         }
-        
+
         if ($this->isMulti()) {
             $this->value[] = $value;
             return;
         }
-        
+
         if ($this->value !== null) {
             throw new Exception\OptionNotMulti;
         }
-        
+
         $this->value = $value;
     }
-    
+
     /**
      * 
      * Gets the option value.
@@ -204,7 +216,7 @@ class Option
             return $this->value;
         }
     }
-    
+
     /**
      * 
      * Gets the long name for this option.
@@ -216,7 +228,7 @@ class Option
     {
         return $this->long;
     }
-    
+
     /**
      * 
      * Gets the short name for this option.
@@ -228,7 +240,7 @@ class Option
     {
         return $this->short;
     }
-    
+
     /**
      * 
      * Gets the property name for this option.
@@ -240,7 +252,7 @@ class Option
     {
         return $this->name;
     }
-    
+
     /**
      * 
      * Gets the default value of this option.
@@ -252,7 +264,7 @@ class Option
     {
         return $this->default;
     }
-    
+
     /**
      * 
      * Can this option be present multiple times?
@@ -264,7 +276,7 @@ class Option
     {
         return $this->multi;
     }
-    
+
     /**
      * 
      * Is a param value required to be present on this option?
@@ -276,7 +288,7 @@ class Option
     {
         return $this->param === static::PARAM_REQUIRED;
     }
-    
+
     /**
      * 
      * Is a param value required *not* to be present on this option?
@@ -288,7 +300,7 @@ class Option
     {
         return $this->param === static::PARAM_REJECTED;
     }
-    
+
     /**
      * 
      * Is a param value optional on this option?
@@ -301,3 +313,4 @@ class Option
         return $this->param === static::PARAM_OPTIONAL;
     }
 }
+ 

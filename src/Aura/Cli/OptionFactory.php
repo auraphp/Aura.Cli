@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Cli
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -32,7 +34,7 @@ class OptionFactory
         'multi'   => null,
         'default' => null,
     ];
-    
+
     /**
      * 
      * Creates and returns a new Option object.
@@ -56,3 +58,4 @@ class OptionFactory
         );
     }
 }
+ 

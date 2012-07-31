@@ -3,11 +3,14 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Cli
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
 namespace Aura\Cli\Exception;
 
+use Aura\Cli\Exception as Exception;
 /**
  * 
  * Asked for an option that is not defined.
@@ -15,4 +18,7 @@ namespace Aura\Cli\Exception;
  * @package Aura.Cli
  * 
  */
-class OptionNotDefined extends \Aura\Cli\Exception {}
+class OptionNotDefined extends Exception
+{
+}
+ 

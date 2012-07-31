@@ -3,6 +3,8 @@
  * 
  * This file is part of the Aura project for PHP.
  * 
+ * @package Aura.Cli
+ * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
@@ -25,7 +27,7 @@ class Getopt
      * 
      */
     const STRICT = true;
-    
+
     /**
      * 
      * Do not throw exceptions when undefined options are passed.
@@ -34,7 +36,7 @@ class Getopt
      * 
      */
     const NON_STRICT = false;
-    
+
     /**
      * 
      * A factory to create Option objects.
@@ -43,7 +45,7 @@ class Getopt
      * 
      */
     protected $option_factory;
-    
+
     /**
      * 
      * Definitions for recognized options.
@@ -52,7 +54,7 @@ class Getopt
      * 
      */
     protected $options = [];
-    
+
     /**
      * 
      * Remaining non-option params after loading option values.
@@ -61,7 +63,7 @@ class Getopt
      * 
      */
     protected $params = [];
-    
+
     /**
      * 
      * The incoming arguments, typically from $_SERVER['argv'].
@@ -70,7 +72,7 @@ class Getopt
      * 
      */
     protected $argv = [];
-    
+
     /**
      * 
      * Constructor.
@@ -82,7 +84,7 @@ class Getopt
     {
         $this->option_factory = $option_factory;
     }
-    
+
     /**
      * 
      * Make Option values available as magic readonly properties.
@@ -99,7 +101,7 @@ class Getopt
             return $option->getValue();
         }
     }
-    
+
     /**
      * 
      * Initializes the instance with option definitions.
@@ -118,7 +120,7 @@ class Getopt
         if ($this->options) {
             throw new Exception('Already initialized.');
         }
-        
+
         foreach ($opts as $name => $spec) {
             if (! is_array($spec)) {
                 throw new \UnexpectedValueException;
@@ -126,10 +128,10 @@ class Getopt
             $spec['name'] = $name;
             $this->options[$name] = $this->option_factory->newInstance($spec);
         }
-        
+
         $this->strict = $strict;
     }
-    
+
     /**
      * 
      * Returns all the Option definition objects.
@@ -141,12 +143,12 @@ class Getopt
     {
         return $this->options;
     }
-    
+
     /**
      * 
      * Returns a single Option definition object by its property name.
      * 
-     * @var string $key The property name of the option.
+     * @param string $prop The property name of the option.
      * 
      * @return Option
      * 
@@ -156,12 +158,12 @@ class Getopt
         if (array_key_exists($prop, $this->options)) {
             return $this->options[$prop];
         }
-        
+
         if ($this->strict) {
             throw new Exception\OptionNotDefined($prop);
         }
     }
-    
+
     /**
      * 
      * Returns an array of all Option names and their values.
@@ -177,7 +179,7 @@ class Getopt
         }
         return $vals;
     }
-    
+
     /**
      * 
      * Returns the value of a single Option by name.
@@ -194,7 +196,7 @@ class Getopt
             return $option->getValue();
         }
     }
-    
+
     /**
      * 
      * Returns an array of all numeric parameters.
@@ -206,12 +208,12 @@ class Getopt
     {
         return $this->params;
     }
-    
+
     /**
      * 
      * Returns a single Option definition object by its long-format name.
      * 
-     * @var string $key The long-format name of the option.
+     * @param string $long The long-format name of the option.
      * 
      * @return Option
      * 
@@ -223,17 +225,17 @@ class Getopt
                 return $option;
             }
         }
-        
+
         if ($this->strict) {
             throw new Exception\OptionNotDefined("--$long");
         }
     }
-    
+
     /**
      * 
      * Returns a single Option definition object by its short-format name.
      * 
-     * @var string $key The long-format name of the option.
+     * @param string $char The long-format name of the option.
      * 
      * @return Option
      * 
@@ -245,12 +247,12 @@ class Getopt
                 return $option;
             }
         }
-        
+
         if ($this->strict) {
             throw new Exception\OptionNotDefined("-$char");
         }
     }
-    
+
     /**
      * 
      * Loads Option values from an argument array, placing option values
@@ -266,31 +268,31 @@ class Getopt
     {
         // hold onto the argv source
         $this->argv = $argv;
-        
+
         // remaining non-option params
         $params = [];
-        
+
         // flag to say when we've reached the end of options
         $done = false;
-        
+
         // shift each element from the top of the $argv source
         while ($this->argv) {
-            
+
             // get the next argument
             $arg = array_shift($this->argv);
-            
+
             // after a plain double-dash, all values are numeric (not options)
             if ($arg == '--') {
                 $done = true;
                 continue;
             }
-            
+
             // if we're reached the end of options, just add to the params
             if ($done) {
                 $this->params[] = $arg;
                 continue;
             }
-            
+
             // long option, short option, or numeric param?
             if (substr($arg, 0, 2) == '--') {
                 $this->loadLong($arg);
@@ -301,7 +303,7 @@ class Getopt
             }
         }
     }
-    
+
     /**
      * 
      * Parses a long-form option.
@@ -315,7 +317,7 @@ class Getopt
     {
         // take the leading "--" off the specification
         $spec = substr($spec, 2);
-        
+
         // split the spec into name and value
         $pos = strpos($spec, '=');
         if ($pos === false) {
@@ -325,23 +327,23 @@ class Getopt
             $name  = substr($spec, 0, $pos);
             $value = substr($spec, $pos + 1);
         }
-        
+
         // get the option object
         $option = $this->getLongOption($name);
         if (! $option) {
             return;
         }
-        
+
         // if param is required but not present, blow up
         if ($option->isParamRequired() && $value === null) {
             throw new Exception\OptionParamRequired;
         }
-        
+
         // if params are rejected and one is present, blow up
         if ($option->isParamRejected() && $value !== null) {
             throw new Exception\OptionParamRejected;
         }
-        
+
         // if param is optional but not present, set to true
         if ($option->isParamOptional() && $value === null) {
             $option->setValue(true);
@@ -349,12 +351,12 @@ class Getopt
             $option->setValue($value);
         }
     }
-    
+
     /**
      * 
      * Parses a short-form option (or cluster of options).
      * 
-     * @param string $arg The `$argv` element, e.g. "-f" or "-fbz".
+     * @param string $spec The `$argv` element, e.g. "-f" or "-fbz".
      * 
      * @return void
      * 
@@ -365,51 +367,51 @@ class Getopt
         if (strlen($spec) > 2) {
             return $this->loadShortCluster($spec);
         }
-        
+
         // get the option character (after the first "-")
         $char = substr($spec, 1);
-        
+
         // get the option object
         $option = $this->getShortOption($char);
         if (! $option) {
             return;
         }
-        
+
         // if the option does not need a param, flag as true and move on
         if ($option->isParamRejected()) {
             $option->setValue(true);
             return;
         }
-        
+
         // the option was defined as needing a param (required or optional).
         // peek at the next element from $argv ...
         $value = reset($this->argv);
-        
+
         // ... and see if it's a param. can be empty, too, which indicates
         // then end of the arguments.
         $is_param = ! empty($value) && substr($value, 0, 1) != '-';
-        
+
         if (! $is_param && $option->isParamOptional()) {
             // the next value is not a param, but a param is optional,
             // so flag the option as true and move on.
             $option->setValue(true);
             return;
         }
-        
+
         if (! $is_param && $option->isParamRequired()) {
             // the next value is not a param, but a param is required,
             // so blow up.
             throw new Exception\OptionParamRequired;
         }
-        
+
         // at this point, the value is a param, and it's optional or required.
         // pull it out of the arguments for real ...
         $value = array_shift($this->argv);
-        
+
         // ... and set it.
         $option->setValue($value);
     }
-    
+
     /**
      * 
      * Parses a cluster of short options.
@@ -423,27 +425,28 @@ class Getopt
     {
         // drop the leading dash
         $spec = substr($spec, 1);
-        
+
         // loop through each character in the cluster
         $k = strlen($spec);
         for ($i = 0; $i < $k; $i ++) {
-            
+
             // get the right character from the cluster
             $char = $spec[$i];
-            
+
             // get the option object
             $option = $this->getShortOption($char);
             if (! $option) {
                 continue;
             }
-            
+
             // can't process params in a cluster
             if ($option->isParamRequired()) {
                 throw new Exception\OptionParamRequired;
             }
-            
+
             // otherwise, set the value as a flag
             $option->setValue(true);
         }
     }
 }
+ 
