@@ -1,5 +1,5 @@
 {
-    "name": "Aura/Cli",
+    "name": "aura/cli",
     "type": "aura-package",
     "description": "The Aura CLI package provides a system for creating and executing CLI command objects.  It includes facilities for parsing command-line options and handling standard input/output.",
     "keywords": [
@@ -19,6 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "aura/default-installer": "*"
     }
 }
