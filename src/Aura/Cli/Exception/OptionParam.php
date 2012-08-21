@@ -11,6 +11,7 @@
 namespace Aura\Cli\Exception;
 
 use Aura\Cli\Exception as Exception;
+
 /**
  * 
  * The option 'param' value needs a boolean or a null.
@@ -21,4 +22,4 @@ use Aura\Cli\Exception as Exception;
 class OptionParam extends Exception
 {
 }
- 
+
