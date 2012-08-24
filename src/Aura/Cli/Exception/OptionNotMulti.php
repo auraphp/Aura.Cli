@@ -11,6 +11,7 @@
 namespace Aura\Cli\Exception;
 
 use Aura\Cli\Exception as Exception;
+
 /**
  * 
  * The option does not allow multiple values.
@@ -21,4 +22,4 @@ use Aura\Cli\Exception as Exception;
 class OptionNotMulti extends Exception
 {
 }
- 
+

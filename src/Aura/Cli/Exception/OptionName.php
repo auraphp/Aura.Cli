@@ -11,6 +11,7 @@
 namespace Aura\Cli\Exception;
 
 use Aura\Cli\Exception as Exception;
+
 /**
  * 
  * Option objects need to be initialized with a name.
@@ -21,4 +22,4 @@ use Aura\Cli\Exception as Exception;
 class OptionName extends Exception
 {
 }
- 
+
