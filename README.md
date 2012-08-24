@@ -56,19 +56,19 @@ several dependency objects, all provided by the Aura CLI package.
     use Aura\Cli\OptionFactory;
     use Aura\Cli\Stdio;
     use Aura\Cli\Vt100;
-	use Aura\Cli\Signal;
+    use Aura\Cli\Signal;
     
     // instantiate
     $command = new ExampleCommand(
         new Context($GLOBALS),
         new Stdio(
-            fopen('php://stdin', 'r'),
-            fopen('php://stdout', 'w+'),
-            fopen('php://stderr', 'w+'),
+            new StdioResource('php://stdin', 'r'),
+            new StdioResource('php://stdout', 'w+'),
+            new StdioResource('php://stderr', 'w+'),
             new Vt100
         ),
         new Getopt(new OptionFactory),
-		new Signal,
+        new Signal,
     );
     
     // execute

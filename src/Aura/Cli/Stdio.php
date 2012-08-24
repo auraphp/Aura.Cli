@@ -71,9 +71,9 @@ class Stdio
      * 
      */
     public function __construct (
-        $stdin,
-        $stdout,
-        $stderr,
+        StdioResource $stdin,
+        StdioResource $stdout,
+        StdioResource $stderr,
         Vt100 $vt100
     ) {
         $this->stdin  = $stdin;
@@ -127,7 +127,7 @@ class Stdio
      */
     public function in()
     {
-        return rtrim(fgets($this->stdin), PHP_EOL);
+        return rtrim($this->stdin->fgets(), PHP_EOL);
     }
 
     /**
@@ -140,7 +140,7 @@ class Stdio
      */
     public function inln()
     {
-        return fgets($this->stdin);
+        return $this->stdin->fgets();
     }
 
     /**

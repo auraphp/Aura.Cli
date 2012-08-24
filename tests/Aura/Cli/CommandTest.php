@@ -9,9 +9,9 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     protected function newMockCommand($argv = [], $class = 'Aura\Cli\MockCommand')
     {
         // standard input/output
-        $stdin  = fopen('php://memory', 'r');
-        $stdout = fopen('php://memory', 'w+');
-        $stderr = fopen('php://memory', 'w+');
+        $stdin  = new StdioResource('php://memory', 'r');
+        $stdout = new StdioResource('php://memory', 'w+');
+        $stderr = new StdioResource('php://memory', 'w+');
         $vt100 = new Vt100;
         $stdio = new Stdio($stdin, $stdout, $stderr, $vt100);
         
@@ -19,9 +19,9 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $option_factory = new OptionFactory();
         $getopt = new Getopt($option_factory);
         
-		// signals
-		$signal = new Signal;
-		
+        // signals
+        $signal = new Signal;
+        
         // Command
         $_SERVER['argv'] = $argv;
         $context = new Context($GLOBALS);

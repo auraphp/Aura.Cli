@@ -26,9 +26,9 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->stdin  = fopen('php://memory', 'r+');
-        $this->stdout = fopen('php://memory', 'w+');
-        $this->stderr = fopen('php://memory', 'w+');
+        $this->stdin  = new StdioResource('php://memory', 'r+');
+        $this->stdout = new StdioResource('php://memory', 'w+');
+        $this->stderr = new StdioResource('php://memory', 'w+');
         $this->vt100  = new Vt100;
         $this->stdio = new Stdio(
             $this->stdin,
@@ -81,8 +81,8 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     {
         $expect = 'foo bar baz';
         $this->stdio->out($expect);
-        rewind($this->stdout);
-        $actual = fread($this->stdout, 8192);
+        $this->stdout->rewind();
+        $actual = $this->stdout->fread(8192);
         $this->assertSame($expect, $actual);
     }
 
@@ -93,8 +93,8 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     {
         $expect = 'foo bar baz';
         $this->stdio->outln($expect);
-        rewind($this->stdout);
-        $actual = fread($this->stdout, 8192);
+        $this->stdout->rewind();
+        $actual = $this->stdout->fread(8192);
         $this->assertSame($expect . PHP_EOL, $actual);
     }
 
@@ -105,8 +105,8 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     {
         $expect = 'foo bar baz';
         $this->stdio->err($expect);
-        rewind($this->stderr);
-        $actual = fread($this->stderr, 8192);
+        $this->stderr->rewind();
+        $actual = $this->stderr->fread(8192);
         $this->assertSame($expect, $actual);
     }
 
@@ -117,16 +117,16 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     {
         $expect = 'foo bar baz';
         $this->stdio->errln($expect);
-        rewind($this->stderr);
-        $actual = fread($this->stderr, 8192);
+        $this->stderr->rewind();
+        $actual = $this->stderr->fread(8192);
         $this->assertSame($expect . PHP_EOL, $actual);
     }
     
     public function testInln()
     {
         $expect = 'foo bar baz' . PHP_EOL;
-        fwrite($this->stdin, $expect);
-        rewind($this->stdin);
+        $this->stdin->fwrite($expect);
+        $this->stdin->rewind();
         $actual = $this->stdio->inln();
         $this->assertSame($expect, $actual);
     }
@@ -134,8 +134,8 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     public function testIn()
     {
         $expect = 'foo bar baz';
-        fwrite($this->stdin, $expect . PHP_EOL);
-        rewind($this->stdin);
+        $this->stdin->fwrite($expect . PHP_EOL);
+        $this->stdin->rewind();
         $actual = $this->stdio->in();
         $this->assertSame($expect, $actual);
     }
