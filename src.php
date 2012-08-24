@@ -11,5 +11,7 @@ require_once __DIR__ . '/src/Aura/Cli/Exception/OptionParamRequired.php';
 require_once __DIR__ . '/src/Aura/Cli/Getopt.php';
 require_once __DIR__ . '/src/Aura/Cli/Option.php';
 require_once __DIR__ . '/src/Aura/Cli/OptionFactory.php';
+require_once __DIR__ . '/src/Aura/Cli/SignalInterface.php';
+require_once __DIR__ . '/src/Aura/Cli/Signal.php';
 require_once __DIR__ . '/src/Aura/Cli/Stdio.php';
 require_once __DIR__ . '/src/Aura/Cli/Vt100.php';

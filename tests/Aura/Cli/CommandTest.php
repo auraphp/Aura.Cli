@@ -19,10 +19,13 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $option_factory = new OptionFactory();
         $getopt = new Getopt($option_factory);
         
+		// signals
+		$signal = new Signal;
+		
         // Command
         $_SERVER['argv'] = $argv;
         $context = new Context($GLOBALS);
-        return new $class($context, $stdio, $getopt);
+        return new $class($context, $stdio, $getopt, $signal);
     }
     
     public function testExec()

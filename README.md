@@ -56,6 +56,7 @@ several dependency objects, all provided by the Aura CLI package.
     use Aura\Cli\OptionFactory;
     use Aura\Cli\Stdio;
     use Aura\Cli\Vt100;
+	use Aura\Cli\Signal;
     
     // instantiate
     $command = new ExampleCommand(
@@ -66,7 +67,8 @@ several dependency objects, all provided by the Aura CLI package.
             fopen('php://stderr', 'w+'),
             new Vt100
         ),
-        new Getopt(new OptionFactory)
+        new Getopt(new OptionFactory),
+		new Signal,
     );
     
     // execute

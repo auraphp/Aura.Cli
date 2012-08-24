@@ -70,15 +70,18 @@ abstract class AbstractCommand
      * 
      */
     public function __construct(
-        Context       $context,
-        Stdio         $stdio,
-        Getopt        $getopt
+        Context         $context,
+        Stdio           $stdio,
+        Getopt          $getopt,
+        SignalInterface $signal
     ) {
         $this->context = $context;
         $this->stdio   = $stdio;
         $this->getopt  = $getopt;
+        $this->signal  = $signal;
         $this->initGetopt();
         $this->initParams();
+        $this->initSignal();
     }
 
     /**
@@ -108,6 +111,23 @@ abstract class AbstractCommand
 
     /**
      * 
+     * Initializes the signal handler.
+     * 
+     * @return void
+     * 
+     */
+    protected function initSignal()
+    {
+        $this->signal->handler($this, 'pre_exec',    [$this, 'preExec']);
+        $this->signal->handler($this, 'pre_action',  [$this, 'preAction']);
+        $this->signal->handler($this, 'post_action', [$this, 'postAction']);
+        $this->signal->handler($this, 'pre_render',  [$this, 'preRender']);
+        $this->signal->handler($this, 'post_render', [$this, 'postRender']);
+        $this->signal->handler($this, 'post_exec',   [$this, 'postExec']);
+    }
+    
+    /**
+     * 
      * Executes the Command.  In order, it does these things:
      * 
      * - calls `preExec()`
@@ -127,11 +147,11 @@ abstract class AbstractCommand
      */
     public function exec()
     {
-        $this->preExec();
-        $this->preAction();
+        $this->signal->send($this, 'pre_exec', $this);
+        $this->signal->send($this, 'pre_action', $this);
         $this->action();
-        $this->postAction();
-        $this->postExec();
+        $this->signal->send($this, 'post_action', $this);
+        $this->signal->send($this, 'post_exec', $this);
 
         // return terminal output to normal colors
         $this->stdio->out("%n");
