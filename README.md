@@ -57,6 +57,7 @@ several dependency objects, all provided by the Aura CLI package.
     use Aura\Cli\Stdio;
     use Aura\Cli\Vt100;
     use Aura\Cli\Signal;
+    use Aura\Cli\StdioResource;
     
     // instantiate
     $command = new ExampleCommand(
@@ -68,7 +69,7 @@ several dependency objects, all provided by the Aura CLI package.
             new Vt100
         ),
         new Getopt(new OptionFactory),
-        new Signal,
+        new Signal
     );
     
     // execute
