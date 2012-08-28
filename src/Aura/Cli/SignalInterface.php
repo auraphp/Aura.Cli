@@ -48,4 +48,3 @@ interface SignalInterface
      */
     public function send($origin, $signal);
 }
- 

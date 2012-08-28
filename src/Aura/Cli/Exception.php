@@ -20,4 +20,3 @@ namespace Aura\Cli;
 class Exception extends \Exception
 {
 }
- 

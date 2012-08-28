@@ -313,4 +313,3 @@ class Option
         return $this->param === static::PARAM_OPTIONAL;
     }
 }
- 

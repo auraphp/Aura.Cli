@@ -203,4 +203,3 @@ class Stdio
         $this->vt100->writeln($this->stderr, $string);
     }
 }
- 

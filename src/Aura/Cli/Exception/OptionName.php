@@ -22,4 +22,3 @@ use Aura\Cli\Exception as Exception;
 class OptionName extends Exception
 {
 }
-

@@ -67,4 +67,3 @@ class Signal implements SignalInterface
         call_user_func_array($func, $args);
     }
 }
- 
