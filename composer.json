@@ -21,5 +21,11 @@
     "require": {
         "php": ">=5.4.0",
         "aura/default-installer": "*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Aura\\Cli": "src/"
+        }
     }
 }
