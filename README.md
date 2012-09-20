@@ -35,45 +35,49 @@ classes, or add the `'Aura.Cli/src/'` directory to your autoloader.
 Next, create a command class of your own, extending the `AbstractCommand`
 class:
 
-    <?php
-    namespace Vendor\Package\Cli;
-    use Aura\Cli\AbstractCommand;
-    class ExampleCommand extends AbstractCommand
+```php
+<?php
+namespace Vendor\Package\Cli;
+use Aura\Cli\AbstractCommand;
+class ExampleCommand extends AbstractCommand
+{
+    public function action()
     {
-        public function action()
-        {
-            $this->stdio->outln('Hello World!');
-        }
+        $this->stdio->outln('Hello World!');
     }
+}
+```
 
 Instantiating and executing the command class is moderately complex; it needs
 several dependency objects, all provided by the Aura CLI package.
 
-    <?php
-    namespace Vendor\Package\Cli;
-    use Aura\Cli\Context;
-    use Aura\Cli\Getopt;
-    use Aura\Cli\OptionFactory;
-    use Aura\Cli\Stdio;
-    use Aura\Cli\Vt100;
-    use Aura\Cli\Signal;
-    use Aura\Cli\StdioResource;
-    
-    // instantiate
-    $command = new ExampleCommand(
-        new Context($GLOBALS),
-        new Stdio(
-            new StdioResource('php://stdin', 'r'),
-            new StdioResource('php://stdout', 'w+'),
-            new StdioResource('php://stderr', 'w+'),
-            new Vt100
-        ),
-        new Getopt(new OptionFactory),
-        new Signal
-    );
-    
-    // execute
-    $command->exec();
+```php
+<?php
+namespace Vendor\Package\Cli;
+use Aura\Cli\Context;
+use Aura\Cli\Getopt;
+use Aura\Cli\OptionFactory;
+use Aura\Cli\Stdio;
+use Aura\Cli\Vt100;
+use Aura\Cli\Signal;
+use Aura\Cli\StdioResource;
+
+// instantiate
+$command = new ExampleCommand(
+    new Context($GLOBALS),
+    new Stdio(
+        new StdioResource('php://stdin', 'r'),
+        new StdioResource('php://stdout', 'w+'),
+        new StdioResource('php://stderr', 'w+'),
+        new Vt100
+    ),
+    new Getopt(new OptionFactory),
+    new Signal
+);
+
+// execute
+$command->exec();
+```
 
 (If you have a dependency injection mechanism, you can automate the the
 creation and injection of the dependency objects. The
@@ -92,20 +96,22 @@ Action and Input/Output
 The logic for the command goes in the `action()` method. In the example below,
 we perform some basic input/output.
 
-    <?php
-    namespace Vendor\Package;
-    use Aura\Cli\AbstractCommand;
+```php
+<?php
+namespace Vendor\Package;
+use Aura\Cli\AbstractCommand;
 
-    class ExampleCommand extends AbstractCommand
+class ExampleCommand extends AbstractCommand
+{
+    public function action()
     {
-        public function action()
-        {
-            $this->stdio->outln('Hello World!');
-            $this->stdio->out('Please enter some text: ');
-            $input = $this->stdio->in();
-            $this->stdio->errln('Input was ' . $input);
-        }
+        $this->stdio->outln('Hello World!');
+        $this->stdio->out('Please enter some text: ');
+        $input = $this->stdio->in();
+        $this->stdio->errln('Input was ' . $input);
     }
+}
+```
 
 Use the `$stdio` object to work with standard input/output streams. Its
 methods are:
@@ -124,40 +130,42 @@ There are four method hooks on the CLI command. Use the pre- and post-action
 methods to perform logic before and after the action; use pre- and post-exec
 methods to perform setup and teardown.
 
-    <?php
-    namespace Vendor\Package;
-    use Aura\Cli\AbstractCommand;
+```php
+<?php
+namespace Vendor\Package;
+use Aura\Cli\AbstractCommand;
+
+class ExampleCommand extends AbstractCommand
+{
+    protected $input = 'foo bar baz';
     
-    class ExampleCommand extends AbstractCommand
+    public function preExec()
     {
-        protected $input = 'foo bar baz';
-        
-        public function preExec()
-        {
-            // perform object setup here
-        }
-        
-        public function preAction()
-        {
-            $this->stdio->outln('The input is currently ' . $this->input);
-        }
-        
-        public function action()
-        {
-            $this->stdio->out('Please enter some text: ');
-            $this->input = $this->stdio->in();
-        }
-        
-        public function postAction()
-        {
-            $this->stdio->outln('The input was %r%2' . $this->input . '%n');
-        }
-        
-        public function postExec()
-        {
-            // perform object teardown here
-        }
+        // perform object setup here
     }
+    
+    public function preAction()
+    {
+        $this->stdio->outln('The input is currently ' . $this->input);
+    }
+    
+    public function action()
+    {
+        $this->stdio->out('Please enter some text: ');
+        $this->input = $this->stdio->in();
+    }
+    
+    public function postAction()
+    {
+        $this->stdio->outln('The input was %r%2' . $this->input . '%n');
+    }
+    
+    public function postExec()
+    {
+        // perform object teardown here
+    }
+}
+```
 
 Notice in `postAction()` that we set the background and foreground text
 colors. For more information, please examine the [Vt100 format
@@ -170,19 +178,21 @@ Argument Params
 We may wish to pass information as part of the invocation. To read this
 information while in the command, use `$this->params`.
 
-    <?php
-    namespace Vendor\Package;
-    use Aura\Cli\AbstractCommand;
+```php
+<?php
+namespace Vendor\Package;
+use Aura\Cli\AbstractCommand;
 
-    class ExampleCommand extends AbstractCommand
+class ExampleCommand extends AbstractCommand
+{
+    public function action()
     {
-        public function action()
-        {
-            foreach ($this->params as $key => $val) {
-                $this->stdio->outln("Param $key is '$val'.");
-            }
+        foreach ($this->params as $key => $val) {
+            $this->stdio->outln("Param $key is '$val'.");
         }
     }
+}
+```
     
 For example, if we issue ...
     
@@ -211,29 +221,31 @@ command. Then we can retrieve the option values through the `$getopt` object.
 
 To define an option, do something like the following:
 
-    <?php
-    namespace Vendor\Package;
-    use Aura\Cli\AbstractCommand;
-    use Aura\Cli\Option;
+```php
+<?php
+namespace Vendor\Package;
+use Aura\Cli\AbstractCommand;
+use Aura\Cli\Option;
+
+class ExampleCommand extends AbstractCommand
+{
+    protected $options = [
+        'foo_bar' => [
+            'long'    => 'foo-bar',
+            'short'   => 'f',
+            'param'   => Option::PARAM_REQUIRED,
+            'multi'   => false,
+            'default' => null,
+        ],
+    ];
     
-    class ExampleCommand extends AbstractCommand
+    public function action()
     {
-        protected $options = [
-            'foo_bar' => [
-                'long'    => 'foo-bar',
-                'short'   => 'f',
-                'param'   => Option::PARAM_REQUIRED,
-                'multi'   => false,
-                'default' => null,
-            ],
-        ];
-        
-        public function action()
-        {
-            $this->stdio->out("The value of -f/--foo-bar is ");
-            $this->stdio->outln($this->getopt->foo_bar);
-        }
+        $this->stdio->out("The value of -f/--foo-bar is ");
+        $this->stdio->outln($this->getopt->foo_bar);
     }
+}
+```
 
 When we invoke the above command like this ...
 
