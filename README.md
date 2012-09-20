@@ -38,7 +38,9 @@ class:
 ```php
 <?php
 namespace Vendor\Package\Cli;
+
 use Aura\Cli\AbstractCommand;
+
 class ExampleCommand extends AbstractCommand
 {
     public function action()
@@ -54,6 +56,7 @@ several dependency objects, all provided by the Aura CLI package.
 ```php
 <?php
 namespace Vendor\Package\Cli;
+
 use Aura\Cli\Context;
 use Aura\Cli\Getopt;
 use Aura\Cli\OptionFactory;
@@ -99,6 +102,7 @@ we perform some basic input/output.
 ```php
 <?php
 namespace Vendor\Package;
+
 use Aura\Cli\AbstractCommand;
 
 class ExampleCommand extends AbstractCommand
@@ -133,6 +137,7 @@ methods to perform setup and teardown.
 ```php
 <?php
 namespace Vendor\Package;
+
 use Aura\Cli\AbstractCommand;
 
 class ExampleCommand extends AbstractCommand
@@ -181,6 +186,7 @@ information while in the command, use `$this->params`.
 ```php
 <?php
 namespace Vendor\Package;
+
 use Aura\Cli\AbstractCommand;
 
 class ExampleCommand extends AbstractCommand
@@ -224,6 +230,7 @@ To define an option, do something like the following:
 ```php
 <?php
 namespace Vendor\Package;
+
 use Aura\Cli\AbstractCommand;
 use Aura\Cli\Option;
 
