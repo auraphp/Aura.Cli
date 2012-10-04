@@ -21,4 +21,5 @@ use Aura\Cli\Exception as Exception;
  */
 class OptionParamRequired extends Exception
 {
+    protected $localized_message_key = 'ERR_OPTION_PARAM_REQUIRED';
 }

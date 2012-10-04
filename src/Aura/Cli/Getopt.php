@@ -336,12 +336,22 @@ class Getopt
 
         // if param is required but not present, blow up
         if ($option->isParamRequired() && $value === null) {
-            throw new Exception\OptionParamRequired;
+            try {
+                throw new Exception\OptionParamRequired;
+            } catch (Exception $e) {
+                echo $e->getLocalizedMessageKey();
+                exit;
+            }
         }
 
         // if params are rejected and one is present, blow up
         if ($option->isParamRejected() && $value !== null) {
-            throw new Exception\OptionParamRejected;
+            try {
+                throw new Exception\OptionParamRequired;
+            } catch (Exception $e) {
+                echo $e->getLocalizedMessageKey();
+                exit;
+            }
         }
 
         // if param is optional but not present, set to true
@@ -401,7 +411,12 @@ class Getopt
         if (! $is_param && $option->isParamRequired()) {
             // the next value is not a param, but a param is required,
             // so blow up.
-            throw new Exception\OptionParamRequired;
+            try {
+                throw new Exception\OptionParamRequired;
+            } catch (Exception $e) {
+                echo $e->getLocalizedMessageKey();
+                exit;
+            }
         }
 
         // at this point, the value is a param, and it's optional or required.
@@ -441,7 +456,12 @@ class Getopt
 
             // can't process params in a cluster
             if ($option->isParamRequired()) {
-                throw new Exception\OptionParamRequired;
+                try {
+                    throw new Exception\OptionParamRequired;
+                } catch (Exception $e) {
+                    echo $e->getLocalizedMessageKey();
+                    exit;
+                }
             }
 
             // otherwise, set the value as a flag
