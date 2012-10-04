@@ -19,4 +19,10 @@ namespace Aura\Cli;
  */
 class Exception extends \Exception
 {
+    protected $localized_message_key = 'LOCALIZED_MESSAGE_KEY';
+
+    public function getLocalizedMessageKey()
+    {
+        return $this->localized_message_key;
+    }
 }

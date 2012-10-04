@@ -341,7 +341,7 @@ class Getopt
 
         // if params are rejected and one is present, blow up
         if ($option->isParamRejected() && $value !== null) {
-            throw new Exception\OptionParamRejected;
+            throw new Exception\OptionParamRequired;
         }
 
         // if param is optional but not present, set to true

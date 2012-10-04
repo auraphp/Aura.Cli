@@ -79,9 +79,19 @@ abstract class AbstractCommand
         $this->stdio   = $stdio;
         $this->getopt  = $getopt;
         $this->signal  = $signal;
-        $this->initGetopt();
-        $this->initParams();
-        $this->initSignal();
+
+        try {
+            $this->initGetopt();
+            $this->initParams();
+            $this->initSignal();
+        } catch (Exception $e) {
+            if (method_exists($e, 'getLocalizedMessageKey')) {
+                echo $e->getLocalizedMessageKey();
+            } else {
+                echo $e->getMessage();
+            }
+            exit;
+        }
     }
 
     /**
