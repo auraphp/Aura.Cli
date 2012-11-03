@@ -8,8 +8,18 @@ $loader->add('Aura\Cli\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
  * Instance params and setter values.
  */
 
+// Translator
+$di->params['Aura\Cli\Translator']['locale'] = 'en_US';
+$di->params['Aura\Cli\Translator']['catalog'] = require dirname(__DIR__)
+                                              . DIRECTORY_SEPARATOR . 'intl'
+                                              . DIRECTORY_SEPARATOR . 'catalog.php';
+
+// ExceptionFactory
+$di->params['Aura\Cli\ExceptionFactory']['translator'] = $di->lazyNew('Aura\Cli\Translator');
+
 // Getopt
 $di->params['Aura\Cli\Getopt']['option_factory'] = $di->lazyNew('Aura\Cli\OptionFactory');
+$di->params['Aura\Cli\Getopt']['exception_factory'] = $di->lazyNew('Aura\Cli\ExceptionFactory');
 
 // Stdio
 $di->params['Aura\Cli\Stdio']['stdin'] = $di->lazyNew('Aura\Cli\StdioResource', [

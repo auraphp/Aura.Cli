@@ -58,12 +58,14 @@ several dependency objects, all provided by the Aura CLI package.
 namespace Vendor\Package\Cli;
 
 use Aura\Cli\Context;
+use Aura\Cli\ExceptionFactory;
 use Aura\Cli\Getopt;
 use Aura\Cli\OptionFactory;
-use Aura\Cli\Stdio;
-use Aura\Cli\Vt100;
 use Aura\Cli\Signal;
+use Aura\Cli\Stdio;
 use Aura\Cli\StdioResource;
+use Aura\Cli\Translator;
+use Aura\Cli\Vt100;
 
 // instantiate
 $command = new ExampleCommand(
@@ -74,7 +76,13 @@ $command = new ExampleCommand(
         new StdioResource('php://stderr', 'w+'),
         new Vt100
     ),
-    new Getopt(new OptionFactory),
+    new Getopt(
+        new OptionFactory,
+        new ExceptionFactory(
+            'en_US',
+            include '/path/to/Aura.Cli/intl/catalog.php'
+        )
+    ),
     new Signal
 );
 
