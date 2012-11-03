@@ -14,11 +14,11 @@ use Aura\Cli\Exception as Exception;
 
 /**
  * 
- * The option 'param' value needs a proper constant.
+ * Getopt has already been initialized.
  * 
  * @package Aura.Cli
  * 
  */
-class OptionParam extends Exception
+class GetoptInitialized extends Exception
 {
 }

@@ -141,29 +141,9 @@ class Option
         $this->name    = (string) $name;
         $this->long    = (string) $long;
         $this->short   = (string) $short;
-        $this->param   = $param ?: static::PARAM_OPTIONAL;
+        $this->param   = (string) $param;
         $this->multi   = (bool) $multi;
         $this->default = $default;
-
-        // always need a name
-        if (! $this->name) {
-            throw new Exception\OptionName;
-        }
-
-        // always need a long format or a short format.
-        if (! $this->long && ! $this->short) {
-            // auto-add a long format
-            $this->long = str_replace('_', '-', $this->name);
-        }
-
-        // param has to be boolean or null
-        $ok = $this->param === static::PARAM_REQUIRED
-           || $this->param === static::PARAM_REJECTED
-           || $this->param === static::PARAM_OPTIONAL;
-
-        if (! $ok) {
-            throw new Exception\OptionParam;
-        }
 
         // preset the value to an array if multiple values are allowed
         if ($this->multi) {
@@ -184,20 +164,11 @@ class Option
      */
     public function setValue($value)
     {
-        if ($this->isParamRequired() && trim($value) === '') {
-            throw new Exception\OptionParamRequired;
-        }
-
         if ($this->isMulti()) {
             $this->value[] = $value;
-            return;
+        } else {
+            $this->value = $value;
         }
-
-        if ($this->value !== null) {
-            throw new Exception\OptionNotMulti;
-        }
-
-        $this->value = $value;
     }
 
     /**

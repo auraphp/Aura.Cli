@@ -14,11 +14,11 @@ use Aura\Cli\Exception as Exception;
 
 /**
  * 
- * The option 'param' value needs a proper constant.
+ * The option definition needs to be an array.
  * 
  * @package Aura.Cli
  * 
  */
-class OptionParam extends Exception
+class OptionArray extends Exception
 {
 }

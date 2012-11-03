@@ -13,6 +13,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     protected $option_factory;
     
+    protected $exception_factory;
+    
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -20,8 +22,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        
+        $catalog = include dirname(dirname(dirname(__DIR__)))
+                 . DIRECTORY_SEPARATOR . 'intl'
+                 . DIRECTORY_SEPARATOR . 'catalog.php';
+        
+        $translator = new Translator('en_US', $catalog);
+        
         $this->option_factory = new OptionFactory;
-        $this->getopt = new Getopt($this->option_factory);
+        $this->exception_factory = new ExceptionFactory($translator);
+        $this->getopt = new Getopt($this->option_factory, $this->exception_factory);
     }
     
     /**
@@ -54,9 +64,9 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException Aura\Cli\Exception
+     * @expectedException Aura\Cli\Exception\GetoptInitialized
      */
-    public function testInit_alreadyInitialized()
+    public function testInit_getoptInitialized()
     {
         $opts = [
             'foo_bar' => [
@@ -70,6 +80,22 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         ];
         
         $this->getopt->init($opts);
+        $this->getopt->init($opts);
+    }
+    
+    /**
+     * @expectedException Aura\Cli\Exception\OptionParam
+     */
+    public function testInit_optionParam()
+    {
+        $opts = [
+            'foo_bar' => [
+                'long' => 'foo-bar',
+                'short' => 'f',
+                'param' => 'no-such-param-type'
+            ],
+        ];
+        
         $this->getopt->init($opts);
     }
     
