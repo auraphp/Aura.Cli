@@ -25,11 +25,9 @@ class Translator implements TranslatorInterface
      */
     protected $messages = [];
 
-    public function __construct(
-        $locale,
-        array $catalog
-    ) {
-        $this->messages = $catalog['messages'][$locale];
+    public function __construct(array $package)
+    {
+        $this->messages = $package['messages'];
     }
 
     /**
