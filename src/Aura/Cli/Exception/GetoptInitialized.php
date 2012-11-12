@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception as Exception;
+use Aura\Cli\Exception;
 
 /**
  * 

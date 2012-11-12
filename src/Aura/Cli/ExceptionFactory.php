@@ -16,7 +16,7 @@ class ExceptionFactory
         $message = $this->translator->translate($key, $tokens_values);
         
         // strip 'ERR_' prefix.
-        // ERR_OPTION_NOT_DEFINED -> OPTINO_NOT_DEFINED
+        // ERR_OPTION_NOT_DEFINED -> OPTION_NOT_DEFINED
         $class = substr($key, 4);
         
         // underscores to spaces, lowercase all, uppercase words.
@@ -26,7 +26,7 @@ class ExceptionFactory
         // remove spaces and add prefix
         $class = 'Aura\Cli\Exception\\' . str_replace(' ', '', $class);
         
-        // return the new exception
-        return new $class($message);
+        // return the new exception, with a return code of 1
+        return new $class($message, 1);
     }
 }

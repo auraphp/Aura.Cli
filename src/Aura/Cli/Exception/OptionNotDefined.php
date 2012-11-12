@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception as Exception;
+use Aura\Cli\Exception;
 
 /**
  * 
@@ -21,4 +21,5 @@ use Aura\Cli\Exception as Exception;
  */
 class OptionNotDefined extends Exception
 {
+    protected $message_only = true;
 }

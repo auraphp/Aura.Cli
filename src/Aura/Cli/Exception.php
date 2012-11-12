@@ -10,6 +10,8 @@
  */
 namespace Aura\Cli;
 
+use Exception as PhpException;
+
 /**
  * 
  * Generic package exception.
@@ -17,6 +19,12 @@ namespace Aura\Cli;
  * @package Aura.Cli
  * 
  */
-class Exception extends \Exception
+class Exception extends PhpException
 {
+    protected $message_only = false;
+    
+    public function getMessageOnly()
+    {
+        return (bool) $this->message_only;
+    }
 }
