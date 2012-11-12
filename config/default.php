@@ -8,14 +8,11 @@ $loader->add('Aura\Cli\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
  * Instance params and setter values.
  */
 
-// Translator
-$di->params['Aura\Cli\Translator']['locale'] = 'en_US';
-$di->params['Aura\Cli\Translator']['catalog'] = require dirname(__DIR__)
-                                              . DIRECTORY_SEPARATOR . 'intl'
-                                              . DIRECTORY_SEPARATOR . 'catalog.php';
-
 // ExceptionFactory
-$di->params['Aura\Cli\ExceptionFactory']['translator'] = $di->lazyNew('Aura\Cli\Translator');
+$di->params['Aura\Cli\ExceptionFactory']['translator'] = $di->lazy(function () use ($di) {
+    $translators = $di->get('intl_translator_locator');
+    return $translators->get('Aura.Cli');
+});
 
 // Getopt
 $di->params['Aura\Cli\Getopt']['option_factory'] = $di->lazyNew('Aura\Cli\OptionFactory');
@@ -53,3 +50,17 @@ $di->set('cli_context', $di->lazyNew('Aura\Cli\Context', [
 ]));
 
 $di->set('cli_stdio', $di->lazyNew('Aura\Cli\Stdio'));
+
+/**
+ * Intl
+ */
+$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Cli'] = [
+    'en_US' => function () use ($system) {
+        $package = require "$system/package/Aura.Cli/intl/en_US.php";
+        return new Aura\Intl\Package(
+            $package['formatter'],
+            $package['fallback'],
+            $package['messages']
+        );
+    },
+];
