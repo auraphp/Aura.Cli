@@ -79,8 +79,9 @@ $command = new ExampleCommand(
     new Getopt(
         new OptionFactory,
         new ExceptionFactory(
-            'en_US',
-            include '/path/to/Aura.Cli/intl/catalog.php'
+            new Translator(
+                include '/path/to/Aura.Cli/intl/en_US.php'
+            )
         )
     ),
     new Signal
