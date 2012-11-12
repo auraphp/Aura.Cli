@@ -23,11 +23,11 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         
-        $catalog = include dirname(dirname(dirname(__DIR__)))
-                 . DIRECTORY_SEPARATOR . 'intl'
-                 . DIRECTORY_SEPARATOR . 'catalog.php';
+        $messages = include dirname(dirname(dirname(__DIR__)))
+                  . DIRECTORY_SEPARATOR . 'intl'
+                  . DIRECTORY_SEPARATOR . 'en_US.php';
         
-        $translator = new Translator('en_US', $catalog);
+        $translator = new Translator($messages);
         
         $this->option_factory = new OptionFactory;
         $this->exception_factory = new ExceptionFactory($translator);

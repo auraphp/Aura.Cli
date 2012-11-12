@@ -16,11 +16,11 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $stdio = new Stdio($stdin, $stdout, $stderr, $vt100);
         
         // getopt
-        $catalog = include dirname(dirname(dirname(__DIR__)))
-                 . DIRECTORY_SEPARATOR . 'intl'
-                 . DIRECTORY_SEPARATOR . 'catalog.php';
+        $messages = include dirname(dirname(dirname(__DIR__)))
+                  . DIRECTORY_SEPARATOR . 'intl'
+                  . DIRECTORY_SEPARATOR . 'en_US.php';
         
-        $translator = new Translator('en_US', $catalog);
+        $translator = new Translator($messages);
         
         $option_factory = new OptionFactory;
         $exception_factory = new ExceptionFactory($translator);

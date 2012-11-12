@@ -7,11 +7,11 @@ class ExceptionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $catalog = include dirname(dirname(dirname(__DIR__)))
-                 . DIRECTORY_SEPARATOR . 'intl'
-                 . DIRECTORY_SEPARATOR . 'catalog.php';
+        $messages = include dirname(dirname(dirname(__DIR__)))
+                  . DIRECTORY_SEPARATOR . 'intl'
+                  . DIRECTORY_SEPARATOR . 'en_US.php';
         
-        $translator = new Translator('en_US', $catalog);
+        $translator = new Translator($messages);
         
         $this->exception_factory = new ExceptionFactory($translator);
     }
