@@ -10,6 +10,9 @@
  */
 namespace Aura\Cli;
 
+use Exception;
+use Aura\Cli\Exception as CliException;
+
 /**
  * 
  * The CLI equivalent of a page-controller to perform a single action.
@@ -60,6 +63,15 @@ abstract class AbstractCommand
 
     /**
      * 
+     * The return code when this command is done.
+     * 
+     * @var int
+     * 
+     */
+    protected $return = 0;
+    
+    /**
+     * 
      * Constructor.
      * 
      * @param \Aura\Cli\Context $context The command-line context.
@@ -79,66 +91,61 @@ abstract class AbstractCommand
         $this->stdio   = $stdio;
         $this->getopt  = $getopt;
         $this->signal  = $signal;
-        $this->initGetopt();
-        $this->initParams();
-        $this->initSignal();
+        $this->init();
     }
 
     /**
      * 
-     * Passes the Context arguments to `$getopt`.
+     * Post-constructor initialization.
      * 
      * @return void
      * 
      */
-    protected function initGetopt()
+    protected function init()
     {
+        // set signal handlers
+        $this->signal->handler($this, 'pre_exec',        [$this, 'preExec']);
+        $this->signal->handler($this, 'pre_action',      [$this, 'preAction']);
+        $this->signal->handler($this, 'post_action',     [$this, 'postAction']);
+        $this->signal->handler($this, 'pre_render',      [$this, 'preRender']);
+        $this->signal->handler($this, 'post_render',     [$this, 'postRender']);
+        $this->signal->handler($this, 'post_exec',       [$this, 'postExec']);
+        
+        // the exception-catching signal handler on this class is intended as
+        // a final fallback; other handlers most likely need to run before it.
+        $this->signal->handler(
+            $this,
+            'catch_exception',
+            [$this, 'catchException'],
+            999
+        );
+        
+        // initialize getopt
         $this->getopt->init($this->options, $this->options_strict);
-        $this->getopt->load($this->context->getArgv());
-    }
-
-    /**
-     * 
-     * Loads `$params` from `$getopt`.
-     * 
-     * @return void
-     * 
-     */
-    protected function initParams()
-    {
-        $this->params = $this->getopt->getParams();
-    }
-
-    /**
-     * 
-     * Initializes the signal handler.
-     * 
-     * @return void
-     * 
-     */
-    protected function initSignal()
-    {
-        $this->signal->handler($this, 'pre_exec',    [$this, 'preExec']);
-        $this->signal->handler($this, 'pre_action',  [$this, 'preAction']);
-        $this->signal->handler($this, 'post_action', [$this, 'postAction']);
-        $this->signal->handler($this, 'pre_render',  [$this, 'preRender']);
-        $this->signal->handler($this, 'post_render', [$this, 'postRender']);
-        $this->signal->handler($this, 'post_exec',   [$this, 'postExec']);
     }
     
     /**
      * 
      * Executes the Command.  In order, it does these things:
      * 
-     * - calls `preExec()`
+     * - signals `pre_exec`, thereby calling `preExec()`
      * 
-     * - calls `preAction()`
+     * - loads $getopt and sets $params
      * 
-     * - calles `action()`
+     * - signals `pre_action`, thereby calling `preAction()`
      * 
-     * - calls `postAction()`
+     * - calls `action()`
      * 
-     * - calls `postExec()`
+     * - signals `post_action`, thereby calling `postAction()`
+     * 
+     * - signals `post_exec`, thereby calling `postExec()`
+     * 
+     * - signals `catch_exception` when a exception is thrown, thereby
+     *   calling `catchException()`
+     * 
+     * - resets the terminal to normal
+     * 
+     * - returns the `$return` code
      * 
      * @see action()
      * 
@@ -147,17 +154,55 @@ abstract class AbstractCommand
      */
     public function exec()
     {
-        $this->signal->send($this, 'pre_exec', $this);
-        $this->signal->send($this, 'pre_action', $this);
-        $this->action();
-        $this->signal->send($this, 'post_action', $this);
-        $this->signal->send($this, 'post_exec', $this);
+        try {
+            
+            // pre-exec
+            $this->signal->send($this, 'pre_exec', $this);
+            
+            // load getopt, then set params. we need to do this here so that
+            // exceptions thrown by getopt are signaled to handlers.
+            $this->getopt->load($this->context->getArgv());
+            $this->params = $this->getopt->getParams();
+            
+            // pre-action, action, post-action
+            $this->signal->send($this, 'pre_action', $this);
+            $this->action();
+            $this->signal->send($this, 'post_action', $this);
+            
+            // post-exec
+            $this->signal->send($this, 'post_exec', $this);
+            
+        } catch (Exception $exception) {
+            
+            // set the exception and send a signal
+            $this->exception = $exception;
+            $this->signal->send($this, 'catch_exception', $this);
+            
+        }
 
-        // return terminal output to normal colors
+        // reset terminal output to normal colors
         $this->stdio->out("%n");
         $this->stdio->err("%n");
+        
+        // send back the return code, and done
+        return $this->getReturn();
     }
 
+    public function getException()
+    {
+        return $this->exception;
+    }
+    
+    protected function setReturn($return)
+    {
+        $this->return = (int) $return;
+    }
+    
+    public function getReturn()
+    {
+        return $this->return;
+    }
+    
     /**
      * 
      * Runs at the beginning of `exec()` before `preAction()`.
@@ -209,5 +254,38 @@ abstract class AbstractCommand
      */
     public function postExec()
     {
+    }
+    
+    /**
+     * 
+     * Runs when `exec()` catches an exception.
+     * 
+     * @return mixed
+     * 
+     */
+    public function catchException()
+    {
+        // get the current exception
+        $e = $this->getException();
+        
+        // is this a message-only exception?
+        $message_only = $e instanceof CliException && $e->getMessageOnly();
+        if ($message_only) {
+            
+            // print the message to stderr
+            $this->stdio->errln($e->getMessage());
+            
+            // set the return code
+            $this->setReturn($e->getCode());
+            
+            // done
+            return;
+            
+        }
+        
+        // not a message-only exception. throw a copy, with the original as
+        // the previous exception so that we can see a full trace.
+        $class = get_class($e);
+        throw new $class($e->getMessage(), $e->getCode(), $e);
     }
 }
