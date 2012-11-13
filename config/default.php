@@ -9,7 +9,7 @@ $loader->add('Aura\Cli\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
  */
 
 // ExceptionFactory
-$di->params['Aura\Cli\ExceptionFactory']['translator'] = $di->lazy(function () use ($di) {
+$di->params['Aura\Cli\ExceptionFactory']['translator'] = $di->lazyNew(function () use ($di) {
     $translators = $di->get('intl_translator_locator');
     return $translators->get('Aura.Cli');
 });
