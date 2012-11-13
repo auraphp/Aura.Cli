@@ -166,7 +166,10 @@ abstract class AbstractCommand
             
             // pre-action, action, post-action
             $this->signal->send($this, 'pre_action', $this);
-            $this->action();
+            $return = $this->action();
+            if ($return !== null) {
+                $this->return = $return;
+            }
             $this->signal->send($this, 'post_action', $this);
             
             // post-exec
