@@ -1,5 +1,6 @@
 <?php
 namespace Aura\Cli;
+
 use Aura\Cli\AbstractCommand;
 
 class MockCommand extends AbstractCommand
@@ -31,9 +32,10 @@ class MockCommand extends AbstractCommand
         $this->_post_action = true;
     }
     
-    public function action()
+    protected function action()
     {
         $this->_action = __METHOD__;
         $this->stdio->out($this->_action);
+        return 0;
     }
 }

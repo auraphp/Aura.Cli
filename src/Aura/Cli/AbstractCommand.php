@@ -168,7 +168,7 @@ abstract class AbstractCommand
             $this->signal->send($this, 'pre_action', $this);
             $return = call_user_func_array([$this, 'action'], $this->params);
             if ($return !== null) {
-                $this->return = $return;
+                $this->setReturn($return);
             }
             $this->signal->send($this, 'post_action', $this);
             
