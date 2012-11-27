@@ -25,7 +25,7 @@ class Stdio
      * 
      * A handle for standard input.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stdin;
@@ -34,7 +34,7 @@ class Stdio
      * 
      * A handle for standard output.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stdout;
@@ -43,7 +43,7 @@ class Stdio
      * 
      * A handle for standard error.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stderr;
@@ -61,11 +61,11 @@ class Stdio
      * 
      * Constructor.
      * 
-     * @param resource $stdin A handle for standard input.
+     * @param StdioResource $stdin A handle for standard input.
      * 
-     * @param resource $stdout A handle for standard output.
+     * @param StdioResource $stdout A handle for standard output.
      * 
-     * @param resource $stderr A handle for standard error.
+     * @param StdioResource $stderr A handle for standard error.
      * 
      * @param Vt100 $vt100 A VT100 formatting object.
      * 

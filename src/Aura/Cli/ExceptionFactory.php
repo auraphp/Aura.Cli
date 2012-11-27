@@ -1,15 +1,56 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Cli
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Cli;
 
+/**
+ * 
+ * A factory to create exception objects with translated messages.
+ * 
+ * @package Aura.Cli
+ * 
+ */
 class ExceptionFactory
 {
+    /**
+     * 
+     * A translator object.
+     * 
+     * @var TranslatorInterface
+     * 
+     */
     protected $translator;
     
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param TranslatorInterface $translator A translator object.
+     * 
+     */
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
     
+    /**
+     * 
+     * Returns a new Exception instance.
+     * 
+     * @param string $key The type of exception to return; e.g.,
+     * 'ERR_OPTION_NOT_DEFINED'.
+     * 
+     * @param array $tokens_values Translation placeholder tokens and their
+     * replacement values.
+     * 
+     */
     public function newInstance($key, $tokens_values = [])
     {
         // get a message translation

@@ -20,11 +20,21 @@ namespace Aura\Cli;
 class Translator implements TranslatorInterface
 {
     /**
-     *
+     * 
+     * The array of message keys and translations.
+     * 
      * @var array
+     * 
      */
     protected $messages = [];
 
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param array $package The package internationalization values.
+     * 
+     */
     public function __construct(array $package)
     {
         $this->messages = $package['messages'];
@@ -32,13 +42,14 @@ class Translator implements TranslatorInterface
 
     /**
      * 
-     * Translate the key with the token values replaced
+     * Translate the key with the token values replaced.
      * 
-     * @param string $key
+     * @param string $key The message key.
      * 
-     * @param array $tokens_values
+     * @param array $tokens_values The message placeholder tokens and their
+     * replacement values.
      * 
-     * @return string
+     * @return string The translated string.
      * 
      */
     public function translate($key, array $tokens_values = [])

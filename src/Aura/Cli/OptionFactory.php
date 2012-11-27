@@ -41,7 +41,7 @@ class OptionFactory
      * 
      * Creates and returns a new Option object.
      * 
-     * @param array $params An array of key-value pairs corresponding to
+     * @param array $args An array of key-value pairs corresponding to
      * Option constructor params.
      * 
      * @return Option

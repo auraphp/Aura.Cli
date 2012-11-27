@@ -80,6 +80,8 @@ abstract class AbstractCommand
      * 
      * @param \Aura\Cli\Getopt $getopt An options processor and reader.
      * 
+     * @param \Aura\Cli\SignalInterface $signal A signal manager.
+     * 
      */
     public function __construct(
         Context         $context,
@@ -191,16 +193,39 @@ abstract class AbstractCommand
         return $this->getReturn();
     }
 
+    /**
+     * 
+     * Returns the exception caught in exec().
+     * 
+     * @return \Exception
+     * 
+     */
     public function getException()
     {
         return $this->exception;
     }
     
+    /**
+     * 
+     * Sets the return (exit) code for exec().
+     * 
+     * @param int $return The return (exit) code.
+     * 
+     * @return void
+     * 
+     */
     protected function setReturn($return)
     {
         $this->return = (int) $return;
     }
     
+    /**
+     * 
+     * Gets the return (exit) code for exec().
+     * 
+     * @return int The return (exit) code.
+     * 
+     */
     public function getReturn()
     {
         return $this->return;

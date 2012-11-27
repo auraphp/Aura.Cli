@@ -206,7 +206,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
      * 
-     * @param resource $resource The file handle.
+     * @param StdioResource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -232,7 +232,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
      * 
-     * @param resource $resource The file handle.
+     * @param StdioResource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -252,12 +252,12 @@ class Vt100
      * 
      * Determines if a stream handle should be treated as a POSIX terminal.
      * 
-     * @param resource $resource The stream handle.
+     * @param StdioResource $resource The stream handle.
      * 
      * @return bool
      * 
      */
-    protected function isPosix($resource)
+    protected function isPosix(StdioResource $resource)
     {
         if (is_bool($this->posix)) {
             // forced to posix
@@ -266,8 +266,7 @@ class Vt100
             // windows is not posix
             return false;
         } else {
-            // silence posix_isatty() errors regarding non-standard handles,
-            // e.g. php://memory
+            // check the resource itself
             return $resource->isPosixTty();
         }
     }

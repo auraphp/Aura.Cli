@@ -133,6 +133,8 @@ class StdioResource
      */
     public function isPosixTty()
     {
+        // silence posix_isatty() errors regarding non-standard handles,
+        // e.g. php://memory
         return @posix_isatty($this->handle);
     }
 }

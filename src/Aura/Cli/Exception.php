@@ -21,8 +21,22 @@ use Exception as PhpException;
  */
 class Exception extends PhpException
 {
+    /**
+     * 
+     * Should this exception print only the message text?
+     * 
+     * @var bool
+     * 
+     */
     protected $message_only = false;
     
+    /**
+     * 
+     * Should this exception print only the message text?
+     * 
+     * @return bool
+     * 
+     */
     public function getMessageOnly()
     {
         return (bool) $this->message_only;

@@ -79,6 +79,9 @@ class Getopt
      * 
      * @param OptionFactory $option_factory A factory for Option objects.
      * 
+     * @param ExceptionFactory $exception_factory A factory for Exception
+     * objects.
+     * 
      */
     public function __construct(
         OptionFactory $option_factory,

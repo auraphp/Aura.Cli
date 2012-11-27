@@ -21,5 +21,12 @@ use Aura\Cli\Exception;
  */
 class OptionParamRequired extends Exception
 {
+    /**
+     * 
+     * Should this exception print only the message text?
+     * 
+     * @var bool
+     * 
+     */
     protected $message_only = true;
 }
