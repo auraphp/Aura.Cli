@@ -5,7 +5,7 @@
     "keywords": [ "command", "command line", "cli", "getopt", "options" ],
     "homepage": "http://auraphp.github.com/Aura.Cli",
     "version": "1.0.0-dev",
-    "license": "BSD",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Aura Contributors",
