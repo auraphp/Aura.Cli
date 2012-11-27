@@ -206,7 +206,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
      * 
-     * @param resource $handle The file handle.
+     * @param StdioResource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -216,14 +216,14 @@ class Vt100
      * @see writeln()
      * 
      */
-    public function write($handle, $text)
+    public function write(StdioResource $resource, $text)
     {
-        if ($this->isPosix($handle)) {
+        if ($this->isPosix($resource)) {
             // it's a tty. use formatted text.
-            fwrite($handle, $this->format($text));
+            $resource->fwrite($this->format($text));
         } else {
             // not a tty, or a non-standard handle. use plain text.
-            fwrite($handle, $this->strip($text));
+            $resource->fwrite($this->strip($text));
         }
     }
 
@@ -232,7 +232,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
      * 
-     * @param resource $handle The file handle.
+     * @param StdioResource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -242,22 +242,22 @@ class Vt100
      * @see write()
      * 
      */
-    public function writeln($handle, $text)
+    public function writeln(StdioResource $resource, $text)
     {
-        $this->write($handle, $text);
-        fwrite($handle, PHP_EOL);
+        $this->write($resource, $text);
+        $resource->fwrite(PHP_EOL);
     }
 
     /**
      * 
      * Determines if a stream handle should be treated as a POSIX terminal.
      * 
-     * @param resource $handle The stream handle.
+     * @param StdioResource $resource The stream handle.
      * 
      * @return bool
      * 
      */
-    protected function isPosix($handle)
+    protected function isPosix(StdioResource $resource)
     {
         if (is_bool($this->posix)) {
             // forced to posix
@@ -266,10 +266,8 @@ class Vt100
             // windows is not posix
             return false;
         } else {
-            // silence posix_isatty() errors regarding non-standard handles,
-            // e.g. php://memory
-            return @posix_isatty($handle);
+            // check the resource itself
+            return $resource->isPosixTty();
         }
     }
 }
- 

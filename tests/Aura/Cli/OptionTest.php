@@ -101,40 +101,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('zim', $option->getValue());
     }
     
-    /**
-     * @expectedException Aura\Cli\Exception\OptionParamRequired
-     */
-    public function testSetValue_required()
-    {
-        $spec = [
-            'name' => 'foo_bar',
-            'long' => 'foo-bar',
-            'short' => 'f',
-            'param' => Option::PARAM_REQUIRED,
-        ];
-        
-        $option = $this->factory->newInstance($spec);
-        
-        $option->setValue('');
-    }
-    
-    /**
-     * @expectedException Aura\Cli\Exception\OptionNotMulti
-     */
-    public function testSetValue_notMulti()
-    {
-        $spec = [
-            'name' => 'foo_bar',
-            'long' => 'foo-bar',
-            'short' => 'f',
-        ];
-        
-        $option = $this->factory->newInstance($spec);
-        
-        $option->setValue('zim');
-        $option->setValue('gir');
-    }
-    
     public function testIsMulti()
     {
         $spec = [

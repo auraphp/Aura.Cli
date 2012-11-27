@@ -25,7 +25,7 @@ class Stdio
      * 
      * A handle for standard input.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stdin;
@@ -34,7 +34,7 @@ class Stdio
      * 
      * A handle for standard output.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stdout;
@@ -43,7 +43,7 @@ class Stdio
      * 
      * A handle for standard error.
      * 
-     * @var resource
+     * @var StdioResource
      * 
      */
     protected $stderr;
@@ -61,19 +61,19 @@ class Stdio
      * 
      * Constructor.
      * 
-     * @param resource $stdin A handle for standard input.
+     * @param StdioResource $stdin A handle for standard input.
      * 
-     * @param resource $stdout A handle for standard output.
+     * @param StdioResource $stdout A handle for standard output.
      * 
-     * @param resource $stderr A handle for standard error.
+     * @param StdioResource $stderr A handle for standard error.
      * 
      * @param Vt100 $vt100 A VT100 formatting object.
      * 
      */
     public function __construct (
-        $stdin,
-        $stdout,
-        $stderr,
+        StdioResource $stdin,
+        StdioResource $stdout,
+        StdioResource $stderr,
         Vt100 $vt100
     ) {
         $this->stdin  = $stdin;
@@ -127,7 +127,7 @@ class Stdio
      */
     public function in()
     {
-        return rtrim(fgets($this->stdin), PHP_EOL);
+        return rtrim($this->stdin->fgets(), PHP_EOL);
     }
 
     /**
@@ -140,7 +140,7 @@ class Stdio
      */
     public function inln()
     {
-        return fgets($this->stdin);
+        return $this->stdin->fgets();
     }
 
     /**
@@ -203,4 +203,3 @@ class Stdio
         $this->vt100->writeln($this->stderr, $string);
     }
 }
- 

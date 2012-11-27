@@ -79,10 +79,16 @@ class Getopt
      * 
      * @param OptionFactory $option_factory A factory for Option objects.
      * 
+     * @param ExceptionFactory $exception_factory A factory for Exception
+     * objects.
+     * 
      */
-    public function __construct(OptionFactory $option_factory)
-    {
+    public function __construct(
+        OptionFactory $option_factory,
+        ExceptionFactory $exception_factory
+    ) {
         $this->option_factory = $option_factory;
+        $this->exception_factory = $exception_factory;
     }
 
     /**
@@ -118,7 +124,9 @@ class Getopt
     public function init(array $opts, $strict = self::STRICT)
     {
         if ($this->options) {
-            throw new Exception('Already initialized.');
+            throw $this->exception_factory->newInstance(
+                'ERR_GETOPT_INITIALIZED'
+            );
         }
 
         foreach ($opts as $name => $spec) {
@@ -126,7 +134,14 @@ class Getopt
                 throw new \UnexpectedValueException;
             }
             $spec['name'] = $name;
-            $this->options[$name] = $this->option_factory->newInstance($spec);
+            try {
+                $this->options[$name] = $this->option_factory->newInstance($spec);
+            } catch (Exception\OptionParam $e) {
+                throw $this->exception_factory->newInstance(
+                    'ERR_OPTION_PARAM',
+                    ['option' => $name]
+                );
+            }
         }
 
         $this->strict = $strict;
@@ -160,7 +175,10 @@ class Getopt
         }
 
         if ($this->strict) {
-            throw new Exception\OptionNotDefined($prop);
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_NOT_DEFINED',
+                ['option' => $prop]
+            );
         }
     }
 
@@ -227,7 +245,10 @@ class Getopt
         }
 
         if ($this->strict) {
-            throw new Exception\OptionNotDefined("--$long");
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_NOT_DEFINED',
+                ['option' => "--$long"]
+            );
         }
     }
 
@@ -249,7 +270,10 @@ class Getopt
         }
 
         if ($this->strict) {
-            throw new Exception\OptionNotDefined("-$char");
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_NOT_DEFINED',
+                ['option' => "-$char"]
+            );
         }
     }
 
@@ -335,17 +359,23 @@ class Getopt
         }
 
         // if param is required but not present, blow up
-        if ($option->isParamRequired() && $value === null) {
-            throw new Exception\OptionParamRequired;
+        if ($option->isParamRequired() && trim($value) === '') {
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_PARAM_REQUIRED',
+                ['option' => "--$spec"]
+            );
         }
 
         // if params are rejected and one is present, blow up
-        if ($option->isParamRejected() && $value !== null) {
-            throw new Exception\OptionParamRejected;
+        if ($option->isParamRejected() && trim($value) !== '') {
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_PARAM_REJECTED',
+                ['option' => "--$spec"]
+            );
         }
 
         // if param is optional but not present, set to true
-        if ($option->isParamOptional() && $value === null) {
+        if ($option->isParamOptional() && trim($value) === '') {
             $option->setValue(true);
         } else {
             $option->setValue($value);
@@ -401,7 +431,10 @@ class Getopt
         if (! $is_param && $option->isParamRequired()) {
             // the next value is not a param, but a param is required,
             // so blow up.
-            throw new Exception\OptionParamRequired;
+            throw $this->exception_factory->newInstance(
+                'ERR_OPTION_PARAM_REQUIRED',
+                ['option' => "-$char"]
+            );
         }
 
         // at this point, the value is a param, and it's optional or required.
@@ -441,7 +474,10 @@ class Getopt
 
             // can't process params in a cluster
             if ($option->isParamRequired()) {
-                throw new Exception\OptionParamRequired;
+                throw $this->exception_factory->newInstance(
+                    'ERR_OPTION_PARAM_REQUIRED',
+                    ['option' => "-$char"]
+                );
             }
 
             // otherwise, set the value as a flag
@@ -449,4 +485,3 @@ class Getopt
         }
     }
 }
- 

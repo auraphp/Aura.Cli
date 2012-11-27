@@ -9,20 +9,30 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     protected function newMockCommand($argv = [], $class = 'Aura\Cli\MockCommand')
     {
         // standard input/output
-        $stdin  = fopen('php://memory', 'r');
-        $stdout = fopen('php://memory', 'w+');
-        $stderr = fopen('php://memory', 'w+');
+        $stdin  = new StdioResource('php://memory', 'r');
+        $stdout = new StdioResource('php://memory', 'w+');
+        $stderr = new StdioResource('php://memory', 'w+');
         $vt100 = new Vt100;
         $stdio = new Stdio($stdin, $stdout, $stderr, $vt100);
         
         // getopt
-        $option_factory = new OptionFactory();
-        $getopt = new Getopt($option_factory);
+        $messages = include dirname(dirname(dirname(__DIR__)))
+                  . DIRECTORY_SEPARATOR . 'intl'
+                  . DIRECTORY_SEPARATOR . 'en_US.php';
+        
+        $translator = new Translator($messages);
+        
+        $option_factory = new OptionFactory;
+        $exception_factory = new ExceptionFactory($translator);
+        $getopt = new Getopt($option_factory, $exception_factory);
+        
+        // signals
+        $signal = new Signal;
         
         // Command
         $_SERVER['argv'] = $argv;
         $context = new Context($GLOBALS);
-        return new $class($context, $stdio, $getopt);
+        return new $class($context, $stdio, $getopt, $signal);
     }
     
     public function testExec()
@@ -34,6 +44,21 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         // did the params get passed in?
         $actual = $command->params;
         $this->assertSame($expect, $actual);
+    }
+    
+    public function testExec_exceptionMessageOnly()
+    {
+        $command = $this->newMockCommand([], 'Aura\Cli\MockCommandWrong');
+        $command->exec();
+        $actual = $command->getException();
+        $this->assertInstanceOf('Aura\Cli\MockException', $actual);
+    }
+    
+    public function testExec_exceptionRethrown()
+    {
+        $command = $this->newMockCommand([], 'Aura\Cli\MockCommandWrongAgain');
+        $this->setExpectedException('UnexpectedValueException');
+        $command->exec();
     }
     
     public function testExec_hooks()

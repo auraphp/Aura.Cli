@@ -10,7 +10,8 @@
  */
 namespace Aura\Cli\Exception;
 
-use Aura\Cli\Exception as Exception;
+use Aura\Cli\Exception;
+
 /**
  * 
  * The option requires a non-blank parameter.
@@ -20,5 +21,12 @@ use Aura\Cli\Exception as Exception;
  */
 class OptionParamRequired extends Exception
 {
+    /**
+     * 
+     * Should this exception print only the message text?
+     * 
+     * @var bool
+     * 
+     */
+    protected $message_only = true;
 }
- 

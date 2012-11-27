@@ -10,6 +10,8 @@
  */
 namespace Aura\Cli;
 
+use Aura\Cli\Option;
+
 /**
  * 
  * A factory to create Option objects.
@@ -39,23 +41,47 @@ class OptionFactory
      * 
      * Creates and returns a new Option object.
      * 
-     * @param array $params An array of key-value pairs corresponding to
+     * @param array $args An array of key-value pairs corresponding to
      * Option constructor params.
      * 
      * @return Option
      * 
      */
-    public function newInstance(array $params)
+    public function newInstance(array $args)
     {
-        $params = array_merge($this->params, $params);
+        $args = array_merge($this->params, $args);
+        
+        // always need a name
+        if (! $args['name']) {
+            throw new Exception\OptionName;
+        }
+
+        // always need a long format or a short format.
+        if (! $args['long'] && ! $args['short']) {
+            // auto-add a long format
+            $args['long'] = str_replace('_', '-', $args['name']);
+        }
+
+        // always need a param value
+        if (! $args['param']) {
+            $args['param'] = Option::PARAM_OPTIONAL;            
+        }
+        
+        $ok = $args['param'] === Option::PARAM_REQUIRED
+           || $args['param'] === Option::PARAM_REJECTED
+           || $args['param'] === Option::PARAM_OPTIONAL;
+
+        if (! $ok) {
+            throw new Exception\OptionParam;
+        }
+
         return new Option(
-            $params['name'],
-            $params['long'],
-            $params['short'],
-            $params['param'],
-            $params['multi'],
-            $params['default']
+            $args['name'],
+            $args['long'],
+            $args['short'],
+            $args['param'],
+            $args['multi'],
+            $args['default']
         );
     }
 }
- 

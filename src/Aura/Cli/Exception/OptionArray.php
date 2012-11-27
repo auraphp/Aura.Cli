@@ -14,19 +14,11 @@ use Aura\Cli\Exception;
 
 /**
  * 
- * The option does not allow multiple values.
+ * The option definition needs to be an array.
  * 
  * @package Aura.Cli
  * 
  */
-class OptionNotMulti extends Exception
+class OptionArray extends Exception
 {
-    /**
-     * 
-     * Should this exception print only the message text?
-     * 
-     * @var bool
-     * 
-     */
-    protected $message_only = true;
 }
