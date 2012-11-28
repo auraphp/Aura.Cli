@@ -1,3 +1,5 @@
+(These changes include those in release 1.0.0, which failed to note them here.)
+
 - [NEW] Add a SignalInterface and a bare-bones Signal implementation for
   handling hooks
 
@@ -42,3 +44,4 @@
     
     - [CHG] Allow the action() to take args from the getopt sequential params.
 
+- Updated tests, README, etc.
