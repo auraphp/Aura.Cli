@@ -314,6 +314,6 @@ abstract class AbstractCommand
         // not a message-only exception. throw a copy, with the original as
         // the previous exception so that we can see a full trace.
         $class = get_class($e);
-        throw new $class($e->getMessage(), $e->getCode(), $e);
+        throw new $class($e->getMessage(), (int)$e->getCode(), $e);
     }
 }
