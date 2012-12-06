@@ -306,11 +306,10 @@ abstract class AbstractCommand
             // set the return code
             $this->setReturn($e->getCode());
 
-            // done
             return;
+
         }
 
-        // throw the exception
         throw $e;
     }
 }
