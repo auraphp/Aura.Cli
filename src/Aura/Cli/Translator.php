@@ -65,7 +65,7 @@ class Translator implements TranslatorInterface
 
         // do string replacements
         foreach ($tokens_values as $token => $value) {
-            $message = str_replace("{:$token}", $value, $message);
+            $message = str_replace('{' . $token . '}', $value, $message);
         }
         
         // done!
