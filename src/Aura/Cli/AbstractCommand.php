@@ -178,7 +178,7 @@ abstract class AbstractCommand
             $this->signal->send($this, 'post_exec', $this);
             
         } catch (Exception $exception) {
-            
+
             // set the exception and send a signal
             $this->exception = $exception;
             $this->signal->send($this, 'catch_exception', $this);
@@ -305,15 +305,11 @@ abstract class AbstractCommand
             
             // set the return code
             $this->setReturn($e->getCode());
-            
-            // done
+
             return;
-            
+
         }
-        
-        // not a message-only exception. throw a copy, with the original as
-        // the previous exception so that we can see a full trace.
-        $class = get_class($e);
-        throw new $class($e->getMessage(), $e->getCode(), $e);
+
+        throw $e;
     }
 }
