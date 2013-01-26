@@ -74,6 +74,11 @@ class Getopt
     protected $argv = [];
 
     /**
+     * @var bool
+     */
+    protected $strict;
+
+    /**
      * 
      * Constructor.
      * 
