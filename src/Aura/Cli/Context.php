@@ -52,8 +52,6 @@ class Context
      * 
      * @param array $globals Globals provided by PHP, typically `$GLOBALS`.
      * 
-     * @return void
-     * 
      */
     public function __construct(array $globals)
     {
@@ -178,7 +176,7 @@ class Context
             return $this->$var;
         } elseif (array_key_exists($key, $this->$var)) {
             // found the requested key.
-            // need the funny {} becuase $var[$key] will try to find a
+            // need the funny {} because $var[$key] will try to find a
             // property named for that element value, not for $var.
             return $this->{$var}[$key];
         } else {

@@ -69,7 +69,12 @@ abstract class AbstractCommand
      * 
      */
     protected $return = 0;
-    
+
+    /**
+     * @var Exception
+     */
+    protected $exception;
+
     /**
      * 
      * Constructor.
