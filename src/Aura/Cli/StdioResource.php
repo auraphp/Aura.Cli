@@ -104,7 +104,7 @@ class StdioResource
      * 
      * Rewind the position of a file pointer
      * 
-     * @return type
+     * @return bool
      * 
      */
     public function rewind()
