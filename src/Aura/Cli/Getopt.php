@@ -74,6 +74,11 @@ class Getopt
     protected $argv = [];
 
     /**
+     * @var bool
+     */
+    protected $strict;
+
+    /**
      * 
      * Constructor.
      * 
@@ -294,7 +299,7 @@ class Getopt
         $this->argv = $argv;
 
         // remaining non-option params
-        $params = [];
+        $this->params = [];
 
         // flag to say when we've reached the end of options
         $done = false;
