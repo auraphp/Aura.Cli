@@ -52,8 +52,6 @@ class Context
      * 
      * @param array $globals Globals provided by PHP, typically `$GLOBALS`.
      * 
-     * @return void
-     * 
      */
     public function __construct(array $globals)
     {
