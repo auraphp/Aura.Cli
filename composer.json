@@ -11,9 +11,8 @@
         "console"
     ],
     "homepage": "http://auraphp.github.com/Aura.Cli",
-    "version": "1.0.1",
-    "time": "2012-11-28",
-    "license": "BSD",
+    "time": "2013-04-12",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Aura.Cli Contributors",
@@ -28,6 +27,11 @@
             "name": "Hari KT",
             "email": "kthari85@gmail.com",
             "homepage": "http://harikt.com"
+        },
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com",
+            "homepage": ""
         },
         {
             "name": "Chris Cornutt",
