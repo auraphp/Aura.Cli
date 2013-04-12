@@ -122,7 +122,7 @@ class Stdio
      * 
      * Gets user input from the command line and trims the end-of-line.
      * 
-     * @return void
+     * @return string
      * 
      */
     public function in()
@@ -135,7 +135,7 @@ class Stdio
      * Gets user input from the command line and leaves the end-of-line in
      * place.
      * 
-     * @return void
+     * @return string
      * 
      */
     public function inln()

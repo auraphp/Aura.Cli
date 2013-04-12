@@ -54,6 +54,10 @@ class Translator implements TranslatorInterface
      */
     public function translate($key, array $tokens_values = [])
     {
+        if (! isset($this->messages[$key])) {
+            return $key;
+        }
+        
         // retain the message string
         $message = $this->messages[$key];
 
@@ -65,7 +69,7 @@ class Translator implements TranslatorInterface
 
         // do string replacements
         foreach ($tokens_values as $token => $value) {
-            $message = str_replace("{:$token}", $value, $message);
+            $message = str_replace('{' . $token . '}', $value, $message);
         }
         
         // done!

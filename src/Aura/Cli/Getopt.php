@@ -75,6 +75,15 @@ class Getopt
 
     /**
      * 
+     * Has Getopt been initialized in strict mode or not?
+     * 
+     * @var bool
+     * 
+     */
+    protected $strict;
+
+    /**
+     * 
      * Constructor.
      * 
      * @param OptionFactory $option_factory A factory for Option objects.
@@ -294,7 +303,7 @@ class Getopt
         $this->argv = $argv;
 
         // remaining non-option params
-        $params = [];
+        $this->params = [];
 
         // flag to say when we've reached the end of options
         $done = false;

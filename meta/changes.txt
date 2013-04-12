@@ -1,47 +1,6 @@
-(These changes include those in release 1.0.0, which failed to note them here.)
+- [CHG] Use {foo} instead of {:foo} for placeholders, in line with PSR-3 placeholders.
 
-- [NEW] Add a SignalInterface and a bare-bones Signal implementation for
-  handling hooks
+- [CHG] Make Translator more forgiving; if message key does not exist, return it as-is.
 
-- [NEW] Class StdioResource is now used in place of "naked" file handles;
-  this allows easier lazy-loading of resources
+- [CHG] Docblock fixes; thanks, @koriym.
 
-- [NEW] Add a TranslatorInterface and a bare-bones Translator implementation
-  for translating exception messages.
-
-- [ADD] Exception classes now have method getMessageOnly(), and property
-  $message_only, to determine if the exception should print only its message
-  (as vs the entire stack trace).
-
-- [NEW] Translation file intl/en_US.php for US English messages.
-
-- In AbstractCommand ...
-
-    - [ADD] Property $return, and methods setReturn() and getReturn(), to
-      allow setting and getting of the return code from exec().
-    
-    - [ADD] Method init() and move init*() behaviors there.
-    
-    - [ADD] Method catchException(), along with adding a signal handler
-      'catch_exception', to facilitate external exception handlers. The method
-      sends "message-only" exception messages to stderr; other exceptions are
-      re-thrown.
-    
-    - [ADD] Method getException() so that external handlers can read the
-      thrown exception.
-    
-    - [ADD] Methods getReturn() and setReturn() so that external handlers can
-      read and change the return code.
-    
-    - [CHG] The exec() method now uses try/catch and sends the
-      'catch_exception' signal in the catch block.
-    
-    - [CHG] Getopt is now loaded, and params are now set, after the pre-exec
-      hook executes in exec().
-
-    - [CHG] In exec(), read and set the return code from the action return
-      value.
-    
-    - [CHG] Allow the action() to take args from the getopt sequential params.
-
-- Updated tests, README, etc.
