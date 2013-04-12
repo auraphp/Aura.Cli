@@ -74,7 +74,11 @@ class Getopt
     protected $argv = [];
 
     /**
+     * 
+     * Has Getopt been initialized in strict mode or not?
+     * 
      * @var bool
+     * 
      */
     protected $strict;
 

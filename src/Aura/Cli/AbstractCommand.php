@@ -71,7 +71,11 @@ abstract class AbstractCommand
     protected $return = 0;
 
     /**
+     * 
+     * Exception caught in the exec() loop.
+     * 
      * @var Exception
+     * 
      */
     protected $exception;
 
