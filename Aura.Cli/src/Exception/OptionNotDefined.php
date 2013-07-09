@@ -14,19 +14,11 @@ use Aura\Cli\Exception;
 
 /**
  * 
- * The option does not allow multiple values.
+ * Asked for an option that is not defined.
  * 
  * @package Aura.Cli
  * 
  */
-class OptionNotMulti extends Exception
+class OptionNotDefined extends Exception
 {
-    /**
-     * 
-     * Should this exception print only the message text?
-     * 
-     * @var bool
-     * 
-     */
-    protected $message_only = true;
 }

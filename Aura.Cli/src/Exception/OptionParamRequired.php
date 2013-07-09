@@ -14,11 +14,11 @@ use Aura\Cli\Exception;
 
 /**
  * 
- * Getopt has already been initialized.
+ * The option requires a non-blank parameter.
  * 
  * @package Aura.Cli
  * 
  */
-class GetoptInitialized extends Exception
+class OptionParamRequired extends Exception
 {
 }

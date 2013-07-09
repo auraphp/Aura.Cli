@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Cli;
+namespace Aura\Cli\Stdio;
 
 /**
  * Test class for Vt100.
@@ -73,7 +73,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->write($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);
@@ -87,7 +87,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->writeln($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);
@@ -104,7 +104,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m";
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->write($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);
@@ -121,7 +121,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m" . PHP_EOL;
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->writeln($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);
@@ -137,7 +137,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->write($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);
@@ -153,7 +153,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
         
-        $resource = new StdioResource('php://memory', 'w+');
+        $resource = new Resource('php://memory', 'w+');
         $this->vt100->writeln($resource, $text);
         $resource->rewind();
         $actual = $resource->fread(8192);

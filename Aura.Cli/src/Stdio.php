@@ -10,11 +10,12 @@
  */
 namespace Aura\Cli;
 
-use Aura\Cli\Vt100;
+use Aura\Cli\Stdio\Resource;
+use Aura\Cli\Stdio\Vt100;
 
 /**
  * 
- * Provides a wrapper for standard input/output handles.
+ * Provides a wrapper for standard input/output streams.
  * 
  * @package Aura.Cli
  * 
@@ -23,27 +24,27 @@ class Stdio
 {
     /**
      * 
-     * A handle for standard input.
+     * A Resource object for standard input.
      * 
-     * @var StdioResource
+     * @var Resource
      * 
      */
     protected $stdin;
 
     /**
      * 
-     * A handle for standard output.
+     * A Resource object for standard output.
      * 
-     * @var StdioResource
+     * @var Resource
      * 
      */
     protected $stdout;
 
     /**
      * 
-     * A handle for standard error.
+     * A Resource object for standard error.
      * 
-     * @var StdioResource
+     * @var Resource
      * 
      */
     protected $stderr;
@@ -61,19 +62,19 @@ class Stdio
      * 
      * Constructor.
      * 
-     * @param StdioResource $stdin A handle for standard input.
+     * @param Resource $stdin A Resource object for standard input.
      * 
-     * @param StdioResource $stdout A handle for standard output.
+     * @param Resource $stdout A Resource object for standard output.
      * 
-     * @param StdioResource $stderr A handle for standard error.
+     * @param Resource $stderr A Resource object for standard error.
      * 
      * @param Vt100 $vt100 A VT100 formatting object.
      * 
      */
     public function __construct (
-        StdioResource $stdin,
-        StdioResource $stdout,
-        StdioResource $stderr,
+        Resource $stdin,
+        Resource $stdout,
+        Resource $stderr,
         Vt100 $vt100
     ) {
         $this->stdin  = $stdin;
@@ -84,9 +85,9 @@ class Stdio
 
     /**
      * 
-     * Returns the standard input handle.
+     * Returns the standard input Resource object.
      * 
-     * @return resource
+     * @return Resource
      * 
      */
     public function getStdin()
@@ -96,9 +97,9 @@ class Stdio
 
     /**
      * 
-     * Returns the standard output handle.
+     * Returns the standard output Resource object.
      * 
-     * @return resource
+     * @return Resource
      * 
      */
     public function getStdout()
@@ -108,9 +109,9 @@ class Stdio
 
     /**
      * 
-     * Returns the standard error handle.
+     * Returns the standard error Resource object.
      * 
-     * @return resource
+     * @return Resource
      * 
      */
     public function getStderr()

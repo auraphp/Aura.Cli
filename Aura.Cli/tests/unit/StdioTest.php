@@ -1,6 +1,9 @@
 <?php
 namespace Aura\Cli;
 
+use Aura\Cli\Stdio\Resource;
+use Aura\Cli\Stdio\Vt100;
+
 /**
  * Test class for Stdio.
  */
@@ -19,16 +22,12 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     
     protected $vt100;
     
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         parent::setUp();
-        $this->stdin  = new StdioResource('php://memory', 'r+');
-        $this->stdout = new StdioResource('php://memory', 'w+');
-        $this->stderr = new StdioResource('php://memory', 'w+');
+        $this->stdin  = new Resource('php://memory', 'r+');
+        $this->stdout = new Resource('php://memory', 'w+');
+        $this->stderr = new Resource('php://memory', 'w+');
         $this->vt100  = new Vt100;
         $this->stdio = new Stdio(
             $this->stdin,

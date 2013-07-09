@@ -8,17 +8,15 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Cli\Exception;
-
-use Aura\Cli\Exception;
+namespace Aura\Cli;
 
 /**
  * 
- * The option 'param' value needs a proper constant.
+ * Generic package exception.
  * 
  * @package Aura.Cli
  * 
  */
-class OptionParam extends Exception
+class Exception extends \Exception
 {
 }

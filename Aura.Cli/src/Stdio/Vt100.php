@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Cli;
+namespace Aura\Cli\Stdio;
 
 /**
  * 
@@ -109,6 +109,53 @@ class Vt100
 
     /**
      * 
+     * When stripping markup, use these values.
+     * 
+     * @var string
+     * 
+     * @see $format
+     * 
+     */
+    protected $strip = [
+        '%%'    => '%',
+        '%k'    => '',
+        '%r'    => '',
+        '%g'    => '',
+        '%y'    => '',
+        '%b'    => '',
+        '%m'    => '',
+        '%p'    => '',
+        '%c'    => '',
+        '%w'    => '',
+        '%n'    => '',
+        '%K'    => '',
+        '%R'    => '',
+        '%G'    => '',
+        '%Y'    => '',
+        '%B'    => '',
+        '%M'    => '',
+        '%P'    => '',
+        '%C'    => '',
+        '%W'    => '',
+        '%N'    => '',
+        '%0'    => '',
+        '%1'    => '',
+        '%2'    => '',
+        '%3'    => '',
+        '%4'    => '',
+        '%5'    => '',
+        '%6'    => '',
+        '%7'    => '',
+        '%F'    => '',
+        '%_'    => '',
+        '%U'    => '',
+        '%I'    => '',
+        '%*'    => '',
+        '%d'    => '',
+    ];
+    
+    /**
+     * 
      * Forces output to format for POSIX terminals, or to strip for non-POSIX
      * terminals; when null, will auto-determine if the terminal is POSIX.
      * 
@@ -190,15 +237,7 @@ class Vt100
      */
     public function strip($text)
     {
-        static $strip = null;
-        if ($strip === null) {
-            foreach ($this->format as $key => $val) {
-                $strip[$key] = '';
-            }
-            $strip['%%'] = '%';
-        }
-
-        return strtr($text, $strip);
+        return strtr($text, $this->strip);
     }
 
     /**
@@ -206,7 +245,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
      * 
-     * @param StdioResource $resource The file handle.
+     * @param Resource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -216,7 +255,7 @@ class Vt100
      * @see writeln()
      * 
      */
-    public function write(StdioResource $resource, $text)
+    public function write(Resource $resource, $text)
     {
         if ($this->isPosix($resource)) {
             // it's a tty. use formatted text.
@@ -232,7 +271,7 @@ class Vt100
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
      * 
-     * @param StdioResource $resource The file handle.
+     * @param Resource $resource The file handle.
      * 
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
@@ -242,7 +281,7 @@ class Vt100
      * @see write()
      * 
      */
-    public function writeln(StdioResource $resource, $text)
+    public function writeln(Resource $resource, $text)
     {
         $this->write($resource, $text);
         $resource->fwrite(PHP_EOL);
@@ -252,12 +291,12 @@ class Vt100
      * 
      * Determines if a stream handle should be treated as a POSIX terminal.
      * 
-     * @param StdioResource $resource The stream handle.
+     * @param Resource $resource The stream handle.
      * 
      * @return bool
      * 
      */
-    protected function isPosix(StdioResource $resource)
+    protected function isPosix(Resource $resource)
     {
         if (is_bool($this->posix)) {
             // forced to posix
