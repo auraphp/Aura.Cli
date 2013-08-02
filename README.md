@@ -141,7 +141,7 @@ exceptions:
 To get the positional arguments passed to the command line, use the `$argv`
 property:
 
-```
+```php
 <?php
 // if the script was invoked with:
 // php script.php arg1 arg2 arg3 arg4
@@ -243,19 +243,18 @@ The _Stdio_ object methods are ...
 
 You can use VT100 style %-codes in the output strings to set text color, text
 weight, background color, and other display characteristics. See the
-[VT100 cheat sheet](#vt100) below.
+[VT100 cheat sheet](#vt100-cheat-sheet) below.
 
 ```php
 <?php
 // print to stdout
-$context->outln('This is normal text.');
+$stdio->outln('This is normal text.');
 
 // print to stderr
-$context->errln('%rThis is an error in red.%n');
+$stdio->errln('%rThis is an error in red.%n');
 ?>
 ```
 
-<a href="#vt100"></a>
 VT100 Cheat Sheet
 =================
 
