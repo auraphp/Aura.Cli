@@ -4,8 +4,6 @@ Aura.Cli
 Overview
 --------
 
-### Description
-
 The Aura.Cli library provides the equivalent of request ( _Context_ ) and
 response ( _Stdio_ ) objects for the command line interface, including _Getopt_
 support. Note that it does not provide commands or other controller-like
@@ -217,7 +215,7 @@ Instantiate a _Stdio_ object like so:
 <?php
 use Aura\Cli\Stdio;
 
-$stdio  = new Stdio(
+$stdio = new Stdio(
     new Stdio\Resource('php://stdin', 'r'),
     new Stdio\Resource('php://stdout', 'w+'),
     new Stdio\Resource('php://stderr', 'w+'),
