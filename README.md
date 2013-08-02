@@ -1,20 +1,32 @@
 Aura.Cli
 ========
 
-Overview
---------
-
 The Aura.Cli library provides the equivalent of request ( _Context_ ) and
-response ( _Stdio_ ) objects for the command line interface, including _Getopt_
-support. Note that it does not provide commands or other controller-like
-objects; it is strictly for environment discovery and standard input/ouput
-operations.
+response ( _Stdio_ ) objects for the command line interface, including
+_Getopt_ support. Note that it does not provide commands or other
+controller-like objects; it is strictly for environment discovery and standard
+input/ouput operations.
 
 ### Installation and Autoloading
 
 This library is installable via Composer and is registered on Packagist at
-<https://packagist.org/packages/aura/cli>. Alternatively, require or include
-its _autoload.php_ file.
+<https://packagist.org/packages/aura/cli>. Installing via Composer will set up
+autoloading automatically.
+
+Alternatively, download or clone this repository, then require or include its
+_autoload.php_ file.
+
+### Dependencies
+
+As with all Aura libraries, this library has no external dependencies.
+
+### Tests
+
+This library has 100% code coverage. To run the library tests, first install
+[PHPUnit][], then go to the library _tests_ directory
+and issue `phpunit` at the command line.
+
+[PHPUnit]: http://phpunit.de/manual/
 
 ### PSR Compliance
 
