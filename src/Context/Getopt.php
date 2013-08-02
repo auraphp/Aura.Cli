@@ -1,35 +1,5 @@
 <?php
 /*
-Do we want to simplify this more?
-
-No default values; use $context->opts->get() for defaults.
-
-No support for dual long and short options.
-
-Force multiple occurrences to arrays instead of checking them.
-
-Use the PHP getopt() notation: getopt($short, array $long) with : for required
-and :: for optional.
-
-Keep up with the "option not supported" stuff.
-
-This is so we can make calls to Context::getopt() a lot shorter.
-
-    $defs = [
-        'a',            // stored as 'a', no value
-        'b:'            // stored as 'b', required value
-        'c::',          // stored as 'c', optional value
-        'foo',          // stored as 'foo', no value
-        'bar:',         // stored as 'bar', required value
-        'baz::',        // stored as 'baz', optional value
-    ];
-
-    $params = ['name1', 'name2', 'name3']; // names for sequential params
-
-If the option is present without a value, set to boolean true.
-
-Re-add strict/nonstrict? Might make it easier for folks who are doing nested
-controllers that read different options.  Or 
 */
 
 /**
@@ -52,6 +22,8 @@ use UnexpectedValueException;
  * 
  * @package Aura.Cli
  * 
+ * @todo Re-add strict/nonstrict? Might make it easier for folks who are doing
+ * nested controllers that read different options.
  */
 class Getopt
 {

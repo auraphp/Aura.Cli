@@ -73,9 +73,9 @@ To define command line options for the _Context_ to recognize, use the
 `getopt()` method. This method uses a format similar to, but not exactly the
 same as, the [getopt()](http://php.net/getopt) function in PHP.
 
-Instead of defining flags and options as a pair of string, they are defined as
-elements in an array. Once these are defined, you can use the `$opts` property
-to get the option values.
+Instead of defining short flags in a string and long options in a separate
+array, they are defined as elements in a single array. Once these are defined,
+you can use the `$opts` property to get the option values.
 
 ```php
 <?php
@@ -109,6 +109,18 @@ $context->getopt([
 ]);
 
 $name = $context->opts->get('name'); // both -f and --foo map to 'name'
+?>
+```
+
+If an option is passed multiple times, it will result in an array of multiple
+values.
+
+```php
+<?php
+// if the script was invoked with:
+// php script.php -f foo -f bar -f baz
+$context->getopt(['f:']);
+$values = $context->opts->get('f'); // ['foo', 'bar', 'baz']
 ?>
 ```
 
