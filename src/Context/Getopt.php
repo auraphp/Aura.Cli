@@ -1,7 +1,4 @@
 <?php
-/*
-*/
-
 /**
  * 
  * This file is part of the Aura project for PHP.
