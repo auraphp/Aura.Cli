@@ -14,7 +14,7 @@ use Aura\Cli\Context\PropertyFactory;
 
 /**
  * 
- * Collection point for information about the command-line execution context.
+ * Collection point for information about the command line execution context.
  * 
  * @package Aura.Cli
  * 

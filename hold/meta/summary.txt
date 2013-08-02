@@ -1,1 +1,0 @@
-A system for creating and executing CLI commands

@@ -5,9 +5,8 @@ class PropertyFactory
 {
     protected $globals;
     
-    public function __construct(
-        array $globals
-    ) {
+    public function __construct(array $globals)
+    {
         $this->globals = $globals;
     }
     

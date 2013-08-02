@@ -74,6 +74,16 @@ class Resource
         }
     }
 
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+    
+    public function getMode()
+    {
+        return $this->mode;
+    }
+    
     /**
      * 
      * Binary-safe file read

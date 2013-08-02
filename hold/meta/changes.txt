@@ -1,6 +1,0 @@
-- [CHG] Use {foo} instead of {:foo} for placeholders, in line with PSR-3 placeholders.
-
-- [CHG] Make Translator more forgiving; if message key does not exist, return it as-is.
-
-- [CHG] Docblock fixes; thanks, @koriym.
-

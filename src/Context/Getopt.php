@@ -27,6 +27,9 @@ This is so we can make calls to Context::getopt() a lot shorter.
     $params = ['name1', 'name2', 'name3']; // names for sequential params
 
 If the option is present without a value, set to boolean true.
+
+Re-add strict/nonstrict? Might make it easier for folks who are doing nested
+controllers that read different options.  Or 
 */
 
 /**
@@ -45,7 +48,7 @@ use UnexpectedValueException;
 
 /**
  * 
- * Retrieves and validates command-line options and parameter values.
+ * Retrieves and validates command line options and parameter values.
  * 
  * @package Aura.Cli
  * 
