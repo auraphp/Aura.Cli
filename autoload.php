@@ -21,6 +21,8 @@ spl_autoload_register(function ($class) {
         __DIR__ . DIRECTORY_SEPARATOR . 'src',
         __DIR__ . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'src',
     ];
+    
+    // go through the directories to find classes
     foreach ($dirs as $dir) {
         $file = $dir . DIRECTORY_SEPARATOR . $part;
         if (is_readable($file)) {
