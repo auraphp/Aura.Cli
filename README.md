@@ -6,8 +6,8 @@ Overview
 
 ### Description
 
-The Aura.Cli library provides the equivalent of request (_Context_) and
-response (_Stdio_) objects for the command line interface, including _Getopt_
+The Aura.Cli library provides the equivalent of request ( _Context_ ) and
+response ( _Stdio_ ) objects for the command line interface, including _Getopt_
 support. Note that it does not provide commands or other controller-like
 objects; it is strictly for environment discovery and standard input/ouput
 operations.
