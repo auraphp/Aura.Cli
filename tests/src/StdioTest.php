@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli;
 
-use Aura\Cli\Stdio\Resource;
+use Aura\Cli\Stdio\Handle;
 use Aura\Cli\Stdio\Vt100;
 
 /**
@@ -25,9 +25,9 @@ class StdioTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->stdin  = new Resource('php://memory', 'r+');
-        $this->stdout = new Resource('php://memory', 'w+');
-        $this->stderr = new Resource('php://memory', 'w+');
+        $this->stdin  = new Handle('php://memory', 'r+');
+        $this->stdout = new Handle('php://memory', 'w+');
+        $this->stderr = new Handle('php://memory', 'w+');
         $this->vt100  = new Vt100;
         $this->stdio = new Stdio(
             $this->stdin,

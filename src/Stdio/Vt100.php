@@ -10,6 +10,8 @@
  */
 namespace Aura\Cli\Stdio;
 
+use Aura\Cli\Stdio\Handle;
+
 /**
  * 
  * Text formatting for VT100 terminals.
@@ -242,12 +244,12 @@ class Vt100
 
     /**
      * 
-     * Writes text to a file handle, converting to control codes if the handle
+     * Writes text to a resource object, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
      * 
-     * @param Resource $resource The file handle.
+     * @param Handle $handle The resource object.
      * 
-     * @param string $text The text to write to the file handle, converting
+     * @param string $text The text to write to the resource object, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
      * @return null
@@ -255,25 +257,25 @@ class Vt100
      * @see writeln()
      * 
      */
-    public function write(Resource $resource, $text)
+    public function write(Handle $handle, $text)
     {
-        if ($this->isPosix($resource)) {
+        if ($this->isPosix($handle)) {
             // it's a tty. use formatted text.
-            $resource->fwrite($this->format($text));
+            $handle->fwrite($this->format($text));
         } else {
             // not a tty, or a non-standard handle. use plain text.
-            $resource->fwrite($this->strip($text));
+            $handle->fwrite($this->strip($text));
         }
     }
 
     /**
      * 
-     * Writes text to a file handle, converting to control codes if the handle
+     * Writes text to a resource object, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
      * 
-     * @param Resource $resource The file handle.
+     * @param Handle $handle The resource object.
      * 
-     * @param string $text The text to write to the file handle, converting
+     * @param string $text The text to write to the resource object, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
      * @return null
@@ -281,22 +283,22 @@ class Vt100
      * @see write()
      * 
      */
-    public function writeln(Resource $resource, $text)
+    public function writeln(Handle $handle, $text)
     {
-        $this->write($resource, $text);
-        $resource->fwrite(PHP_EOL);
+        $this->write($handle, $text);
+        $handle->fwrite(PHP_EOL);
     }
 
     /**
      * 
      * Determines if a stream handle should be treated as a POSIX terminal.
      * 
-     * @param Resource $resource The stream handle.
+     * @param Handle $handle The stream handle.
      * 
      * @return bool
      * 
      */
-    protected function isPosix(Resource $resource)
+    protected function isPosix(Handle $handle)
     {
         if (is_bool($this->posix)) {
             // forced to posix
@@ -306,7 +308,7 @@ class Vt100
             return false;
         } else {
             // check the resource itself
-            return $resource->isPosixTty();
+            return $handle->isPosixTty();
         }
     }
 }

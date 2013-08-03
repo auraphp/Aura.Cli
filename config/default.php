@@ -21,15 +21,15 @@ $di->params['Aura\Cli\Context\PropertyFactory']['globals'] = $GLOBALS;
  * Aura\Cli\Stdio
  */
 $di->params['Aura\Cli\Stdio'] = [
-    'stdin' => $di->lazyNew('Aura\Cli\Stdio\Resource', [
+    'stdin' => $di->lazyNew('Aura\Cli\Stdio\Handle', [
         'filename' => 'php://stdin',
         'mode' => 'r',
     ]),
-    'stdout' => $di->lazyNew('Aura\Cli\Stdio\Resource', [
+    'stdout' => $di->lazyNew('Aura\Cli\Stdio\Handle', [
         'filename' => 'php://stdout',
         'mode' => 'w+',
     ]),
-    'stderr' => $di->lazyNew('Aura\Cli\Stdio\Resource', [
+    'stderr' => $di->lazyNew('Aura\Cli\Stdio\Handle', [
         'filename' => 'php://stderr',
         'mode' => 'w+',
     ]),

@@ -73,11 +73,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->write($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->write($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }
@@ -87,11 +87,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->writeln($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->writeln($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }
@@ -104,11 +104,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m";
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->write($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->write($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }
@@ -121,11 +121,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $esc    = chr(27);
         $expect = "{$esc}[30;1mbold%percent{$esc}[0m" . PHP_EOL;
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->writeln($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->writeln($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }
@@ -137,11 +137,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent";
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->write($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->write($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }
@@ -153,11 +153,11 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $text = '%Kbold%%percent%n';
         $expect = "bold%percent" . PHP_EOL;
         
-        $resource = new Resource('php://memory', 'w+');
-        $this->vt100->writeln($resource, $text);
-        $resource->rewind();
-        $actual = $resource->fread(8192);
-        unset($resource);
+        $handle = new Handle('php://memory', 'w+');
+        $this->vt100->writeln($handle, $text);
+        $handle->rewind();
+        $actual = $handle->fread(8192);
+        unset($handle);
         
         $this->assertSame($expect, $actual);
     }

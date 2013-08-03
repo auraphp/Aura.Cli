@@ -17,11 +17,11 @@ namespace Aura\Cli\Stdio;
  * @package Aura.Cli
  * 
  */
-class Resource
+class Handle
 {
     /**
      *
-     * Resource handle.
+     * Handle handle.
      * 
      * @var resource 
      * 

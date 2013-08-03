@@ -240,9 +240,9 @@ Instantiate a _Stdio_ object like so:
 use Aura\Cli\Stdio;
 
 $stdio = new Stdio(
-    new Stdio\Resource('php://stdin', 'r'),
-    new Stdio\Resource('php://stdout', 'w+'),
-    new Stdio\Resource('php://stderr', 'w+'),
+    new Stdio\Handle('php://stdin', 'r'),
+    new Stdio\Handle('php://stdout', 'w+'),
+    new Stdio\Handle('php://stderr', 'w+'),
     new Stdio\Vt100
 );
 ?>
@@ -254,7 +254,7 @@ reource handles.
 The _Stdio_ object methods are ...
 
 - `getStdin()`, `getStdout()`, and `getStderr()` to return the respective
-  _Resource_ objects;
+  _Handle_ objects;
 
 - `outln()` and `out()` to print to _stdout_, with or without a line ending;
 
