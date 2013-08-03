@@ -23,25 +23,30 @@ class Context
 {
     /**
      * 
-     * Values taken from $_SERVER['argv'].
+     * Positional arguments.
      * 
-     * @var array
+     * @var Context\Values
      * 
      */
-    protected $argv;
-
+    protected $args;
+    
     /**
      * 
      * Imported $_ENV values.
      * 
-     * @var array
+     * @var Context\Values
      * 
      */
     protected $env;
 
+    /**
+     * 
+     * Values from short flags and long options.
+     * 
+     * @var Context\Values
+     * 
+     */
     protected $opts;
-    
-    protected $args;
     
     /**
      * 
@@ -65,6 +70,9 @@ class Context
      * 
      * Constructor.
      * 
+     * @param PropertyFactory $property_factory A factory to create propery
+     * objects.
+     * 
      */
     public function __construct(PropertyFactory $property_factory)
     {
@@ -75,11 +83,32 @@ class Context
         $this->server           = $this->property_factory->newServer();
     }
 
+    /**
+     * 
+     * Magic read for property objects.
+     * 
+     * @param string $key The property to get.
+     * 
+     * @return Context\Value A property object.
+     * 
+     */
     public function __get($key)
     {
         return $this->$key;
     }
     
+    /**
+     * 
+     * Set the options definitions, then reload the `$opts` and `$args`
+     * property objects.
+     * 
+     * @param array $defs The option definitions.
+     * 
+     * @return null
+     * 
+     * @see Context\Getopt::setDefs()
+     * 
+     */
     public function getopt(array $defs)
     {
         $instances = $this->property_factory->newOptsArgs($defs);
