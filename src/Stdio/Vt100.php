@@ -111,7 +111,7 @@ class Vt100
      * 
      * When stripping markup, use these values.
      * 
-     * @var string
+     * @var array
      * 
      * @see $format
      * 
