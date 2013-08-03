@@ -12,7 +12,7 @@ namespace Aura\Cli\Stdio;
 
 /**
  * 
- * An object-oriented wrapper for resource streams.
+ * An object-oriented wrapper for file/stream resource handles.
  * 
  * @package Aura.Cli
  * 
@@ -21,7 +21,7 @@ class Handle
 {
     /**
      *
-     * Handle handle.
+     * The resource handle.
      * 
      * @var resource 
      * 
@@ -30,7 +30,7 @@ class Handle
 
     /**
      * 
-     * The file name represented by the resource handle.
+     * The file name represented by the handle.
      * 
      * @var string 
      *
@@ -39,7 +39,7 @@ class Handle
 
     /**
      * 
-     * The mode under which the resource handle was opened.
+     * The mode under which the handle was opened.
      *
      * @var string 
      * 
@@ -79,7 +79,7 @@ class Handle
 
     /**
      * 
-     * Returns the file name of the resource handle.
+     * Returns the file name of the handle.
      * 
      * @return string
      * 
@@ -91,7 +91,7 @@ class Handle
     
     /**
      * 
-     * Returns the mode under which the resource handle was opened.
+     * Returns the mode under which the handle was opened.
      * 
      * @return string
      * 
@@ -103,7 +103,7 @@ class Handle
     
     /**
      * 
-     * Reads 8192 bytes from the resource handle.
+     * Reads 8192 bytes from the handle.
      * 
      * @return mixed The string read on success, or boolean false on failure.
      * 
@@ -115,7 +115,7 @@ class Handle
 
     /**
      * 
-     * Writes a string the resource handle.
+     * Writes a string the handle.
      * 
      * @param string $string
      * 
@@ -130,7 +130,7 @@ class Handle
 
     /**
      * 
-     * Rewinds the resource handle.
+     * Rewinds the handle.
      * 
      * @return bool
      * 
@@ -142,7 +142,7 @@ class Handle
 
     /**
      * 
-     * Reads a line from the resource handle.
+     * Reads a line from the handle.
      * 
      * @return string The line on success, or boolean false on failure.
      * 
@@ -154,7 +154,7 @@ class Handle
 
     /**
      * 
-     * Is the resource handle an interactive terminal?
+     * Is the handle an interactive terminal?
      * 
      * @return bool
      * 

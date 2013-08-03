@@ -8,20 +8,20 @@ class HandleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->resource  = new Handle('php://memory', 'w+');
+        $this->handle = new Handle('php://memory', 'w+');
     }
 
     public function testGetFilename()
     {
         $expect = 'php://memory';
-        $actual = $this->resource->getFilename();
+        $actual = $this->handle->getFilename();
         $this->assertSame($expect, $actual);
     }
 
     public function testGetMode()
     {
         $expect = 'w+';
-        $actual = $this->resource->getMode();
+        $actual = $this->handle->getMode();
         $this->assertSame($expect, $actual);
     }
     

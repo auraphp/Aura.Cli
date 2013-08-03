@@ -244,12 +244,12 @@ class Vt100
 
     /**
      * 
-     * Writes text to a resource object, converting to control codes if the handle
+     * Writes text to a handle object, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
      * 
-     * @param Handle $handle The resource object.
+     * @param Handle $handle The handle object.
      * 
-     * @param string $text The text to write to the resource object, converting
+     * @param string $text The text to write to the handle object, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
      * @return null
@@ -270,12 +270,12 @@ class Vt100
 
     /**
      * 
-     * Writes text to a resource object, converting to control codes if the handle
+     * Writes text to a handle object, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
      * 
-     * @param Handle $handle The resource object.
+     * @param Handle $handle The handle object.
      * 
-     * @param string $text The text to write to the resource object, converting
+     * @param string $text The text to write to the handle object, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
      * @return null
@@ -307,7 +307,7 @@ class Vt100
             // windows is not posix
             return false;
         } else {
-            // check the resource itself
+            // check the handle itself
             return $handle->isPosixTty();
         }
     }
