@@ -28,6 +28,18 @@ and issue `phpunit` at the command line.
 
 [PHPUnit]: http://phpunit.de/manual/
 
+### API Documentation
+
+This library has embedded DocBlock API documentation. To generate the
+documentation in HTML, first install [PHPDocumentor][], then go to the library
+directory and issue the following at the command line:
+
+    phpdoc -d ./src -t /path/to/output --force
+
+You can then browse the HTML-formatted API documentation at _/path/to/output_.
+    
+[PHPDocumentor]: http://phpdoc.org/docs/latest/for-users/installation.html
+
 ### PSR Compliance
 
 This library is compliant with [PSR-1][] and [PSR-2][]. If you notice
