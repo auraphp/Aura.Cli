@@ -15,7 +15,7 @@ use UnexpectedValueException;
 
 /**
  * 
- * Retrieves and validates command line options and parameter values.
+ * Parses command line option and argument values.
  * 
  * @package Aura.Cli
  * 
