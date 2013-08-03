@@ -12,7 +12,7 @@ namespace Aura\Cli\Stdio;
 
 /**
  * 
- * An object-oriented wrapper for file/stream resource handles.
+ * An object-oriented wrapper for file/stream resources.
  * 
  * @package Aura.Cli
  * 
@@ -21,25 +21,25 @@ class Handle
 {
     /**
      *
-     * The resource handle.
+     * The resource represented by the handle.
      * 
      * @var resource 
      * 
      */
-    protected $handle;
+    protected $resource;
 
     /**
      * 
-     * The file name represented by the handle.
+     * The resource name, typically a file or stream name.
      * 
      * @var string 
      *
      */
-    protected $filename;
+    protected $name;
 
     /**
      * 
-     * The mode under which the handle was opened.
+     * The mode under which the resource was opened.
      *
      * @var string 
      * 
@@ -50,48 +50,48 @@ class Handle
      * 
      * Constructor.
      * 
-     * @param string $filename The file name to open, typically a PHP stream
-     * like `php://stdout`.
+     * @param string $name The resource to open, typically a PHP stream
+     * like "php://stdout".
      * 
-     * @param string $mode The mode under which to open the stream.
+     * @param string $mode Open the resource in this mode; e.g., "w+".
      * 
      */
-    public function __construct($filename, $mode)
+    public function __construct($name, $mode)
     {
-        $this->filename = $filename;
+        $this->name     = $name;
         $this->mode     = $mode;
-        $this->handle   = fopen($this->filename, $this->mode);
+        $this->resource = fopen($this->name, $this->mode);
     }
 
     /**
      * 
-     * Destructor; closes the handle if it is not already closed.
+     * Destructor; closes the resource if it is not already closed.
      * 
      * @return null
      * 
      */
     public function __destruct()
     {
-        if ($this->handle) {
-            fclose($this->handle);
+        if ($this->resource) {
+            fclose($this->resource);
         }
     }
 
     /**
      * 
-     * Returns the file name of the handle.
+     * Returns the resource name.
      * 
      * @return string
      * 
      */
-    public function getFilename()
+    public function getName()
     {
-        return $this->filename;
+        return $this->name;
     }
     
     /**
      * 
-     * Returns the mode under which the handle was opened.
+     * Returns the resource mode.
      * 
      * @return string
      * 
@@ -103,19 +103,19 @@ class Handle
     
     /**
      * 
-     * Reads 8192 bytes from the handle.
+     * Reads 8192 bytes from the resource.
      * 
      * @return mixed The string read on success, or boolean false on failure.
      * 
      */
     public function fread()
     {
-        return fread($this->handle, 8192);
+        return fread($this->resource, 8192);
     }
 
     /**
      * 
-     * Writes a string the handle.
+     * Writes a string to the resource.
      * 
      * @param string $string
      * 
@@ -125,46 +125,46 @@ class Handle
      */
     public function fwrite($string)
     {
-        return fwrite($this->handle, $string);
+        return fwrite($this->resource, $string);
     }
 
     /**
      * 
-     * Rewinds the handle.
+     * Rewinds the resource pointer.
      * 
      * @return bool
      * 
      */
     public function rewind()
     {
-        return rewind($this->handle);
+        return rewind($this->resource);
     }
 
     /**
      * 
-     * Reads a line from the handle.
+     * Reads a line from the resource.
      * 
      * @return string The line on success, or boolean false on failure.
      * 
      */
     public function fgets()
     {
-        return fgets($this->handle);
+        return fgets($this->resource);
     }
 
     /**
      * 
-     * Is the handle an interactive terminal?
+     * Does the resource represent an interactive terminal?
      * 
      * @return bool
      * 
      */
     public function isPosixTty()
     {
-        // silence posix_isatty() errors regarding non-standard handles,
+        // silence posix_isatty() errors regarding non-standard resources,
         // e.g. php://memory
         $level = error_reporting(0);
-        $value = posix_isatty($this->handle);
+        $value = posix_isatty($this->resource);
         error_reporting($level);
         return $value;
     }

@@ -11,10 +11,10 @@ class HandleTest extends \PHPUnit_Framework_TestCase
         $this->handle = new Handle('php://memory', 'w+');
     }
 
-    public function testGetFilename()
+    public function testGetName()
     {
         $expect = 'php://memory';
-        $actual = $this->handle->getFilename();
+        $actual = $this->handle->getName();
         $this->assertSame($expect, $actual);
     }
 
