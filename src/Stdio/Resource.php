@@ -21,7 +21,7 @@ class Resource
 {
     /**
      *
-     * file pointer
+     * Resource handle.
      * 
      * @var resource 
      * 
@@ -30,7 +30,7 @@ class Resource
 
     /**
      * 
-     * filename
+     * The file name represented by the resource handle.
      * 
      * @var string 
      *
@@ -39,7 +39,7 @@ class Resource
 
     /**
      * 
-     * The mode parameter specifies the type of access you require to the stream.
+     * The mode under which the resource handle was opened.
      *
      * @var string 
      * 
@@ -48,11 +48,12 @@ class Resource
 
     /**
      * 
-     * Constructor
+     * Constructor.
      * 
-     * @param string $filename
+     * @param string $filename The file name to open, typically a PHP stream
+     * like `php://stdout`.
      * 
-     * @param string $mode
+     * @param string $mode The mode under which to open the stream.
      * 
      */
     public function __construct($filename, $mode)
@@ -64,7 +65,9 @@ class Resource
 
     /**
      * 
-     * Destructor
+     * Destructor; closes the handle if it is not already closed.
+     * 
+     * @return null
      * 
      */
     public function __destruct()
@@ -74,11 +77,25 @@ class Resource
         }
     }
 
+    /**
+     * 
+     * Returns the file name of the resource handle.
+     * 
+     * @return string
+     * 
+     */
     public function getFilename()
     {
         return $this->filename;
     }
     
+    /**
+     * 
+     * Returns the mode under which the resource handle was opened.
+     * 
+     * @return string
+     * 
+     */
     public function getMode()
     {
         return $this->mode;
@@ -86,9 +103,9 @@ class Resource
     
     /**
      * 
-     * Binary-safe file read
+     * Reads 8192 bytes from the resource handle.
      * 
-     * @return string
+     * @return mixed The string read on success, or boolean false on failure.
      * 
      */
     public function fread()
@@ -98,11 +115,12 @@ class Resource
 
     /**
      * 
-     * Binary-safe file write
+     * Writes a string the resource handle.
      * 
      * @param string $string
      * 
-     * @return int
+     * @return int The number of bytes written on success, or boolean false on
+     * failure.
      * 
      */
     public function fwrite($string)
@@ -112,7 +130,7 @@ class Resource
 
     /**
      * 
-     * Rewind the position of a file pointer
+     * Rewinds the resource handle.
      * 
      * @return bool
      * 
@@ -124,9 +142,9 @@ class Resource
 
     /**
      * 
-     * Gets line from file pointer
+     * Reads a line from the resource handle.
      * 
-     * @return string
+     * @return string The line on success, or boolean false on failure.
      * 
      */
     public function fgets()
@@ -136,7 +154,7 @@ class Resource
 
     /**
      * 
-     * Determine if a file descriptor is an interactive terminal
+     * Is the resource handle an interactive terminal?
      * 
      * @return bool
      * 
@@ -145,6 +163,9 @@ class Resource
     {
         // silence posix_isatty() errors regarding non-standard handles,
         // e.g. php://memory
-        return @posix_isatty($this->handle);
+        $level = error_reporting(0);
+        $value = posix_isatty($this->handle);
+        error_reporting($level);
+        return $value;
     }
 }
