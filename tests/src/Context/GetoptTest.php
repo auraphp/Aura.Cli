@@ -261,38 +261,19 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    // public function testLoad_optionalParamsAsFlags()
-    // {
-    //     $this->testInit();
-    //     
-    //     $this->getopt->load([
-    //         'abc',
-    //         '--foo-bar',
-    //         'def',
-    //         '-b',
-    //     ]);
-    //     
-    //     // check options
-    //     $expect = [
-    //         'foo_bar' => true,
-    //         'baz_dib' => true,
-    //     ];
-    //     $actual = $this->getopt->getOptionValues();
-    //     $this->assertSame($expect, $actual);
-    //     
-    //     // check single option values
-    //     $actual = $this->getopt->getOptionValue('foo_bar');
-    //     $this->assertTrue($actual);
-    //     
-    //     $actual = $this->getopt->getOptionValue('baz_dib');
-    //     $this->assertTrue($actual);
-    //     
-    //     // check params
-    //     $expect = [
-    //         'abc',
-    //         'def',
-    //     ];
-    //     $actual = $this->getopt->getParams();
-    //     $this->assertSame($expect, $actual);
-    // }
+    public function testStrict()
+    {
+        $this->getopt->setStrict(false);
+        $this->assertFalse($this->getopt->getStrict());
+        
+        // short flag in non-strict mode
+        $expect = ['name' => 'u', 'param' => 'rejected'];
+        $actual = $this->getopt->getDef('u');
+        $this->assertSame($expect, $actual);
+        
+        // long option in non-strict mode
+        $expect = ['name' => 'undef', 'param' => 'optional'];
+        $actual = $this->getopt->getDef('undef');
+        $this->assertSame($expect, $actual);
+    }
 }

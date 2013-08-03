@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * This file is part of the Aura project for PHP.
+ * This file is part of Aura for PHP.
  * 
  * @package Aura.Cli
  * 
@@ -162,7 +162,7 @@ class Vt100
      * @param bool $flag True to force formatting, false to force stripping,
      * or null to auto-determine.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function setPosix($flag)
@@ -192,7 +192,7 @@ class Vt100
      * 
      * @param string $php_os The new PHP OS value.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function setPhpOs($php_os)
@@ -250,7 +250,7 @@ class Vt100
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
-     * @return void
+     * @return null
      * 
      * @see writeln()
      * 
@@ -276,7 +276,7 @@ class Vt100
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
      * 
-     * @return void
+     * @return null
      * 
      * @see write()
      * 

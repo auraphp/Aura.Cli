@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * This file is part of the Aura project for PHP.
+ * This file is part of Aura for PHP.
  * 
  * @package Aura.Cli
  * 
@@ -151,7 +151,7 @@ class Stdio
      * 
      * @param string $string The text to print to standard output.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function out($string = null)
@@ -166,7 +166,7 @@ class Stdio
      * 
      * @param string $string The text to print to standard output.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function outln($string = null)
@@ -181,7 +181,7 @@ class Stdio
      * 
      * @param string $string The text to print to standard error.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function err($string = null)
@@ -196,7 +196,7 @@ class Stdio
      * 
      * @param string $string The text to print to standard error.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function errln($string = null)

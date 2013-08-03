@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * This file is part of the Aura project for PHP.
+ * This file is part of Aura for PHP.
  * 
  * @package Aura.Cli
  * 
@@ -19,8 +19,6 @@ use UnexpectedValueException;
  * 
  * @package Aura.Cli
  * 
- * @todo Re-add strict/nonstrict? Might make it easier for folks who are doing
- * nested controllers that read different options.
  */
 class Getopt
 {
@@ -60,6 +58,52 @@ class Getopt
      */
     protected $argv = [];
 
+    /**
+     * 
+     * When strict, passing an undefined option will throw an exception.
+     * 
+     * @var bool
+     * 
+     */
+    protected $strict = true;
+    
+    /**
+     * 
+     * Sets strict mode; when strict, passing an undefined option will throw
+     * an exception.
+     * 
+     * @param bool $strict True for strict mode, false for loose mode.
+     * 
+     */
+    public function setStrict($strict)
+    {
+        $this->strict = $strict;
+    }
+    
+    /**
+     * 
+     * Returns the current strict mode.
+     * 
+     * @return bool True when strict, false when loose.
+     * 
+     */
+    public function getStrict()
+    {
+        return $this->strict;
+    }
+    
+    /**
+     * 
+     * Set the getopt definitions.
+     * 
+     * @param array $defs The definitions. Each element is a short flag
+     * character or long option name; two colons means an optional param, one
+     * colon means a required param, no colon means no param is allowed.
+     * (Cf. <http://php.net/getopt>.)
+     * 
+     * @return null
+     * 
+     */
     public function setDefs($defs)
     {
         $this->defs = [];
@@ -94,29 +138,64 @@ class Getopt
         }
     }
     
+    /**
+     * 
+     * Returns the option definitions.
+     * 
+     * @return array
+     * 
+     */
     public function getDefs()
     {
         return $this->defs;
     }
     
+    /**
+     * 
+     * Gets a single option definition.
+     * 
+     * When in strict mode, looking for an undefined option will thrown an
+     * OptionNotDefined exception.  When not in strict mode:
+     * 
+     * - looking for an undefined short flag (e.g., 'u') returns
+     *   `['name' => 'u', 'param' => 'rejected']`
+     * 
+     * - looking for an undefined long option (e.g., 'undef') returns
+     *   `['name' => 'undef', 'param' => 'optional']`
+     * 
+     * @param string $key The definition key to look for.
+     * 
+     * @return array An option definition array with two keys, 'name' (the
+     * option name) and 'param' (whether a param is rejected, required, or
+     * optional).
+     * 
+     */
     public function getDef($key)
     {
         if (isset($this->defs[$key])) {
             return $this->defs[$key];
         }
         
-        throw new Exception\OptionNotDefined($key);
+        if ($this->strict) {
+            throw new Exception\OptionNotDefined($key);
+        }
+        
+        // non-strict short flags do not take params
+        if (strlen($key) == 1) {
+            return ['name' => $key, 'param' => 'rejected'];
+        }
+        
+        // non-strict long options take optional param
+        return ['name' => $key, 'param' => 'optional'];
     }
     
     /**
      * 
-     * Loads Option values from an argument array, placing option values
-     * in the defined Option objects and placing non-option params in a 
-     * `$params` variable.
+     * Loads `$opts` and `$args` values from an argument array.
      * 
-     * @param array $argv An argument array, typically from $_SERVER['argv'].
+     * @param array $argv An argument array, typically from `$_SERVER['argv']`.
      * 
-     * @return void
+     * @return null
      * 
      */
     public function setArgv(array $argv)
@@ -160,11 +239,25 @@ class Getopt
         }
     }
 
+    /**
+     * 
+     * Returns the option-values object.
+     * 
+     * @return Values
+     * 
+     */
     public function getOpts()
     {
         return $this->opts;
     }
     
+    /**
+     * 
+     * Returns the argument-values object.
+     * 
+     * @return Values
+     * 
+     */
     public function getArgs()
     {
         return $this->args;
@@ -176,7 +269,7 @@ class Getopt
      * 
      * @param string $key The `$argv` element, e.g. "--foo" or "--bar=baz".
      * 
-     * @return void
+     * @return null
      * 
      */
     protected function loadLong($key)
@@ -221,7 +314,7 @@ class Getopt
      * 
      * @param string $spec The `$argv` element, e.g. "-f" or "-fbz".
      * 
-     * @return void
+     * @return null
      * 
      */
     protected function loadShort($spec)
@@ -272,6 +365,18 @@ class Getopt
         $this->setOpt($def, $value);
     }
 
+    /**
+     * 
+     * Sets an option value; if an option value is set multiple times, it is
+     * automatically converted to an array.
+     * 
+     * @param array $def The option definition.
+     * 
+     * @param mixed $value The option value.
+     * 
+     * @return null
+     * 
+     */
     protected function setOpt($def, $value)
     {
         $name = $def['name'];
@@ -290,7 +395,7 @@ class Getopt
      * 
      * @param string $spec The short-option cluster (e.g. "-abcd").
      * 
-     * @return void
+     * @return null
      * 
      */
     protected function loadShortCluster($spec)
