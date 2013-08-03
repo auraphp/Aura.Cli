@@ -10,8 +10,6 @@
  */
 namespace Aura\Cli\Stdio;
 
-use Aura\Cli\Stdio\Handle;
-
 /**
  * 
  * Text formatting for VT100 terminals.
@@ -244,8 +242,8 @@ class Vt100
 
     /**
      * 
-     * Writes text to a handle object, converting to control codes if the handle
-     * is a posix TTY, or to plain text if not.
+     * Writes text to a handle object, converting to control codes if the
+     * handle is a posix TTY, or to plain text if not.
      * 
      * @param Handle $handle The handle object.
      * 
@@ -291,9 +289,9 @@ class Vt100
 
     /**
      * 
-     * Determines if a stream handle should be treated as a POSIX terminal.
+     * Determines if a handle object should be treated as a POSIX terminal.
      * 
-     * @param Handle $handle The stream handle.
+     * @param Handle $handle The handle object.
      * 
      * @return bool
      * 
