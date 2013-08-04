@@ -31,14 +31,19 @@ and issue `phpunit` at the command line.
 ### API Documentation
 
 This library has embedded DocBlock API documentation. To generate the
-documentation in HTML, first install [PHPDocumentor][], then go to the library
-directory and issue the following at the command line:
+documentation in HTML, first install [PHPDocumentor][] or [ApiGen][], then go
+to the library directory and issue one of the following at the command line:
 
-    phpdoc -d ./src -t /path/to/output --force
+    # for PHPDocumentor
+    phpdoc -d ./src/ -t /path/to/output/
+    
+    # for ApiGen
+    apigen --source=./src/ --destination=/path/to/output/
 
 You can then browse the HTML-formatted API documentation at _/path/to/output_.
-    
+
 [PHPDocumentor]: http://phpdoc.org/docs/latest/for-users/installation.html
+[ApiGen]: http://apigen.org/#installation
 
 ### PSR Compliance
 
