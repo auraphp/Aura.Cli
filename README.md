@@ -23,8 +23,8 @@ As with all Aura libraries, this library has no external dependencies.
 ### Tests
 
 This library has 100% code coverage. To run the library tests, first install
-[PHPUnit][], then go to the library _tests_ directory
-and issue `phpunit` at the command line.
+[PHPUnit][], then go to the library _tests_ directory and issue `phpunit` at
+the command line.
 
 [PHPUnit]: http://phpunit.de/manual/
 
