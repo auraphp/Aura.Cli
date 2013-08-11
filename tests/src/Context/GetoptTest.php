@@ -53,9 +53,9 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->getopt->getDef('no-such-def');
     }
     
-    public function testSetArgv_noDefs()
+    public function testParse_noDefs()
     {
-        $this->getopt->setArgv(['abc', 'def']);
+        $this->getopt->parse(['abc', 'def']);
         
         $expect = [];
         $actual = $this->getopt->getOpts();
@@ -66,81 +66,81 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_longRejected()
+    public function testParse_longRejected()
     {
         $defs = ['foo-bar'];
         $this->getopt->setDefs($defs);
         
         $argv = ['--foo-bar'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['foo-bar' => true];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $this->setExpectedException('Aura\Cli\Exception\OptionParamRejected');
         $argv = ['--foo-bar=baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
     }
     
-    public function testSetArgv_longRequired()
+    public function testParse_longRequired()
     {
         $defs = ['foo-bar:'];
         $this->getopt->setDefs($defs);
         
         $argv = ['--foo-bar=baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['foo-bar' => 'baz'];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
         $argv = ['--foo-bar'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
     }
     
-    public function testSetArgv_longOptional()
+    public function testParse_longOptional()
     {
         $defs = ['foo-bar::'];
         $this->getopt->setDefs($defs);
         
         $argv = ['--foo-bar'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['foo-bar' => true];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['--foo-bar=baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['foo-bar' => 'baz'];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_longMultiple()
+    public function testParse_longMultiple()
     {
         $defs = ['foo-bar::'];
         $this->getopt->setDefs($defs);
         
         $argv = ['--foo-bar', '--foo-bar=baz', '--foo-bar=dib'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['foo-bar' => [true, 'baz', 'dib']];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_shortRejected()
+    public function testParse_shortRejected()
     {
         $defs = ['f'];
         $this->getopt->setDefs($defs);
         
         $argv = ['-f'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => true];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['-f', 'baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => true];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
@@ -149,59 +149,59 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_shortRequired()
+    public function testParse_shortRequired()
     {
         $defs = ['f:'];
         $this->getopt->setDefs($defs);
         
         $argv = ['-f', 'baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => 'baz'];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
         $argv = ['-f'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
     }
     
-    public function testSetArgv_shortOptional()
+    public function testParse_shortOptional()
     {
         $defs = ['f::'];
         $this->getopt->setDefs($defs);
         
         $argv = ['-f'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => true];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['-f', 'baz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => 'baz'];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_shortMultiple()
+    public function testParse_shortMultiple()
     {
         $defs = ['f::'];
         $this->getopt->setDefs($defs);
         
         $argv = ['-f', '-f', 'baz', '-f', 'dib'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         $expect = ['f' => [true, 'baz', 'dib']];
         $actual = $this->getopt->getOpts();
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_shortCluster()
+    public function testParse_shortCluster()
     {
         $defs = ['f', 'b', 'z'];
         $this->getopt->setDefs($defs);
         
         $argv = ['-fbz'];
-        $this->getopt->setArgv($argv);
+        $this->getopt->parse($argv);
         
         $expect = [
             'f' => true,
@@ -212,18 +212,36 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testSetArgv_shortClusterRequired()
+    public function testParse_shortClusterRequired()
     {
         $defs = ['f', 'b:', 'z'];
         $this->getopt->setDefs($defs);
         $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
-        $this->getopt->setArgv(['-fbz']);
+        $this->getopt->parse(['-fbz']);
     }
     
-    public function testSetArgv()
+    public function testPrase_namedArgs()
+    {
+        $expect = ['foo', 'bar', 'baz'];
+        $this->getopt->setArgNames($expect);
+        $actual = $this->getopt->getArgNames();
+        $this->assertSame($expect, $actual);
+        
+        $this->getopt->parse(['dib', 'qux']);
+        $expect = [
+            0 => 'dib',
+            1 => 'qux',
+            'foo' => 'dib',
+            'bar' => 'qux',
+        ];
+        $actual = $this->getopt->getArgs();
+        $this->assertSame($expect, $actual);
+    }
+    
+    public function testParse()
     {
         $this->getopt->setDefs(['foo-bar:', 'b', 'z::']);
-        $this->getopt->setArgv([
+        $this->getopt->parse([
             'abc',
             '--foo-bar=zim',
             'def',

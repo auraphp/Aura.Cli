@@ -104,11 +104,12 @@ class PropertyFactory
      * @return array
      * 
      */
-    public function newOptsArgs(array $defs)
+    public function newOptsArgs(array $defs, array $arg_names)
     {
         $getopt = new Getopt;
         $getopt->setDefs($defs);
-        $getopt->setArgv($this->getGlobals('argv'));
+        $getopt->setArgNames($arg_names);
+        $getopt->parse($this->getGlobals('argv'));
         return [
             $this->newOpts($getopt->getOpts()),
             $this->newArgs($getopt->getArgs()),

@@ -19,6 +19,9 @@ use UnexpectedValueException;
  * 
  * @package Aura.Cli
  * 
+ * @todo Add support for naming the sequential arguments. E.g., $getopt->setNamedArgs([
+ * 'arg1', 'arg2', 'arg3']); to set names for the arguments.
+ * 
  */
 class Getopt
 {
@@ -39,6 +42,8 @@ class Getopt
      * 
      */
     protected $opts = [];
+    
+    protected $arg_names = [];
     
     /**
      * 
@@ -189,6 +194,16 @@ class Getopt
         return ['name' => $key, 'param' => 'optional'];
     }
     
+    public function setArgNames(array $arg_names)
+    {
+        $this->arg_names = $arg_names;
+    }
+    
+    public function getArgNames()
+    {
+        return $this->arg_names;
+    }
+    
     /**
      * 
      * Loads `$opts` and `$args` values from an argument array.
@@ -198,7 +213,7 @@ class Getopt
      * @return null
      * 
      */
-    public function setArgv(array $argv)
+    public function parse(array $argv)
     {
         // hold onto the argv source
         $this->argv = $argv;
@@ -235,6 +250,13 @@ class Getopt
                 $this->loadShort($arg);
             } else {
                 $this->args[] = $arg;
+            }
+        }
+        
+        // set the named arguments
+        foreach ($this->arg_names as $i => $name) {
+            if (isset($this->args[$i])) {
+                $this->args[$name] = $this->args[$i];
             }
         }
     }

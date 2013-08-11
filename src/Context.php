@@ -109,9 +109,9 @@ class Context
      * @see Context\Getopt::setDefs()
      * 
      */
-    public function getopt(array $defs)
+    public function getopt(array $defs, array $arg_names = [])
     {
-        $instances = $this->property_factory->newOptsArgs($defs);
+        $instances = $this->property_factory->newOptsArgs($defs, $arg_names);
         list($this->opts, $this->args) = $instances;
     }
 }
