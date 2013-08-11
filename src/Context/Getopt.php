@@ -43,6 +43,13 @@ class Getopt
      */
     protected $opts = [];
     
+    /**
+     * 
+     * Names for sequential arguments.
+     * 
+     * @var array
+     * 
+     */
     protected $arg_names = [];
     
     /**
@@ -194,11 +201,28 @@ class Getopt
         return ['name' => $key, 'param' => 'optional'];
     }
     
+    /**
+     * 
+     * Sets the names for sequential arguments.
+     * 
+     * @param array $arg_names An array where element 0 is the name for
+     * argument 0, element 1 for argument 1, etc.
+     * 
+     * @return null
+     * 
+     */
     public function setArgNames(array $arg_names)
     {
         $this->arg_names = $arg_names;
     }
     
+    /**
+     * 
+     * Returns the names for sequential arguments.
+     * 
+     * @return array
+     * 
+     */
     public function getArgNames()
     {
         return $this->arg_names;

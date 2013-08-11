@@ -101,6 +101,8 @@ class PropertyFactory
      * 
      * @param array $defs An array of Getopt option definitions.
      * 
+     * @param array $arg_names An array of names for sequential arguments.
+     * 
      * @return array
      * 
      */
