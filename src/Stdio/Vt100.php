@@ -20,6 +20,7 @@ namespace Aura\Cli\Stdio;
  * 
  * @author Paul M. Jones <pmjones@paul-m-jones.com>
  * 
+ * @todo Add methods like blackText(), blackBold(), blackBackground(), etc. to make adding 
  */
 class Vt100
 {
@@ -268,8 +269,9 @@ class Vt100
 
     /**
      * 
-     * Writes text to a handle object, converting to control codes if the handle
-     * is a posix TTY, or to plain text if not, and then appends a newline.
+     * Writes text to a handle object, converting to control codes if the
+     * handle is a posix TTY, or to plain text if not, and then appends a
+     * newline.
      * 
      * @param Handle $handle The handle object.
      * 
