@@ -24,6 +24,13 @@ use UnexpectedValueException;
  * 
  * @package Aura.Cli
  * 
+ * @todo Short flags with rejected param should be a count, not merely true;
+ * that way we can see how many times it was specified.
+ * 
+ * @todo Convert to a single value store for both opts and args. Prefix opts
+ * with -/-- to indicate their option status.  Add a get() method to get the
+ * values.
+ * 
  */
 class Optarg
 {
@@ -73,6 +80,8 @@ class Optarg
     protected $argv = [];
 
     protected $errors = [];
+    
+    protected $values = [];
     
     /**
      * 
@@ -224,7 +233,7 @@ class Optarg
 
         // reset option and argument values
         $this->errors = [];
-        $this->opts = [];
+        $this->values = [];
         $this->args = [];
         
         // flag to say when we've reached the end of options
@@ -278,7 +287,7 @@ class Optarg
      */
     public function getOpts()
     {
-        return $this->opts;
+        return $this->values;
     }
     
     /**
@@ -337,7 +346,7 @@ class Optarg
         }
         
         // retain the value, and done
-        $this->setOpt($def, $val);
+        $this->setOpt('--' . $def['name'], $val);
     }
 
     /**
@@ -364,7 +373,7 @@ class Optarg
 
         // if the option does not need a param, flag as true and move on
         if ($def['param'] == 'rejected') {
-            $this->setOpt($def, true);
+            $this->setOpt('-' . $def['name'], true);
             return;
         }
 
@@ -379,7 +388,7 @@ class Optarg
         if (! $is_param && $def['param'] == 'optional') {
             // the next value is not a param, but a param is optional,
             // so flag the option as true and move on.
-            $this->setOpt($def, true);
+            $this->setOpt('-' . $def['name'], true);
             return;
         }
 
@@ -394,7 +403,7 @@ class Optarg
         $value = array_shift($this->argv);
 
         // ... and set it.
-        $this->setOpt($def, $value);
+        $this->setOpt('-' . $def['name'], $value);
     }
 
     /**
@@ -402,22 +411,21 @@ class Optarg
      * Sets an option value; if an option value is set multiple times, it is
      * automatically converted to an array.
      * 
-     * @param array $def The option definition.
+     * @param array $name The option name.
      * 
      * @param mixed $value The option value.
      * 
      * @return null
      * 
      */
-    protected function setOpt($def, $value)
+    protected function setOpt($name, $value)
     {
-        $name = $def['name'];
-        if (isset($this->opts[$name])) {
+        if (isset($this->values[$name])) {
             // force to an array
-            settype($this->opts[$name], 'array');
-            $this->opts[$name][] = $value;
+            settype($this->values[$name], 'array');
+            $this->values[$name][] = $value;
         } else {
-            $this->opts[$name] = $value;
+            $this->values[$name] = $value;
         }
     }
     
@@ -452,7 +460,7 @@ class Optarg
             }
 
             // otherwise, set the value as a flag
-            $this->setOpt($def, true);
+            $this->setOpt('-' . $def['name'], true);
         }
     }
 }
