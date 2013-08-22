@@ -189,7 +189,12 @@ class Getopt
         }
         
         if ($this->strict) {
-            throw new Exception\OptionNotDefined($key);
+            if (strlen($key) == 1) {
+                $opt = "-$key";
+            } else {
+                $opt = "--$key";
+            }
+            throw new Exception\OptionNotDefined("The option '$opt' is not recognized.");
         }
         
         // non-strict short flags do not take params
@@ -337,12 +342,12 @@ class Getopt
 
         // if param is required but not present, blow up
         if ($def['param'] == 'required' && trim($val) === '') {
-            throw new Exception\OptionParamRequired("--$key");
+            throw new Exception\OptionParamRequired("A parameter is required for '--$key'.");
         }
 
         // if params are rejected and one is present, blow up
         if ($def['param'] == 'rejected' && trim($val) !== '') {
-            throw new Exception\OptionParamRejected("--$key");
+            throw new Exception\OptionParamRejected("The option '--$key' does not accept a parameter.");
         }
 
         // if param is not present, set to true
@@ -400,7 +405,7 @@ class Getopt
         if (! $is_param && $def['param'] == 'required') {
             // the next value is not a param, but a param is required,
             // so blow up.
-            throw new Exception\OptionParamRequired("-$char");
+            throw new Exception\OptionParamRequired("A parameter is required for '-$char'.");
         }
 
         // at this point, the value is a param, and it's optional or required.
@@ -461,7 +466,7 @@ class Getopt
 
             // can't process params in a cluster
             if ($def['param'] == 'required') {
-                throw new Exception\OptionParamRequired("-$char");
+                throw new Exception\OptionParamRequired("A parameter is required for '-$char'.");
             }
 
             // otherwise, set the value as a flag
