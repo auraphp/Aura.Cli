@@ -1,6 +1,8 @@
 Aura.Cli
 ========
 
+## Overview
+
 The Aura.Cli library provides the equivalent of request ( _Context_ ) and
 response ( _Stdio_ ) objects for the command line interface, including
 _Getopt_ support. Note that it does not provide commands or other
@@ -54,8 +56,7 @@ compliance oversights, please send a patch via pull request.
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 
 
-The Context Object
-------------------
+## The Context Object
 
 The _Context_ object provides information about the command line environment,
 including any option flags passed via the command line. (This is the command
@@ -232,8 +233,7 @@ $a    = $context->opts->get('a'); // bar
 ?>
 ```
 
-The Stdio Object
-----------------
+## The Stdio Object
 
 The _Stdio_ object to allows you to work with standard input/output streams.
 (This is the command line equivalent of a web response object.)
