@@ -34,7 +34,7 @@ class Optarg
      * @var array
      * 
      */
-    protected $defs = [];
+    protected $opt_defs = [];
 
     /**
      * 
@@ -52,7 +52,7 @@ class Optarg
      * @var array
      * 
      */
-    protected $arg_names = [];
+    protected $arg_defs = [];
     
     /**
      * 
@@ -120,7 +120,7 @@ class Optarg
      */
     public function setDefs($defs)
     {
-        $this->defs = [];
+        $this->opt_defs = [];
         foreach ($defs as $key => $val) {
             
             $def = [
@@ -148,7 +148,7 @@ class Optarg
             
             // retain the definition
             $key = rtrim($key, ':');
-            $this->defs[$key] = $def;
+            $this->opt_defs[$key] = $def;
         }
     }
     
@@ -161,7 +161,7 @@ class Optarg
      */
     public function getDefs()
     {
-        return $this->defs;
+        return $this->opt_defs;
     }
     
     /**
@@ -186,8 +186,8 @@ class Optarg
      */
     public function getDef($key)
     {
-        if (isset($this->defs[$key])) {
-            return $this->defs[$key];
+        if (isset($this->opt_defs[$key])) {
+            return $this->opt_defs[$key];
         }
         
         if ($this->strict) {
@@ -212,15 +212,15 @@ class Optarg
      * 
      * Sets the names for sequential arguments.
      * 
-     * @param array $arg_names An array where element 0 is the name for
+     * @param array $arg_defs An array where element 0 is the name for
      * argument 0, element 1 for argument 1, etc.
      * 
      * @return null
      * 
      */
-    public function setArgNames(array $arg_names)
+    public function setArgNames(array $arg_defs)
     {
-        $this->arg_names = $arg_names;
+        $this->arg_defs = $arg_defs;
     }
     
     /**
@@ -232,7 +232,7 @@ class Optarg
      */
     public function getArgNames()
     {
-        return $this->arg_names;
+        return $this->arg_defs;
     }
     
     /**
@@ -285,7 +285,7 @@ class Optarg
         }
         
         // set the named arguments
-        foreach ($this->arg_names as $i => $name) {
+        foreach ($this->arg_defs as $i => $name) {
             if (isset($this->args[$i])) {
                 $this->args[$name] = $this->args[$i];
             }
