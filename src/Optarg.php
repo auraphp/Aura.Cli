@@ -72,6 +72,8 @@ class Optarg
      */
     protected $argv = [];
 
+    protected $errors = [];
+    
     /**
      * 
      * Set the getopt definitions.
@@ -152,17 +154,18 @@ class Optarg
      */
     public function getOptDef($key)
     {
+        // is the option defined?
         if (isset($this->opt_defs[$key])) {
             return $this->opt_defs[$key];
         }
         
+        // undefined; retain a message about it then deal with it
         if (strlen($key) == 1) {
             $opt = "-$key";
         } else {
             $opt = "--$key";
         }
-        
-        $this->messages[] = "The option '$opt' is not recognized.";
+        $this->errors[] = "The option '$opt' is not recognized.";
         
         // undefined short flags take no param
         if (strlen($key) == 1) {
@@ -200,6 +203,11 @@ class Optarg
         return $this->arg_defs;
     }
     
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+    
     /**
      * 
      * Loads `$opts` and `$args` values from an argument array.
@@ -215,6 +223,7 @@ class Optarg
         $this->argv = $argv;
 
         // reset option and argument values
+        $this->errors = [];
         $this->opts = [];
         $this->args = [];
         
@@ -255,6 +264,9 @@ class Optarg
                 $this->args[$name] = $this->args[$i];
             }
         }
+        
+        // did parsing work without errors?
+        return $this->errors ? false : true;
     }
 
     /**
@@ -309,12 +321,14 @@ class Optarg
 
         // if param is required but not present, blow up
         if ($def['param'] == 'required' && trim($val) === '') {
-            throw new Exception\OptionParamRequired("A parameter is required for '--$key'.");
+            $this->errors[] = "The option '--$key' requires a parameter.";
+            return;
         }
 
         // if params are rejected and one is present, blow up
         if ($def['param'] == 'rejected' && trim($val) !== '') {
-            throw new Exception\OptionParamRejected("The option '--$key' does not accept a parameter.");
+            $this->errors[] = "The option '--$key' does not accept a parameter.";
+            return;
         }
 
         // if param is not present, set to true
@@ -370,9 +384,9 @@ class Optarg
         }
 
         if (! $is_param && $def['param'] == 'required') {
-            // the next value is not a param, but a param is required,
-            // so blow up.
-            throw new Exception\OptionParamRequired("A parameter is required for '-$char'.");
+            // the next value is not a param, but a param is required
+            $this->errors[] = "The option '-$char' requires a parameter.";
+            return;
         }
 
         // at this point, the value is a param, and it's optional or required.
@@ -433,7 +447,8 @@ class Optarg
 
             // can't process params in a cluster
             if ($def['param'] == 'required') {
-                throw new Exception\OptionParamRequired("A parameter is required for '-$char'.");
+                $this->errors[] = "The option '-$char' requires a parameter.";
+                continue;
             }
 
             // otherwise, set the value as a flag

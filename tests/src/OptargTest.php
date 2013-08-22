@@ -48,11 +48,22 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         
         $actual = $this->optarg->getOptDef('f');
         $this->assertSame($expect['f'], $actual);
+        
+        // get an undefined short flag
+        $actual = $this->optarg->getOptDef('n');
+        $expect = ['name' => 'n', 'param' => 'rejected'];
+        $this->assertSame($expect, $actual);
+        
+        // get an undefined long option
+        $actual = $this->optarg->getOptDef('no-long');
+        $expect = ['name' => 'no-long', 'param' => 'optional'];
+        $this->assertSame($expect, $actual);
     }
     
     public function testParse_noDefs()
     {
-        $this->optarg->parse(['abc', 'def']);
+        $result = $this->optarg->parse(['abc', 'def']);
+        $this->assertTrue($result);
         
         $expect = [];
         $actual = $this->optarg->getOpts();
@@ -69,14 +80,20 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['foo-bar' => true];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
         
-        $this->setExpectedException('Aura\Cli\Exception\OptionParamRejected');
         $argv = ['--foo-bar=baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertFalse($result);
+        
+        $actual = $this->optarg->getErrors();
+        $expect = ["The option '--foo-bar' does not accept a parameter."];
+        $this->assertSame($expect, $actual);
     }
     
     public function testParse_longRequired()
@@ -85,14 +102,20 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar=baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['foo-bar' => 'baz'];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
         
-        $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
         $argv = ['--foo-bar'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertFalse($result);
+        
+        $actual = $this->optarg->getErrors();
+        $expect = ["The option '--foo-bar' requires a parameter."];
+        $this->assertSame($expect, $actual);
     }
     
     public function testParse_longOptional()
@@ -101,13 +124,17 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['foo-bar' => true];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['--foo-bar=baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['foo-bar' => 'baz'];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
@@ -119,7 +146,9 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar', '--foo-bar=baz', '--foo-bar=dib'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['foo-bar' => [true, 'baz', 'dib']];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
@@ -131,16 +160,21 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => true];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['-f', 'baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => true];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
+        
         $expect = ['baz'];
         $actual = $this->optarg->getArgs();
         $this->assertSame($expect, $actual);
@@ -152,14 +186,20 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f', 'baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => 'baz'];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
-        
-        $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
+
         $argv = ['-f'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertFalse($result);
+        
+        $actual = $this->optarg->getErrors();
+        $expect = ["The option '-f' requires a parameter."];
+        $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortOptional()
@@ -168,13 +208,17 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => true];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
         
         $argv = ['-f', 'baz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => 'baz'];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
@@ -186,7 +230,9 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f', '-f', 'baz', '-f', 'dib'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
+        
         $expect = ['f' => [true, 'baz', 'dib']];
         $actual = $this->optarg->getOpts();
         $this->assertSame($expect, $actual);
@@ -198,7 +244,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-fbz'];
-        $this->optarg->parse($argv);
+        $result = $this->optarg->parse($argv);
+        $this->assertTrue($result);
         
         $expect = [
             'f' => true,
@@ -213,11 +260,17 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     {
         $opt_defs = ['f', 'b:', 'z'];
         $this->optarg->setOptDefs($opt_defs);
-        $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
-        $this->optarg->parse(['-fbz']);
+
+        $argv = ['-fbz'];
+        $result = $this->optarg->parse($argv);
+        $this->assertFalse($result);
+        
+        $actual = $this->optarg->getErrors();
+        $expect = ["The option '-b' requires a parameter."];
+        $this->assertSame($expect, $actual);
     }
     
-    public function testPrase_namedArgs()
+    public function testParse_namedArgs()
     {
         $expect = ['foo', 'bar', 'baz'];
         $this->optarg->setArgDefs($expect);
