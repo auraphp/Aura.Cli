@@ -16,7 +16,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testSetAndGetDefs()
     {
-        $defs = [
+        $opt_defs = [
             'foo-bar', 
             'f:' => 'foo-bar',
             'baz-dib::',
@@ -42,15 +42,12 @@ class OptargTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         
-        $this->optarg->setDefs($defs);
-        $actual = $this->optarg->getDefs();
+        $this->optarg->setOptDefs($opt_defs);
+        $actual = $this->optarg->getOptDefs();
         $this->assertSame($expect, $actual);
         
-        $actual = $this->optarg->getDef('f');
+        $actual = $this->optarg->getOptDef('f');
         $this->assertSame($expect['f'], $actual);
-        
-        $this->setExpectedException('Aura\Cli\Exception\OptionNotDefined');
-        $this->optarg->getDef('no-such-def');
     }
     
     public function testParse_noDefs()
@@ -68,8 +65,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longRejected()
     {
-        $defs = ['foo-bar'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['foo-bar'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar'];
         $this->optarg->parse($argv);
@@ -84,8 +81,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longRequired()
     {
-        $defs = ['foo-bar:'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['foo-bar:'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar=baz'];
         $this->optarg->parse($argv);
@@ -100,8 +97,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longOptional()
     {
-        $defs = ['foo-bar::'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['foo-bar::'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar'];
         $this->optarg->parse($argv);
@@ -118,8 +115,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longMultiple()
     {
-        $defs = ['foo-bar::'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['foo-bar::'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['--foo-bar', '--foo-bar=baz', '--foo-bar=dib'];
         $this->optarg->parse($argv);
@@ -130,8 +127,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortRejected()
     {
-        $defs = ['f'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f'];
         $this->optarg->parse($argv);
@@ -151,8 +148,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortRequired()
     {
-        $defs = ['f:'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f:'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f', 'baz'];
         $this->optarg->parse($argv);
@@ -167,8 +164,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortOptional()
     {
-        $defs = ['f::'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f::'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f'];
         $this->optarg->parse($argv);
@@ -185,8 +182,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortMultiple()
     {
-        $defs = ['f::'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f::'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-f', '-f', 'baz', '-f', 'dib'];
         $this->optarg->parse($argv);
@@ -197,8 +194,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortCluster()
     {
-        $defs = ['f', 'b', 'z'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f', 'b', 'z'];
+        $this->optarg->setOptDefs($opt_defs);
         
         $argv = ['-fbz'];
         $this->optarg->parse($argv);
@@ -214,8 +211,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortClusterRequired()
     {
-        $defs = ['f', 'b:', 'z'];
-        $this->optarg->setDefs($defs);
+        $opt_defs = ['f', 'b:', 'z'];
+        $this->optarg->setOptDefs($opt_defs);
         $this->setExpectedException('Aura\Cli\Exception\OptionParamRequired');
         $this->optarg->parse(['-fbz']);
     }
@@ -223,8 +220,8 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     public function testPrase_namedArgs()
     {
         $expect = ['foo', 'bar', 'baz'];
-        $this->optarg->setArgNames($expect);
-        $actual = $this->optarg->getArgNames();
+        $this->optarg->setArgDefs($expect);
+        $actual = $this->optarg->getArgDefs();
         $this->assertSame($expect, $actual);
         
         $this->optarg->parse(['dib', 'qux']);
@@ -240,7 +237,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
     
     public function testParse()
     {
-        $this->optarg->setDefs(['foo-bar:', 'b', 'z::']);
+        $this->optarg->setOptDefs(['foo-bar:', 'b', 'z::']);
         $this->optarg->parse([
             'abc',
             '--foo-bar=zim',
@@ -276,22 +273,6 @@ class OptargTest extends \PHPUnit_Framework_TestCase
             'ghi',
         ];
         $actual = $this->optarg->getArgs();
-        $this->assertSame($expect, $actual);
-    }
-    
-    public function testStrict()
-    {
-        $this->optarg->setStrict(false);
-        $this->assertFalse($this->optarg->getStrict());
-        
-        // short flag in non-strict mode
-        $expect = ['name' => 'u', 'param' => 'rejected'];
-        $actual = $this->optarg->getDef('u');
-        $this->assertSame($expect, $actual);
-        
-        // long option in non-strict mode
-        $expect = ['name' => 'undef', 'param' => 'optional'];
-        $actual = $this->optarg->getDef('undef');
         $this->assertSame($expect, $actual);
     }
 }

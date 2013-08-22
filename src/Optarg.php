@@ -74,40 +74,6 @@ class Optarg
 
     /**
      * 
-     * When strict, passing an undefined option will throw an exception.
-     * 
-     * @var bool
-     * 
-     */
-    protected $strict = true;
-    
-    /**
-     * 
-     * Sets strict mode; when strict, passing an undefined option will throw
-     * an exception.
-     * 
-     * @param bool $strict True for strict mode, false for loose mode.
-     * 
-     */
-    public function setStrict($strict)
-    {
-        $this->strict = $strict;
-    }
-    
-    /**
-     * 
-     * Returns the current strict mode.
-     * 
-     * @return bool True when strict, false when loose.
-     * 
-     */
-    public function getStrict()
-    {
-        return $this->strict;
-    }
-    
-    /**
-     * 
      * Set the getopt definitions.
      * 
      * @param array $defs The definitions. Each element is a short flag
@@ -118,7 +84,7 @@ class Optarg
      * @return null
      * 
      */
-    public function setDefs($defs)
+    public function setOptDefs($defs)
     {
         $this->opt_defs = [];
         foreach ($defs as $key => $val) {
@@ -159,7 +125,7 @@ class Optarg
      * @return array
      * 
      */
-    public function getDefs()
+    public function getOptDefs()
     {
         return $this->opt_defs;
     }
@@ -184,27 +150,26 @@ class Optarg
      * optional).
      * 
      */
-    public function getDef($key)
+    public function getOptDef($key)
     {
         if (isset($this->opt_defs[$key])) {
             return $this->opt_defs[$key];
         }
         
-        if ($this->strict) {
-            if (strlen($key) == 1) {
-                $opt = "-$key";
-            } else {
-                $opt = "--$key";
-            }
-            throw new Exception\OptionNotDefined("The option '$opt' is not recognized.");
+        if (strlen($key) == 1) {
+            $opt = "-$key";
+        } else {
+            $opt = "--$key";
         }
         
-        // non-strict short flags do not take params
+        $this->messages[] = "The option '$opt' is not recognized.";
+        
+        // undefined short flags take no param
         if (strlen($key) == 1) {
             return ['name' => $key, 'param' => 'rejected'];
         }
         
-        // non-strict long options take optional param
+        // undefined long options take an optional param
         return ['name' => $key, 'param' => 'optional'];
     }
     
@@ -218,7 +183,7 @@ class Optarg
      * @return null
      * 
      */
-    public function setArgNames(array $arg_defs)
+    public function setArgDefs(array $arg_defs)
     {
         $this->arg_defs = $arg_defs;
     }
@@ -230,7 +195,7 @@ class Optarg
      * @return array
      * 
      */
-    public function getArgNames()
+    public function getArgDefs()
     {
         return $this->arg_defs;
     }
@@ -340,7 +305,7 @@ class Optarg
         }
 
         // get the option definition
-        $def = $this->getDef($key);
+        $def = $this->getOptDef($key);
 
         // if param is required but not present, blow up
         if ($def['param'] == 'required' && trim($val) === '') {
@@ -381,7 +346,7 @@ class Optarg
         $char = substr($spec, 1);
 
         // get the option object
-        $def = $this->getDef($char);
+        $def = $this->getOptDef($char);
 
         // if the option does not need a param, flag as true and move on
         if ($def['param'] == 'rejected') {
@@ -464,7 +429,7 @@ class Optarg
             $char = $spec[$i];
 
             // get the option definition
-            $def = $this->getDef($char);
+            $def = $this->getOptDef($char);
 
             // can't process params in a cluster
             if ($def['param'] == 'required') {
