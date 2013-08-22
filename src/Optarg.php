@@ -45,15 +45,6 @@ class Optarg
 
     /**
      * 
-     * Values for passed options.
-     *      
-     * @var array
-     * 
-     */
-    protected $opts = [];
-    
-    /**
-     * 
      * Names for sequential arguments.
      * 
      * @var array
@@ -61,15 +52,6 @@ class Optarg
      */
     protected $arg_defs = [];
     
-    /**
-     * 
-     * Values for remaining arguments after loading options.
-     * 
-     * @var array
-     * 
-     */
-    protected $args = [];
-
     /**
      * 
      * The incoming arguments, typically from $_SERVER['argv'].
@@ -106,11 +88,11 @@ class Optarg
             ];
             
             if (is_int($key)) {
-                // 0 => 'f:'
+                // 0 => 'f:', 1 => 'bar::', etc
                 $key = $val;
                 $def['name'] = rtrim($val, ':');
             } else {
-                // 'f:' => 'foo'
+                // 'f:' => 'foo', etc
                 $def['name'] = $val;
             }
             
@@ -231,10 +213,12 @@ class Optarg
         // hold onto the argv source
         $this->argv = $argv;
 
-        // reset option and argument values
+        // reset errors and values
         $this->errors = [];
         $this->values = [];
-        $this->args = [];
+        
+        // retain args locally
+        $args = [];
         
         // flag to say when we've reached the end of options
         $done = false;
@@ -251,26 +235,30 @@ class Optarg
                 continue;
             }
 
-            // if we're reached the end of options, just add to the params
+            // if we're reached the end of options, just add to the arguments
             if ($done) {
-                $this->args[] = $arg;
+                $args[] = $arg;
                 continue;
             }
 
-            // long option, short option, or numeric param?
+            // long option, short option, or numeric argument?
             if (substr($arg, 0, 2) == '--') {
                 $this->loadLong($arg);
             } elseif (substr($arg, 0, 1) == '-') {
                 $this->loadShort($arg);
             } else {
-                $this->args[] = $arg;
+                $args[] = $arg;
             }
         }
         
-        // set the named arguments
-        foreach ($this->arg_defs as $i => $name) {
-            if (isset($this->args[$i])) {
-                $this->args[$name] = $this->args[$i];
+        // retain the arguments as values, setting names as we go
+        foreach ($args as $key => $val) {
+            // retain the sequential version
+            $this->values[$key] = $val;
+            // also retain the named version
+            if (isset($this->arg_defs[$key])) {
+                $name = $this->arg_defs[$key];
+                $this->values[$name] = $val;
             }
         }
         
@@ -280,26 +268,14 @@ class Optarg
 
     /**
      * 
-     * Returns the option-values object.
+     * Returns the values array
      * 
-     * @return Values
+     * @return array
      * 
      */
-    public function getOpts()
+    public function getValues()
     {
         return $this->values;
-    }
-    
-    /**
-     * 
-     * Returns the argument-values object.
-     * 
-     * @return Values
-     * 
-     */
-    public function getArgs()
-    {
-        return $this->args;
     }
     
     /**
