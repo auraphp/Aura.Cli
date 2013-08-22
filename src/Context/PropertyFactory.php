@@ -93,6 +93,8 @@ class PropertyFactory
             $server = $this->getGlobals('_SERVER');
             if (isset($server['argv'])) {
                 $data = $server['argv'];
+            } else {
+                $data = [];
             }
         }
         
