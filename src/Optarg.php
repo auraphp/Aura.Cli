@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Cli\Context;
+namespace Aura\Cli;
 
 use Aura\Cli\Exception;
 use UnexpectedValueException;
@@ -17,13 +17,15 @@ use UnexpectedValueException;
  * 
  * Parses command line option and argument values.
  * 
+ * The new idea here is to pass Getopt separately, perhaps as Optarg, so that
+ * we can parse the options and arguments separately from the context. This
+ * allows a console to read different options from a command, and not get in
+ * each others' ways.
+ * 
  * @package Aura.Cli
  * 
- * @todo Add support for naming the sequential arguments. E.g., $getopt->setNamedArgs([
- * 'arg1', 'arg2', 'arg3']); to set names for the arguments.
- * 
  */
-class Getopt
+class Optarg
 {
     /**
      * 

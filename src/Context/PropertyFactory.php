@@ -49,7 +49,7 @@ class PropertyFactory
      */
     public function newServer()
     {
-        return new Values($this->getGlobals('_SERVER'));
+        return new Values($this->get('_SERVER'));
     }
     
     /**
@@ -61,70 +61,7 @@ class PropertyFactory
      */
     public function newEnv()
     {
-        return new Values($this->getGlobals('_ENV'));
-    }
-    
-    /**
-     * 
-     * Returns a Values object representing the command line options.
-     * 
-     * @param array $data Data for the Values object.
-     * 
-     * @return Values
-     * 
-     */
-    public function newOpts(array $data = [])
-    {
-        return new Values($data);
-    }
-    
-    /**
-     * 
-     * A Values object representing the command line arguments.
-     * 
-     * @param array $data Data for the Values object.
-     * 
-     * @return Values
-     * 
-     */
-    public function newArgs(array $data = null)
-    {
-        if ($data === null) {
-            $server = $this->getGlobals('_SERVER');
-            if (isset($server['argv'])) {
-                $data = $server['argv'];
-            } else {
-                $data = [];
-            }
-        }
-        
-        return new Values($data);
-    }
-    
-    /**
-     * 
-     * Given an array of option definitions, returns an array where the first
-     * element is a Values object representing the command line options, and
-     * the second elemend is a Values object representing the command line
-     * arguments.
-     * 
-     * @param array $defs An array of Getopt option definitions.
-     * 
-     * @param array $arg_names An array of names for sequential arguments.
-     * 
-     * @return array
-     * 
-     */
-    public function newOptsArgs(array $defs, array $arg_names)
-    {
-        $getopt = new Getopt;
-        $getopt->setDefs($defs);
-        $getopt->setArgNames($arg_names);
-        $getopt->parse($this->getGlobals('argv'));
-        return [
-            $this->newOpts($getopt->getOpts()),
-            $this->newArgs($getopt->getArgs()),
-        ];
+        return new Values($this->get('_ENV'));
     }
     
     /**
@@ -136,7 +73,7 @@ class PropertyFactory
      * @return array
      * 
      */
-    protected function getGlobals($key)
+    protected function get($key)
     {
         return isset($this->globals[$key])
              ? $this->globals[$key]
