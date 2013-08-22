@@ -49,8 +49,8 @@ class Context
      */
     public function __construct(PropertyFactory $property_factory)
     {
-        $this->env    = $this->property_factory->newEnv();
-        $this->server = $this->property_factory->newServer();
+        $this->env    = $property_factory->newEnv();
+        $this->server = $property_factory->newServer();
     }
 
     /**
