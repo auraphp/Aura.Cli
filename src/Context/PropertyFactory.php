@@ -87,8 +87,15 @@ class PropertyFactory
      * @return Values
      * 
      */
-    public function newArgs(array $data = [])
+    public function newArgs(array $data = null)
     {
+        if ($data === null) {
+            $server = $this->getGlobals('_SERVER');
+            if (isset($server['argv'])) {
+                $data = $server['argv'];
+            }
+        }
+        
         return new Values($data);
     }
     
