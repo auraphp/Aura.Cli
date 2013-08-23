@@ -17,26 +17,17 @@ use UnexpectedValueException;
  * 
  * Parses command line option and argument values.
  * 
- * The new idea here is to pass Getopt separately, perhaps as Optarg, so that
- * we can parse the options and arguments separately from the context. This
- * allows a console to read different options from a command, and not get in
- * each others' ways.
- * 
  * @package Aura.Cli
  * 
  * @todo Short flags with rejected param should be a count, not merely true;
  * that way we can see how many times it was specified.
- * 
- * @todo Convert to a single value store for both opts and args. Prefix opts
- * with -/-- to indicate their option status.  Add a get() method to get the
- * values.
  * 
  */
 class Optarg
 {
     /**
      * 
-     * Definitions for recognized options.
+     * Option definitions (both long option and short flag forms).
      *      
      * @var array
      * 
@@ -45,7 +36,7 @@ class Optarg
 
     /**
      * 
-     * Names for sequential arguments.
+     * Argument definitions (sequential postion to argument name).
      * 
      * @var array
      * 
@@ -56,28 +47,44 @@ class Optarg
      * 
      * The incoming arguments, typically from $_SERVER['argv'].
      * 
-     * @param array
+     * @var array
      * 
      */
     protected $argv = [];
 
+    /**
+     * 
+     * An array of error messages generated while parsing.
+     * 
+     * @var array
+     * 
+     */
     protected $errors = [];
     
+    /**
+     * 
+     * The values generated from parsing: options and flags are keyed on their
+     * dash-prefixed names, sequential arguments are keyed on their integer
+     * position, and named arguments are keyed on their names.
+     * 
+     * @var array
+     * 
+     */
     protected $values = [];
     
     /**
      * 
-     * Set the getopt definitions.
+     * Set the option definitions (both long options and short flags).
      * 
-     * @param array $defs The definitions. Each element is a short flag
-     * character or long option name; two colons means an optional param, one
-     * colon means a required param, no colon means no param is allowed.
-     * (Cf. <http://php.net/getopt>.)
+     * @param array $opt_defs Each element is a short flag character or a
+     * long option name followed by 0-2 colons: two colons means an optional
+     * param, one colon means a required param, no colon means no param is
+     * allowed. (Cf. <http://php.net/getopt>.)
      * 
      * @return null
      * 
      */
-    public function setOptDefs($defs)
+    public function setOptDefs($opt_defs)
     {
         $this->opt_defs = [];
         foreach ($defs as $key => $val) {
@@ -125,15 +132,15 @@ class Optarg
     
     /**
      * 
-     * Gets a single option definition.
+     * Gets a single option definition converted to an array.
      * 
-     * When in strict mode, looking for an undefined option will thrown an
-     * OptionNotDefined exception.  When not in strict mode:
+     * Looking for an undefined option will cause an error message, but will
+     * otherwise proceed.
      * 
-     * - looking for an undefined short flag (e.g., 'u') returns
+     * - Looking for an undefined short flag (e.g., 'u') returns
      *   `['name' => 'u', 'param' => 'rejected']`
      * 
-     * - looking for an undefined long option (e.g., 'undef') returns
+     * - Looking for an undefined long option (e.g., 'undef') returns
      *   `['name' => 'undef', 'param' => 'optional']`
      * 
      * @param string $key The definition key to look for.
@@ -194,18 +201,15 @@ class Optarg
         return $this->arg_defs;
     }
     
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-    
     /**
      * 
-     * Loads `$opts` and `$args` values from an argument array.
+     * Parses an argument array (e.g., $_SERVER['argv']) according to the
+     * option and argument defintions.
      * 
      * @param array $argv An argument array, typically from `$_SERVER['argv']`.
      * 
-     * @return null
+     * @return bool True if parsing succeeded without errors, false if there
+     * were errors.
      * 
      */
     public function parse(array $argv)
@@ -223,10 +227,10 @@ class Optarg
         // flag to say when we've reached the end of options
         $done = false;
 
-        // shift each element from the top of the $argv source
+        // loop through the argument values to be parsed
         while ($this->argv) {
 
-            // get the next argument
+            // shift each element from the top of the $argv source
             $arg = array_shift($this->argv);
 
             // after a plain double-dash, all values are params (not options)
@@ -268,7 +272,7 @@ class Optarg
 
     /**
      * 
-     * Returns the values array
+     * Returns the values array.
      * 
      * @return array
      * 
@@ -280,7 +284,19 @@ class Optarg
     
     /**
      * 
-     * Parses a long-form option.
+     * Returns the error messages.
+     * 
+     * @return array
+     * 
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+    
+    /**
+     * 
+     * Parses a long option.
      * 
      * @param string $key The `$argv` element, e.g. "--foo" or "--bar=baz".
      * 
