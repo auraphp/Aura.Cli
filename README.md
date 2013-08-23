@@ -96,6 +96,59 @@ $value = $context->env->get('key', 'other_value');
 ?>
 ```
 
+## The Stdio Object
+
+The _Stdio_ object to allows you to work with standard input/output streams.
+(This is the command line equivalent of a web response object.)
+
+### Instantiation
+
+Instantiate a _Stdio_ object like so:
+
+```php
+<?php
+use Aura\Cli\Stdio;
+
+$stdio = new Stdio(
+    new Stdio\Handle('php://stdin', 'r'),
+    new Stdio\Handle('php://stdout', 'w+'),
+    new Stdio\Handle('php://stderr', 'w+'),
+    new Stdio\Vt100
+);
+?>
+```
+
+You can pick any stream you like for the _stdin_, _stdout_, and _stderr_
+resource handles.
+
+### Usage
+
+The _Stdio_ object methods are ...
+
+- `getStdin()`, `getStdout()`, and `getStderr()` to return the respective
+  _Handle_ objects;
+
+- `outln()` and `out()` to print to _stdout_, with or without a line ending;
+
+- `errln()` and `err()` to print to _stderr_, with or without a line ending;
+
+- `inln()` and `in()` to read from _stdin_ until the user hits enter; `inln()`
+  leaves the trailing line ending in place, whereas `in()` strips it.
+
+You can use VT100 style %-codes in the output strings to set text color, text
+weight, background color, and other display characteristics. See the
+[VT100 cheat sheet](#vt100-cheat-sheet) below.
+
+```php
+<?php
+// print to stdout
+$stdio->outln('This is normal text.');
+
+// print to stderr
+$stdio->errln('%rThis is an error in red.%n');
+?>
+```
+
 ## The Getopt Object
 
 The _Getopt_ object is separate from the _Context_. Use a _Getopt_ object to
@@ -191,7 +244,7 @@ $success = $getopt->parse($context->server->get('argv', []));
 if (! $success) {
     $errors = $getopt->getErrors();
     foreach ($errors as $error) {
-        echo $error . PHP_EOL; // or use stdio as described below
+        $stdio->errln($error);
     }
 };
 ?>
@@ -299,60 +352,7 @@ $a    = $getopt->get('-a');             // 1
 ```
 
 
-## The Stdio Object
-
-The _Stdio_ object to allows you to work with standard input/output streams.
-(This is the command line equivalent of a web response object.)
-
-### Instantiation
-
-Instantiate a _Stdio_ object like so:
-
-```php
-<?php
-use Aura\Cli\Stdio;
-
-$stdio = new Stdio(
-    new Stdio\Handle('php://stdin', 'r'),
-    new Stdio\Handle('php://stdout', 'w+'),
-    new Stdio\Handle('php://stderr', 'w+'),
-    new Stdio\Vt100
-);
-?>
-```
-
-You can pick any stream you like for the _stdin_, _stdout_, and _stderr_
-resource handles.
-
-### Usage
-
-The _Stdio_ object methods are ...
-
-- `getStdin()`, `getStdout()`, and `getStderr()` to return the respective
-  _Handle_ objects;
-
-- `outln()` and `out()` to print to _stdout_, with or without a line ending;
-
-- `errln()` and `err()` to print to _stderr_, with or without a line ending;
-
-- `inln()` and `in()` to read from _stdin_ until the user hits enter; `inln()`
-  leaves the trailing line ending in place, whereas `in()` strips it.
-
-You can use VT100 style %-codes in the output strings to set text color, text
-weight, background color, and other display characteristics. See the
-[VT100 cheat sheet](#vt100-cheat-sheet) below.
-
-```php
-<?php
-// print to stdout
-$stdio->outln('This is normal text.');
-
-// print to stderr
-$stdio->errln('%rThis is an error in red.%n');
-?>
-```
-
-### VT100 Cheat Sheet
+## VT100 Cheat Sheet
 
 Insert these VT100 %-codes into stdout or stderr text strings to get the
 related display behaviors.
