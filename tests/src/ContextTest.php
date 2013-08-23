@@ -22,11 +22,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 'zim' => 'gir',
                 'irk' => 'doom',
             ],
-            'argv' => [
-                'a',
-                'b',
-                'c',
-            ],
         ]);
         
         $expect = 'gir';
@@ -35,6 +30,14 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         
         $expect = 'default';
         $actual = $context->env->get('no-such-key', 'default');
+        $this->assertSame($expect, $actual);
+        
+        // get all of one
+        $expect = [
+             'zim' => 'gir',
+            'irk' => 'doom',
+        ];
+        $actual = $context->server->get();
         $this->assertSame($expect, $actual);
     }
 }
