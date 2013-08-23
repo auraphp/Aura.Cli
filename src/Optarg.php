@@ -332,9 +332,9 @@ class Optarg
             return;
         }
 
-        // if param is not present, set to true
+        // if param is not present, set to integer 1
         if (trim($val) === '') {
-            $val = true;
+            $val = 1;
         }
         
         // retain the value, and done
@@ -379,8 +379,8 @@ class Optarg
 
         if (! $is_param && $def['param'] == 'optional') {
             // the next value is not a param, but a param is optional,
-            // so flag the option as true and move on.
-            $this->setOptValue($def['name'], true);
+            // so flag the option as integer 1 and move on.
+            $this->setOptValue($def['name'], 1);
             return;
         }
 
