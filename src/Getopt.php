@@ -20,7 +20,7 @@ use UnexpectedValueException;
  * @package Aura.Cli
  * 
  */
-class Optarg
+class Getopt
 {
     /**
      * 
