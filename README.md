@@ -322,7 +322,7 @@ $stdio = new Stdio(
 ```
 
 You can pick any stream you like for the _stdin_, _stdout_, and _stderr_
-reource handles.
+resource handles.
 
 ### Usage
 
