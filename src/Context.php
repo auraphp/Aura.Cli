@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli;
 
-use Aura\Cli\Context\PropertyFactory;
+use Aura\Cli\Context\ValuesFactory;
 
 /**
  * 
@@ -43,14 +43,17 @@ class Context
      * 
      * Constructor.
      * 
-     * @param PropertyFactory $property_factory A factory to create propery
+     * @param ValuesFactory $property_factory A factory to create propery
      * objects.
      * 
      */
-    public function __construct(PropertyFactory $property_factory)
+    public function __construct(ValuesFactory $values_factory)
     {
-        $this->env    = $property_factory->newEnv();
-        $this->server = $property_factory->newServer();
+        $this->values_factory = $values_factory;
+        
+        $this->argv   = $this->values_factory->newArgv();
+        $this->env    = $this->values_factory->newEnv();
+        $this->server = $this->values_factory->newServer();
     }
 
     /**
@@ -65,5 +68,10 @@ class Context
     public function __get($key)
     {
         return $this->$key;
+    }
+    
+    public function getopt(array $opt_defs = [], array $arg_defs = [])
+    {
+        return $this->values_factory->newGetopt($opt_defs, $arg_defs);
     }
 }

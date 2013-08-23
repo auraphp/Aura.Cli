@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Cli;
+namespace Aura\Cli\Context;
 
 class GetoptTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +67,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['abc', 'def'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -81,7 +81,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 1];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
         
         $this->getopt->setInput(['--foo-bar=baz']);
@@ -103,7 +103,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
         
         $this->getopt->setInput(['--foo-bar']);
@@ -125,7 +125,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 1];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
         
         $this->getopt->setInput(['--foo-bar=baz']);
@@ -133,7 +133,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -153,7 +153,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => [2, 'baz', 'dib', 1]];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -167,7 +167,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => 1];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
         
         $this->getopt->setInput(['-f', 'baz']);
@@ -175,7 +175,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => 1, 'baz'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -189,7 +189,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
 
         $this->getopt->setInput(['-f']);
@@ -211,7 +211,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => 1];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
         
         $this->getopt->setInput(['-f', 'baz']);
@@ -219,7 +219,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -233,7 +233,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = ['-f' => [2, 'baz', 'dib', 1]];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -251,7 +251,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             '-b' => 1,
             '-z' => 1,
         ];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -284,7 +284,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             1 => 'qux',
             'bar' => 'qux',
         ];
-        $actual = $this->getopt->get();
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
     
@@ -321,17 +321,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             'ghi',
         ];
         
-        $actual = $this->getopt->get();
-        $this->assertSame($expect, $actual);
-        
-        // a particular value
-        $expect = 'zim';
-        $actual = $this->getopt->get('--foo-bar');
-        $this->assertSame($expect, $actual);
-        
-        // an alternative value
-        $expect = 'irk';
-        $actual = $this->getopt->get('no-such-arg', 'irk');
+        $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
     }
 }

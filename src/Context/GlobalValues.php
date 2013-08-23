@@ -17,27 +17,27 @@ namespace Aura\Cli\Context;
  * @package Aura.Cli
  * 
  */
-class Values
+class GlobalValues
 {
     /**
      * 
-     * The data values represented by this object.
+     * The values represented by this object.
      * 
      * @var array
      * 
      */
-    protected $data;
+    protected $values;
     
     /**
      * 
      * Constructor.
      * 
-     * @param array $data The data values to be represented by this array.
+     * @param array $values The values to be represented by this object.
      * 
      */
-    public function __construct(array $data = [])
+    public function __construct(array $values = [])
     {
-        $this->data = $data;
+        $this->values = $values;
     }
     
     /**
@@ -57,11 +57,11 @@ class Values
     public function get($key = null, $alt = null)
     {
         if ($key === null) {
-            return $this->data;
+            return $this->values;
         }
         
-        if (array_key_exists($key, $this->data)) {
-            return $this->data[$key];
+        if (array_key_exists($key, $this->values)) {
+            return $this->values[$key];
         }
         
         return $alt;

@@ -9,13 +9,13 @@ $di->set('cli_stdio', $di->lazyNew('Aura\Cli\Stdio'));
  * Aura\Cli\Context
  */
 $di->params['Aura\Cli\Context'] = [
-    'property_factory' => $di->lazyNew('Aura\Cli\Context\PropertyFactory'),
+    'property_factory' => $di->lazyNew('Aura\Cli\Context\ValuesFactory'),
 ];
 
 /**
- * Aura\Cli\Context\PropertyFactory
+ * Aura\Cli\Context\ValuesFactory
  */
-$di->params['Aura\Cli\Context\PropertyFactory']['globals'] = $GLOBALS;
+$di->params['Aura\Cli\Context\ValuesFactory']['globals'] = $GLOBALS;
 
 /**
  * Aura\Cli\Stdio

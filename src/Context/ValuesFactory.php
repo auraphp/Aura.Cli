@@ -17,7 +17,7 @@ namespace Aura\Cli\Context;
  * @package Aura.Cli
  * 
  */
-class PropertyFactory
+class ValuesFactory
 {
     /**
      * 
@@ -28,6 +28,8 @@ class PropertyFactory
      */
     protected $globals;
     
+    protected $getopt;
+    
     /**
      * 
      * Constructor.
@@ -35,9 +37,14 @@ class PropertyFactory
      * @param array $globals A copy of $GLOBALS.
      * 
      */
-    public function __construct(array $globals)
-    {
+    public function __construct(
+        Getopt $getopt,
+        array $globals
+    ) {
         $this->globals = $globals;
+        $this->getopt = $getopt;
+        $argv = $this->get('argv');
+        $this->getopt->setInput($argv);
     }
     
     /**
@@ -49,7 +56,7 @@ class PropertyFactory
      */
     public function newServer()
     {
-        return new Values($this->get('_SERVER'));
+        return new GlobalValues($this->get('_SERVER'));
     }
     
     /**
@@ -61,7 +68,23 @@ class PropertyFactory
      */
     public function newEnv()
     {
-        return new Values($this->get('_ENV'));
+        return new GlobalValues($this->get('_ENV'));
+    }
+    
+    public function newArgv()
+    {
+        return new GlobalValues($this->get('argv'));
+    }
+    
+    public function newGetopt(array $opt_defs, array $arg_defs)
+    {
+        $this->getopt->setOptDefs($opt_defs);
+        $this->getopt->setArgDefs($arg_defs);
+        $this->getopt->parse($opt_defs, $arg_defs);
+        return new GetoptValues(
+            $this->getopt->getValues(),
+            $this->getopt->getErrors()
+        );
     }
     
     /**

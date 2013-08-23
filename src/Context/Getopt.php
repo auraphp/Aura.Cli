@@ -8,39 +8,13 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Cli;
+namespace Aura\Cli\Context;
 
 use Aura\Cli\Exception;
-use UnexpectedValueException;
 
 /**
  * 
  * Parses command line option and argument values.
- * 
- * Maybe what we need to do is have Getopt return a values object, along with
- * errors on that object? That way we can have a single Getopt across the whole
- * system, and not have to worry about changing get() values.
- * 
- * $this->optarg = $this->getopt->parse($this->opt_defs, $this->arg_defs);
- * if ($this->getopt->hasErrors()) {
- *     // print errors
- *     return 1;
- * }
- * 
- * $result = $this->getopt->parse($this->opt_defs, $this->arg_defs);
- * if (! $result) {
- *     // print errors
- *     return 1;
- * }
- * $this->input = $this->getopt->getValues();
- * 
- * $this->input = $this->getopt->parse($this->opt_defs, $this->arg_defs);
- * if (! $this->input) {
- *     // print errors
- *     return 1;
- * }
- * 
- * 
  * 
  * @package Aura.Cli
  * 
@@ -67,7 +41,7 @@ class Getopt
     
     /**
      * 
-     * The incoming arguments, typically from $_SERVER['argv'].
+     * The incoming arguments, typically from `$_SERVER['argv']`.
      * 
      * @var array
      * 
@@ -94,7 +68,7 @@ class Getopt
      */
     protected $values = [];
     
-    public function __construct(array $input = [])
+    public function setInput(array $input)
     {
         $this->input = $input;
     }
@@ -237,11 +211,6 @@ class Getopt
         return $this->arg_defs;
     }
     
-    public function setInput(array $input)
-    {
-        $this->input = $input;
-    }
-    
     /**
      * 
      * Parses the input array according to the option and argument defintions.
@@ -250,16 +219,8 @@ class Getopt
      * were errors.
      * 
      */
-    public function parse(array $opt_defs = null, array $arg_defs = null)
+    public function parse()
     {
-        if ($opt_defs !== null) {
-            $this->setOptDefs($opt_defs);
-        }
-        
-        if ($arg_defs !== null){
-            $this->setArgDefs($opt_defs);
-        }
-        
         // reset errors and values
         $this->errors = [];
         $this->values = [];
@@ -316,29 +277,14 @@ class Getopt
 
     /**
      * 
-     * Returns a value.
+     * Returns the parsed values.
      * 
-     * @param string $key The key, if any, to get the value of; if null, will
-     * return all values.
-     * 
-     * @param string $alt The alternative default value to return if the
-     * requested key does not exist.
-     * 
-     * @return mixed The requested value, or the alternative default
-     * value.
+     * @return array
      * 
      */
-    public function get($key = null, $alt = null)
+    public function getValues()
     {
-        if ($key === null) {
-            return $this->values;
-        }
-        
-        if (array_key_exists($key, $this->values)) {
-            return $this->values[$key];
-        }
-        
-        return $alt;
+        return $this->values;
     }
     
     /**

@@ -69,7 +69,7 @@ Instantiate a _Context_ object like so:
 <?php
 use Aura\Cli\Context;
 
-$context = new Context(new Context\PropertyFactory($GLOBALS));
+$context = new Context(new Context\ValuesFactory($GLOBALS));
 ?>
 ```
 

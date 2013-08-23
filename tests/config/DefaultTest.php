@@ -21,7 +21,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     public function testInstances()
     {
         $this->assertNewInstance('Aura\Cli\Context');
-        $this->assertNewInstance('Aura\Cli\PropertyFactory');
+        $this->assertNewInstance('Aura\Cli\ValuesFactory');
         $this->assertNewInstance('Aura\Cli\Stdio');
     }
 }
