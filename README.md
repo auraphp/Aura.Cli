@@ -61,6 +61,8 @@ The _Context_ object provides information about the command line environment,
 including any option flags passed via the command line. (This is the command
 line equivalent of a web request object.)
 
+### Instantiation
+
 Instantiate a _Context_ object like so:
 
 ```php
@@ -71,7 +73,7 @@ $context = new Context(new Context\PropertyFactory($GLOBALS));
 ?>
 ```
 
-### Environment And Server Values
+### Usage
 
 You can access the `$_ENV` and `$_SERVER` values with the `$env` and `$server`
 property objects, respectively. (Note that these properties are copies of `$_ENV`
@@ -97,17 +99,27 @@ $value = $context->env->get('key', 'other_value');
 ## The Getopt Object
 
 The _Getopt_ object is separate from the _Context_. Use a _Getopt_ object to
-parse the command-line `$argv` values into options and arguments.
+parse the command-line `$_SERVER['argv']` values into options and arguments.
 
-### Defining Options and Params
+### Instantiation
 
-To define command line options for the _Getopt_ to recognize, use the
+Instantiation is straightforward:
+
+```php
+<?php
+use Aura\Cli\Getopt;
+
+$getopt = new Getopt;
+?>
+```
+
+### Options and Params
+
+To define command line options for _Getopt_ to recognize, use the
 `setOptDefs()` method. This method uses a format similar to, but not exactly
-the same as, the [getopt()](http://php.net/getopt) function in PHP.
-
-Instead of defining short flags in a string and long options in a separate
-array, they are defined as elements in a single array. Once these are defined,
-you can use the `get()` property to get the option values.
+the same as, the [getopt()](http://php.net/getopt) function in PHP. Instead of
+defining short flags in a string and long options in a separate array, they
+are both defined as elements in a single array.
 
 ```php
 <?php
@@ -139,17 +151,17 @@ $baz = $getopt->get('--baz', 'default value');
 
 If you want a short flag and a long option to be mapped to the same long
 option name, pass the short flag as an array key and the long option name as
-the array value:
+its value:
 
 ```php
 <?php
 // map -f to --foo
 $getopt->setOptDefs([
-    'f:'   => 'foo',   // short flag -f, parameter required
-    'foo:',            // long option --foo, parameter required
+    'f:' => 'foo',  // short flag -f, parameter required
+    'foo:',         // long option --foo, parameter required
 ]);
 
-$name = $getopt->get('--name'); // both -f and --foo map to '--name'
+$name = $getopt->get('--foo'); // both -f and --foo map to '--foo'
 ?>
 ```
 
@@ -170,17 +182,22 @@ $f_count = $getopt->get('-f'); // 3
 
 If you define options with the `setOptDefs()` method, and the user passes
 options that do not conform to the definitions, the _Getopt_ object will track
-various error messages
+various error messages related to the parsing failures.  In these cases,
+`parse()` will return `false`, and you can then review the error messages.
 
-- _OptionNotDefined_ if the user passed an option that was not defined;
+```php
+<?php
+$success = $getopt->parse($context->server->get('argv', []));
+if (! $success) {
+    $errors = $getopt->getErrors();
+    foreach ($errors as $error) {
+        echo $error . PHP_EOL; // or use stdio as described below
+    }
+};
+?>
+```
 
-- _OptionParamRejected_ if the user specified a parameter on an option where a
-  parameter is not allowed; and
-
-- _OptionParamRequired_ if the user did not specify a parameter on an option
-  that requires one
-
-### Positional and Named Arguments
+### Positional Arguments
 
 To get the positional arguments passed to the command line, use the `get()`
 method and the argument position number:
@@ -203,17 +220,18 @@ arguments automatically.
 
 ```php
 <?php
-// if the script was invoked with:
-// php script.php arg1 --foo=bar -a arg2
-
 $getopt->setOptDefs([
     'a',
     'foo:',
 ]);
 
-$val0 = $getopt->argv->get(0); // script.php
-$val1 = $getopt->argv->get(1); // arg1
-$val2 = $getopt->argv->get(2); // arg2
+// if the script was invoked with:
+// php script.php arg1 --foo=bar -a arg2
+$arg0 = $getopt->get(0); // script.php
+$arg1 = $getopt->get(1); // arg1
+$arg2 = $getopt->get(2); // arg2
+$foo  = $getopt->get('--foo'); // bar
+$a    = $getopt->get('-a'); // 1
 ?>
 ```
 
@@ -227,32 +245,66 @@ the flag value, not an argument.
 
 // -a parameter is not allowed
 $getopt->setOptDefs(['a']);
-$arg0 = $getopt->get(0); // script.php
-$arg1 = $getopt->get(1); // foo
-$arg2 = $getopt->get(2); // bar
-$arg3 = $getopt->get(3); // baz
-$a    = $getopt->get('a'); // true
+$arg0 = $getopt->get(0);    // script.php
+$arg1 = $getopt->get(1);    // foo
+$arg2 = $getopt->get(2);    // bar
+$arg3 = $getopt->get(3);    // baz
+$a    = $getopt->get('a');  // true
 
 // -a parameter is required
 $getopt->setOptDefs(['a']);
-$arg0 = $getopt->get(0); // script.php
-$arg1 = $getopt->get(1); // foo
-$arg2 = $getopt->get(2); // baz
-$a    = $getopt->get('a'); // bar
+$arg0 = $getopt->get(0);    // script.php
+$arg1 = $getopt->get(1);    // foo
+$arg2 = $getopt->get(2);    // baz
+$a    = $getopt->get('a');  // bar
 
 // -a parameter is optional
 $getopt->setOptDefs(['a']);
-$arg0 = $getopt->get(0); // script.php
-$arg1 = $getopt->get(1); // foo
-$arg2 = $getopt->get(2); // baz
-$a    = $getopt->get('a'); // bar
+$arg0 = $getopt->get(0);    // script.php
+$arg1 = $getopt->get(1);    // foo
+$arg2 = $getopt->get(2);    // baz
+$a    = $getopt->get('a');  // bar
 ?>
 ```
+
+### Named Arguments
+
+To set names on positional arguments, call `setArgDefs()` with an array where
+the key is the argument position and the value is the argument name you would
+like to use.
+
+```php
+<?php
+// set the option definitions
+$getopt->setOptDefs([
+    'a',
+    'foo:',
+]);
+
+// set the names for argument positions
+$getopt->setArgDefs([
+    0 => 'script_name',
+    1 => 'first_arg',
+    2 => 'second_arg',
+]);
+
+// if the script was invoked with:
+// php script.php arg1 --foo=bar -a arg2
+$arg0 = $getopt->get('script_name');    // script.php
+$arg1 = $getopt->get('first_arg');      // arg1
+$arg2 = $getopt->get('second_arg');     // arg2
+$foo  = $getopt->get('--foo');          // bar
+$a    = $getopt->get('-a');             // 1
+?>
+```
+
 
 ## The Stdio Object
 
 The _Stdio_ object to allows you to work with standard input/output streams.
 (This is the command line equivalent of a web response object.)
+
+### Instantiation
 
 Instantiate a _Stdio_ object like so:
 
@@ -271,6 +323,8 @@ $stdio = new Stdio(
 
 You can pick any stream you like for the _stdin_, _stdout_, and _stderr_
 reource handles.
+
+### Usage
 
 The _Stdio_ object methods are ...
 
@@ -298,11 +352,10 @@ $stdio->errln('%rThis is an error in red.%n');
 ?>
 ```
 
-VT100 Cheat Sheet
-=================
+### VT100 Cheat Sheet
 
-(Insert these VT100 %-codes into stdout or stderr text strings to get the
-related display behaviors.)
+Insert these VT100 %-codes into stdout or stderr text strings to get the
+related display behaviors.
 
 Text color, normal weight:
 

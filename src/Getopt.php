@@ -91,14 +91,21 @@ class Getopt
                 'param' => null,
             ];
             
+            // strip - off the value first
+            $val = ltrim($val, '-');
+            
+            // check if this is a mapped option (e.g., ['f:' => 'foo'])
             if (is_int($key)) {
+                // not a mapped option:
                 // 0 => 'f:', 1 => 'bar::', etc
                 $key = $val;
-                $def['name'] = rtrim($val, ':');
-            } else {
-                // 'f:' => 'foo', etc
-                $def['name'] = $val;
             }
+            
+            // retain the name minus any colons
+            $def['name'] = rtrim($val, ':');
+            
+            // now strip - off the key
+            $key = ltrim($key, '-');
             
             // is a param optional/required/rejected?
             if (substr($key, -2) == '::') {
@@ -109,8 +116,10 @@ class Getopt
                 $def['param'] = 'rejected';
             }
             
-            // retain the definition
+            // strip : off the key
             $key = rtrim($key, ':');
+            
+            // retain the definition
             $this->opt_defs[$key] = $def;
         }
     }
