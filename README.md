@@ -1,5 +1,4 @@
-Aura.Cli
-========
+# Aura.Cli
 
 ## Overview
 
@@ -95,66 +94,83 @@ $value = $context->env->get('key', 'other_value');
 ?>
 ```
 
-### Command Line Options
+## The Getopt Object
 
-To define command line options for the _Context_ to recognize, use the
-`getopt()` method. This method uses a format similar to, but not exactly the
-same as, the [getopt()](http://php.net/getopt) function in PHP.
+The _Getopt_ object is separate from the _Context_. Use a _Getopt_ object to
+parse the command-line `$argv` values into options and arguments.
+
+### Defining Options and Params
+
+To define command line options for the _Getopt_ to recognize, use the
+`setOptDefs()` method. This method uses a format similar to, but not exactly
+the same as, the [getopt()](http://php.net/getopt) function in PHP.
 
 Instead of defining short flags in a string and long options in a separate
 array, they are defined as elements in a single array. Once these are defined,
-you can use the `$opts` property to get the option values.
+you can use the `get()` property to get the option values.
 
 ```php
 <?php
-$context->getopt([
-    'a',        // short flag -a, parameter is not allowed
-    'b:',       // short flag -b, parameter is required
-    'c::',      // short flag -c, parameter is optional
-    'foo',      // long option --foo, parameter is not allowed
-    'bar:',     // long option --bar, parameter is required
-    'baz::',    // long option --baz, parameter is optional
+$getopt->setOptDefs([
+    'a',     // short flag -a, parameter is not allowed
+    'b:',    // short flag -b, parameter is required
+    'c::',   // short flag -c, parameter is optional
+    'foo',   // long option --foo, parameter is not allowed
+    'bar:',  // long option --bar, parameter is required
+    'baz::', // long option --baz, parameter is optional
 ]);
-
-$a   = $context->opts->get('a', false); // true if -a was passed, false if not
-$b   = $context->opts->get('b');
-$c   = $context->opts->get('c', 'default value');
-$foo = $context->opts->get('foo', false); // true if --foo was passed, false if not
-$bar = $context->opts->get('bar');
-$baz = $context->opts->get('baz', 'default value');
 ?>
 ```
 
-If you want a short flag and a long option to be mapped to the same name, pass
-the definition as an array key and the name as the array value:
+Then `parse()` the `$_SERVER['argv']` values and `get()` the option values.
 
 ```php
 <?php
-// map -f and --foo to 'name'
-$context->getopt([
-    'f:'   => 'name',   // short flag -f, parameter required
-    'foo:' => 'name',   // long option --foo, parameter required
+$getopt->parse($context->server->get('argv', []));
+
+$a   = $getopt->get('-a', 0); // 1 if -a was passed, 0 if not
+$b   = $getopt->get('-b');
+$c   = $getopt->get('-c', 'default value');
+$foo = $getopt->get('--foo', 0); // 1 if --foo was passed, 0 if not
+$bar = $getopt->get('--bar');
+$baz = $getopt->get('--baz', 'default value');
+?>
+```
+
+If you want a short flag and a long option to be mapped to the same long
+option name, pass the short flag as an array key and the long option name as
+the array value:
+
+```php
+<?php
+// map -f to --foo
+$getopt->setOptDefs([
+    'f:'   => 'foo',   // short flag -f, parameter required
+    'foo:',            // long option --foo, parameter required
 ]);
 
-$name = $context->opts->get('name'); // both -f and --foo map to 'name'
+$name = $getopt->get('--name'); // both -f and --foo map to '--name'
 ?>
 ```
 
 If an option is passed multiple times, it will result in an array of multiple
-values.
+values. Options that do not take parameters will result in a count of how many
+times the option was passed.
 
 ```php
 <?php
 // if the script was invoked with:
-// php script.php -f foo -f bar -f baz
-$context->getopt(['f:']);
-$values = $context->opts->get('f'); // ['foo', 'bar', 'baz']
+// php script.php --foo=foo --foo=bar --foo=baz -f -f -f
+$getopt->setOptDefs(['f', 'foo:']);
+$getopt->parse();
+$foo = $getopt->get('--foo'); // ['foo', 'bar', 'baz']
+$f_count = $getopt->get('-f'); // 3
 ?>
 ```
 
-If you define options with the `getopt()` method, and the user passes options
-that do not conform to the definitions, the _Getopt_ object will throw various
-exceptions:
+If you define options with the `setOptDefs()` method, and the user passes
+options that do not conform to the definitions, the _Getopt_ object will track
+various error messages
 
 - _OptionNotDefined_ if the user passed an option that was not defined;
 
@@ -164,25 +180,25 @@ exceptions:
 - _OptionParamRequired_ if the user did not specify a parameter on an option
   that requires one
 
-### Command Line Arguments
+### Positional and Named Arguments
 
-To get the positional arguments passed to the command line, use the `$argv`
-property:
+To get the positional arguments passed to the command line, use the `get()`
+method and the argument position number:
 
 ```php
 <?php
 // if the script was invoked with:
 // php script.php arg1 arg2 arg3 arg4
 
-$val0 = $context->argv->get(0); // script.php
-$val1 = $context->argv->get(1); // arg1
-$val2 = $context->argv->get(2); // arg2
-$val3 = $context->argv->get(3); // arg3
-$val4 = $context->argv->get(4); // arg4
+$val0 = $getopt->get(0); // script.php
+$val1 = $getopt->get(1); // arg1
+$val2 = $getopt->get(2); // arg2
+$val3 = $getopt->get(3); // arg3
+$val4 = $getopt->get(4); // arg4
 ?>
 ```
 
-If you have defined options with `getopt()`, options will be removed from the
+If you have defined options with `setOptDefs()`, options will be removed from the
 arguments automatically.
 
 ```php
@@ -190,14 +206,14 @@ arguments automatically.
 // if the script was invoked with:
 // php script.php arg1 --foo=bar -a arg2
 
-$context->getopt([
+$getopt->setOptDefs([
     'a',
     'foo:',
 ]);
 
-$val0 = $context->argv->get(0); // script.php
-$val1 = $context->argv->get(1); // arg1
-$val2 = $context->argv->get(2); // arg2
+$val0 = $getopt->argv->get(0); // script.php
+$val1 = $getopt->argv->get(1); // arg1
+$val2 = $getopt->argv->get(2); // arg2
 ?>
 ```
 
@@ -210,26 +226,26 @@ the flag value, not an argument.
 // php script.php foo -a bar baz
 
 // -a parameter is not allowed
-$context->getopt(['a']);
-$arg0 = $context->argv->get(0); // script.php
-$arg1 = $context->argv->get(1); // foo
-$arg2 = $context->argv->get(2); // bar
-$arg3 = $context->argv->get(3); // baz
-$a    = $context->opts->get('a'); // true
+$getopt->setOptDefs(['a']);
+$arg0 = $getopt->get(0); // script.php
+$arg1 = $getopt->get(1); // foo
+$arg2 = $getopt->get(2); // bar
+$arg3 = $getopt->get(3); // baz
+$a    = $getopt->get('a'); // true
 
 // -a parameter is required
-$context->getopt(['a']);
-$arg0 = $context->argv->get(0); // script.php
-$arg1 = $context->argv->get(1); // foo
-$arg2 = $context->argv->get(2); // baz
-$a    = $context->opts->get('a'); // bar
+$getopt->setOptDefs(['a']);
+$arg0 = $getopt->get(0); // script.php
+$arg1 = $getopt->get(1); // foo
+$arg2 = $getopt->get(2); // baz
+$a    = $getopt->get('a'); // bar
 
 // -a parameter is optional
-$context->getopt(['a']);
-$arg0 = $context->argv->get(0); // script.php
-$arg1 = $context->argv->get(1); // foo
-$arg2 = $context->argv->get(2); // baz
-$a    = $context->opts->get('a'); // bar
+$getopt->setOptDefs(['a']);
+$arg0 = $getopt->get(0); // script.php
+$arg1 = $getopt->get(1); // foo
+$arg2 = $getopt->get(2); // baz
+$a    = $getopt->get('a'); // bar
 ?>
 ```
 
