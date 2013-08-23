@@ -104,7 +104,7 @@ $value = $context->env->get('key', 'other_value');
 ?>
 ```
 
-## Getopt Support
+### Getopt Support
 
 The _Context_ object provides support for retrieving command-line options and
 params, along with positional and named arguments.
@@ -113,7 +113,7 @@ To retrieve options and arguments parsed from the command-line `$argv` values,
 use the `getopt()` method on the _Context_ object. This will return a
 _GetoptValues_ object for you use as as you wish.
 
-### Defining Options and Params
+#### Defining Options and Params
 
 To tell `getopt()` how to recognize command line options, pass an array of
 option definitions. The definitions array format is similar to, but not
@@ -209,7 +209,7 @@ if ($getopt->hasErrors()) {
 ?>
 ```
 
-### Positional Arguments
+#### Positional Arguments
 
 To get the positional arguments passed to the command line, use the `get()`
 method and the argument position number:
@@ -254,7 +254,7 @@ $a    = $getopt->get('-a'); // 1
 > after it will it will be treated as the option value, not as an argument.
 
 
-### Named Arguments
+#### Named Arguments
 
 To set names on positional arguments, pass a second array to `getopt()` where
 the key is the argument position and the value is the argument name you would
