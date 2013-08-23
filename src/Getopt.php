@@ -17,6 +17,31 @@ use UnexpectedValueException;
  * 
  * Parses command line option and argument values.
  * 
+ * Maybe what we need to do is have Getopt return a values object, along with
+ * errors on that object? That way we can have a single Getopt across the whole
+ * system, and not have to worry about changing get() values.
+ * 
+ * $this->optarg = $this->getopt->parse($this->opt_defs, $this->arg_defs);
+ * if ($this->getopt->hasErrors()) {
+ *     // print errors
+ *     return 1;
+ * }
+ * 
+ * $result = $this->getopt->parse($this->opt_defs, $this->arg_defs);
+ * if (! $result) {
+ *     // print errors
+ *     return 1;
+ * }
+ * $this->input = $this->getopt->getValues();
+ * 
+ * $this->input = $this->getopt->parse($this->opt_defs, $this->arg_defs);
+ * if (! $this->input) {
+ *     // print errors
+ *     return 1;
+ * }
+ * 
+ * 
+ * 
  * @package Aura.Cli
  * 
  */
@@ -47,7 +72,7 @@ class Getopt
      * @var array
      * 
      */
-    protected $argv = [];
+    protected $input = [];
 
     /**
      * 
@@ -68,6 +93,11 @@ class Getopt
      * 
      */
     protected $values = [];
+    
+    public function __construct(array $input = [])
+    {
+        $this->input = $input;
+    }
     
     /**
      * 
@@ -207,22 +237,29 @@ class Getopt
         return $this->arg_defs;
     }
     
+    public function setInput(array $input)
+    {
+        $this->input = $input;
+    }
+    
     /**
      * 
-     * Parses an argument array (e.g., $_SERVER['argv']) according to the
-     * option and argument defintions.
-     * 
-     * @param array $argv An argument array, typically from `$_SERVER['argv']`.
+     * Parses the input array according to the option and argument defintions.
      * 
      * @return bool True if parsing succeeded without errors, false if there
      * were errors.
      * 
      */
-    public function parse(array $argv)
+    public function parse(array $opt_defs = null, array $arg_defs = null)
     {
-        // hold onto the argv source
-        $this->argv = $argv;
-
+        if ($opt_defs !== null) {
+            $this->setOptDefs($opt_defs);
+        }
+        
+        if ($arg_defs !== null){
+            $this->setArgDefs($opt_defs);
+        }
+        
         // reset errors and values
         $this->errors = [];
         $this->values = [];
@@ -233,13 +270,14 @@ class Getopt
         // flag to say when we've reached the end of options
         $done = false;
 
-        // loop through the argument values to be parsed
-        while ($this->argv) {
+        // loop through a copy of the input values to be parsed
+        $input = $this->input;
+        while ($input) {
 
-            // shift each element from the top of the $argv source
-            $arg = array_shift($this->argv);
+            // shift each element from the top of the $input source
+            $arg = array_shift($input);
 
-            // after a plain double-dash, all values are params (not options)
+            // after a plain double-dash, all values are args (not options)
             if ($arg == '--') {
                 $done = true;
                 continue;
@@ -255,7 +293,7 @@ class Getopt
             if (substr($arg, 0, 2) == '--') {
                 $this->setLongOptionValue($arg);
             } elseif (substr($arg, 0, 1) == '-') {
-                $this->setShortFlagValue($arg);
+                $this->setShortFlagValue($input, $arg);
             } else {
                 $args[] = $arg;
             }
@@ -319,7 +357,7 @@ class Getopt
      * 
      * Parses a long option.
      * 
-     * @param string $key The `$argv` element, e.g. "--foo" or "--bar=baz".
+     * @param string $key The `$input` element, e.g. "--foo" or "--bar=baz".
      * 
      * @return null
      * 
@@ -341,13 +379,13 @@ class Getopt
         // get the option definition
         $def = $this->getOptDef($key);
 
-        // if param is required but not present, blow up
+        // if param is required but not present, error
         if ($def['param'] == 'required' && trim($val) === '') {
             $this->errors[] = "The option '--$key' requires a parameter.";
             return;
         }
 
-        // if params are rejected and one is present, blow up
+        // if params are rejected and one is present, error
         if ($def['param'] == 'rejected' && trim($val) !== '') {
             $this->errors[] = "The option '--$key' does not accept a parameter.";
             return;
@@ -366,12 +404,12 @@ class Getopt
      * 
      * Parses a short-form option (or cluster of options).
      * 
-     * @param string $spec The `$argv` element, e.g. "-f" or "-fbz".
+     * @param string $spec The `$input` element, e.g. "-f" or "-fbz".
      * 
      * @return null
      * 
      */
-    protected function setShortFlagValue($spec)
+    protected function setShortFlagValue(&$input, $spec)
     {
         // if we have a string like "-abcd", process as a cluster
         if (strlen($spec) > 2) {
@@ -381,7 +419,7 @@ class Getopt
         // get the option character (after the first "-")
         $char = substr($spec, 1);
 
-        // get the option object
+        // get the option def
         $def = $this->getOptDef($char);
 
         // if the option does not need a param, set to integer 1 and move on
@@ -391,11 +429,11 @@ class Getopt
         }
 
         // the option was defined as needing a param (required or optional).
-        // peek at the next element from $argv ...
-        $value = reset($this->argv);
+        // peek at the next element from the input ...
+        $value = reset($input);
 
         // ... and see if it's a param. can be empty, too, which indicates
-        // then end of the arguments.
+        // then end of the input.
         $is_param = ! empty($value) && substr($value, 0, 1) != '-';
 
         if (! $is_param && $def['param'] == 'optional') {
@@ -412,8 +450,8 @@ class Getopt
         }
 
         // at this point, the value is a param, and it's optional or required.
-        // pull it out of the arguments for real ...
-        $value = array_shift($this->argv);
+        // pull it out of the input for real ...
+        $value = array_shift($input);
 
         // ... and set it.
         $this->setOptValue($def['name'], $value);

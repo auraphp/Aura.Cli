@@ -62,8 +62,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_noDefs()
     {
-        $argv = ['abc', 'def'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['abc', 'def']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['abc', 'def'];
@@ -76,16 +76,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['foo-bar'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['--foo-bar'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 1];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $argv = ['--foo-bar=baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar=baz']);
+        $result = $this->getopt->parse();
         $this->assertFalse($result);
         
         $actual = $this->getopt->getErrors();
@@ -98,16 +98,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['foo-bar:'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['--foo-bar=baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar=baz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $argv = ['--foo-bar'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar']);
+        $result = $this->getopt->parse();
         $this->assertFalse($result);
         
         $actual = $this->getopt->getErrors();
@@ -120,16 +120,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['foo-bar::'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['--foo-bar'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 1];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $argv = ['--foo-bar=baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['--foo-bar=baz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
@@ -142,8 +142,14 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['foo-bar::'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['--foo-bar', '--foo-bar', '--foo-bar=baz', '--foo-bar=dib', '--foo-bar'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput([
+            '--foo-bar',
+            '--foo-bar',
+            '--foo-bar=baz',
+            '--foo-bar=dib',
+            '--foo-bar'
+        ]);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => [2, 'baz', 'dib', 1]];
@@ -156,16 +162,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['-f'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => 1];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $argv = ['-f', 'baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f', 'baz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => 1, 'baz'];
@@ -178,16 +184,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f:'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['-f', 'baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f', 'baz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
 
-        $argv = ['-f'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f']);
+        $result = $this->getopt->parse();
         $this->assertFalse($result);
         
         $actual = $this->getopt->getErrors();
@@ -200,16 +206,16 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f::'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['-f'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => 1];
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $argv = ['-f', 'baz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f', 'baz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
@@ -222,8 +228,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f::'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-f', '-f', '-f', 'baz', '-f', 'dib', '-f']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = ['-f' => [2, 'baz', 'dib', 1]];
@@ -236,8 +242,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f', 'b', 'z'];
         $this->getopt->setOptDefs($opt_defs);
         
-        $argv = ['-fbz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-fbz']);
+        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
         $expect = [
@@ -254,8 +260,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f', 'b:', 'z'];
         $this->getopt->setOptDefs($opt_defs);
 
-        $argv = ['-fbz'];
-        $result = $this->getopt->parse($argv);
+        $this->getopt->setInput(['-fbz']);
+        $result = $this->getopt->parse();
         $this->assertFalse($result);
         
         $actual = $this->getopt->getErrors();
@@ -270,7 +276,8 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getopt->getArgDefs();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->parse(['dib', 'qux']);
+        $this->getopt->setInput(['dib', 'qux']);
+        $this->getopt->parse();
         $expect = [
             0 => 'dib',
             'foo' => 'dib',
@@ -284,7 +291,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     public function testParseAndGet()
     {
         $this->getopt->setOptDefs(['foo-bar:', 'b', 'z::']);
-        $this->getopt->parse([
+        $this->getopt->setInput([
             'abc',
             '--foo-bar=zim',
             'def',
@@ -298,6 +305,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             '456',
             'ghi',
         ]);
+        $this->getopt->parse();
         
         // all values
         $expect = [
