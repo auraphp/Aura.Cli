@@ -178,7 +178,9 @@ class Getopt
         } else {
             $opt = "--$key";
         }
-        $this->errors[] = "The option '$opt' is not recognized.";
+        $this->errors[] = new Exception\OptionNotDefined(
+            "The option '$opt' is not recognized."
+        );
         
         // undefined short flags take no param
         if (strlen($key) == 1) {
@@ -332,13 +334,17 @@ class Getopt
 
         // if param is required but not present, error
         if ($def['param'] == 'required' && trim($val) === '') {
-            $this->errors[] = "The option '--$key' requires a parameter.";
+            $this->errors[] = new Exception\OptionParamRequired(
+                "The option '--$key' requires a parameter."
+            );
             return;
         }
 
         // if params are rejected and one is present, error
         if ($def['param'] == 'rejected' && trim($val) !== '') {
-            $this->errors[] = "The option '--$key' does not accept a parameter.";
+            $this->errors[] = new Exception\OptionParamRejected(
+                "The option '--$key' does not accept a parameter."
+            );
             return;
         }
 
@@ -396,7 +402,9 @@ class Getopt
 
         if (! $is_param && $def['param'] == 'required') {
             // the next value is not a param, but a param is required
-            $this->errors[] = "The option '-$char' requires a parameter.";
+            $this->errors[] = new Exception\OptionParamRequired(
+                "The option '-$char' requires a parameter."
+            );
             return;
         }
 
@@ -434,7 +442,9 @@ class Getopt
 
             // can't process params in a cluster
             if ($def['param'] == 'required') {
-                $this->errors[] = "The option '-$char' requires a parameter.";
+                $this->errors[] = new Exception\OptionParamRequired(
+                    "The option '-$char' requires a parameter."
+                );
                 continue;
             }
 

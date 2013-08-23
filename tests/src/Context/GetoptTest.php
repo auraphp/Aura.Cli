@@ -14,6 +14,13 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->getopt = new Getopt;
     }
     
+    public function testInput()
+    {
+        $input = ['foo', 'bar'];
+        $this->getopt->setInput($input);
+        $this->assertSame($input, $this->getopt->getInput());
+    }
+    
     public function testSetAndGetDefs()
     {
         $opt_defs = [
@@ -88,9 +95,12 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $result = $this->getopt->parse();
         $this->assertFalse($result);
         
-        $actual = $this->getopt->getErrors();
-        $expect = ["The option '--foo-bar' does not accept a parameter."];
-        $this->assertSame($expect, $actual);
+        $errors = $this->getopt->getErrors();
+        $actual = $errors[0];
+        $expect = 'Aura\Cli\Exception\OptionParamRejected';
+        $this->assertInstanceOf($expect, $actual);
+        $expect = "The option '--foo-bar' does not accept a parameter.";
+        $this->assertSame($expect, $actual->getMessage());
     }
     
     public function testParse_longRequired()
@@ -110,9 +120,12 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $result = $this->getopt->parse();
         $this->assertFalse($result);
         
-        $actual = $this->getopt->getErrors();
-        $expect = ["The option '--foo-bar' requires a parameter."];
-        $this->assertSame($expect, $actual);
+        $errors = $this->getopt->getErrors();
+        $actual = $errors[0];
+        $expect = 'Aura\Cli\Exception\OptionParamRequired';
+        $this->assertInstanceOf($expect, $actual);
+        $expect = "The option '--foo-bar' requires a parameter.";
+        $this->assertSame($expect, $actual->getMessage());
     }
     
     public function testParse_longOptional()
@@ -191,14 +204,17 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $expect = ['-f' => 'baz'];
         $actual = $this->getopt->getValues();
         $this->assertSame($expect, $actual);
-
+    
         $this->getopt->setInput(['-f']);
         $result = $this->getopt->parse();
         $this->assertFalse($result);
         
-        $actual = $this->getopt->getErrors();
-        $expect = ["The option '-f' requires a parameter."];
-        $this->assertSame($expect, $actual);
+        $errors = $this->getopt->getErrors();
+        $actual = $errors[0];
+        $expect = 'Aura\Cli\Exception\OptionParamRequired';
+        $this->assertInstanceOf($expect, $actual);
+        $expect = "The option '-f' requires a parameter.";
+        $this->assertSame($expect, $actual->getMessage());
     }
     
     public function testParse_shortOptional()
@@ -259,14 +275,17 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     {
         $opt_defs = ['f', 'b:', 'z'];
         $this->getopt->setOptDefs($opt_defs);
-
+    
         $this->getopt->setInput(['-fbz']);
         $result = $this->getopt->parse();
         $this->assertFalse($result);
         
-        $actual = $this->getopt->getErrors();
-        $expect = ["The option '-b' requires a parameter."];
-        $this->assertSame($expect, $actual);
+        $errors = $this->getopt->getErrors();
+        $actual = $errors[0];
+        $expect = 'Aura\Cli\Exception\OptionParamRequired';
+        $this->assertInstanceOf($expect, $actual);
+        $expect = "The option '-b' requires a parameter.";
+        $this->assertSame($expect, $actual->getMessage());
     }
     
     public function testParse_namedArgs()

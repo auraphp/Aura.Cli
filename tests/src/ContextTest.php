@@ -52,15 +52,33 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     
     public function testGetopt()
     {
-        $opt_defs = ['f'];
+        $opt_defs = ['f:'];
         $arg_defs = ['arg0', 'arg1', 'arg2'];
         
         $context = $this->newContext(['argv' => [
+            'foo',
+            'bar',
+            '-f',
         ]]);
         
         $getopt = $context->getopt($opt_defs, $arg_defs);
-        
         $this->assertInstanceOf('Aura\Cli\Context\GetoptValues', $getopt);
         
+        $actual = $getopt->get();
+        $expect = [
+            0 => 'foo',
+            'arg0' => 'foo',
+            1 => 'bar',
+            'arg1' => 'bar',
+        ];
+        
+        $this->assertTrue($getopt->hasErrors());
+        
+        $errors = $getopt->getErrors();
+        $actual = $errors[0];
+        $expect = 'Aura\Cli\Exception\OptionParamRequired';
+        $this->assertInstanceOf($expect, $actual);
+        $expect = "The option '-f' requires a parameter.";
+        $this->assertSame($expect, $actual->getMessage());
     }
 }
