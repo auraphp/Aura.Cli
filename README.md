@@ -63,13 +63,19 @@ line equivalent of a web request object.)
 
 ### Instantiation
 
-Instantiate a _Context_ object like so:
+Instantiate a _Context_ object by giving it a _ValuesFactory_, which itself
+needs a _Getopt_ instance and a copy of `$GLOBALS`:
 
 ```php
 <?php
 use Aura\Cli\Context;
 
-$context = new Context(new Context\ValuesFactory($GLOBALS));
+$context = new Context(
+    new Context\ValuesFactory(
+        new Context\Getopt,
+        $GLOBALS
+    )
+);
 ?>
 ```
 

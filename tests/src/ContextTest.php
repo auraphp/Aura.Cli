@@ -9,7 +9,12 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected function newContext(array $globals = [])
     {
         $globals = array_merge($GLOBALS, $globals);
-        return new Context(new ValuesFactory(new Getopt, $globals));
+        return new Context(
+            new ValuesFactory(
+                new Getopt,
+                $globals
+            )
+        );
     }
     
     public function testGlobalValues()
