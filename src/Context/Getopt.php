@@ -73,6 +73,11 @@ class Getopt
         $this->input = $input;
     }
     
+    public function getInput()
+    {
+        return $this->input;
+    }
+    
     /**
      * 
      * Set the option definitions (both long options and short flags).
