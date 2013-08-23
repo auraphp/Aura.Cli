@@ -19,9 +19,6 @@ use UnexpectedValueException;
  * 
  * @package Aura.Cli
  * 
- * @todo Short flags with rejected param should be a count, not merely true;
- * that way we can see how many times it was specified.
- * 
  */
 class Optarg
 {
@@ -272,14 +269,29 @@ class Optarg
 
     /**
      * 
-     * Returns the values array.
+     * Returns a value.
      * 
-     * @return array
+     * @param string $key The key, if any, to get the value of; if null, will
+     * return all values.
+     * 
+     * @param string $alt The alternative default value to return if the
+     * requested key does not exist.
+     * 
+     * @return mixed The requested value, or the alternative default
+     * value.
      * 
      */
-    public function getValues()
+    public function get($key = null, $alt = null)
     {
-        return $this->values;
+        if ($key === null) {
+            return $this->values;
+        }
+        
+        if (array_key_exists($key, $this->values)) {
+            return $this->values[$key];
+        }
+        
+        return $alt;
     }
     
     /**
