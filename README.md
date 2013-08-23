@@ -136,8 +136,9 @@ $getopt = $context->getopt($opt_defs);
 ?>
 ```
 
-Then use the `get()` method to retrieve the option values; you can provide
-an alternative default value for when the option is missing.
+Then use the `get()` method on the returned _GetoptValues_ object to retrieve
+the option values; you can provide an alternative default value for when the
+option is missing.
 
 ```php
 <?php
@@ -189,7 +190,7 @@ $f   = $getopt->get('-f'); // 3
 ```
 
 If the user passes options that do not conform to the definitions, the
-_GetoptValued_ retains various errors related to the parsing
+_GetoptValues_ object retains various errors related to the parsing
 failures. In these cases, `hasErrors()` will return `true`, and you can then
 review the errors.  (The errors are actually `Aura\Cli\Exception` objects,
 but they don't get thrown as they occur; this is so that you can deal with or
