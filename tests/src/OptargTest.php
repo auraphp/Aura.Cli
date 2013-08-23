@@ -80,7 +80,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => true];
+        $expect = ['--foo-bar' => 1];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
         
@@ -124,7 +124,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => true];
+        $expect = ['--foo-bar' => 1];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
         
@@ -142,11 +142,11 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['foo-bar::'];
         $this->optarg->setOptDefs($opt_defs);
         
-        $argv = ['--foo-bar', '--foo-bar=baz', '--foo-bar=dib'];
+        $argv = ['--foo-bar', '--foo-bar', '--foo-bar=baz', '--foo-bar=dib', '--foo-bar'];
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => [true, 'baz', 'dib']];
+        $expect = ['--foo-bar' => [2, 'baz', 'dib', 1]];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
     }
@@ -160,7 +160,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true];
+        $expect = ['-f' => 1];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
         
@@ -168,7 +168,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true, 'baz'];
+        $expect = ['-f' => 1, 'baz'];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
     }
@@ -204,7 +204,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true];
+        $expect = ['-f' => 1];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
         
@@ -222,11 +222,11 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $opt_defs = ['f::'];
         $this->optarg->setOptDefs($opt_defs);
         
-        $argv = ['-f', '-f', 'baz', '-f', 'dib'];
+        $argv = ['-f', '-f', '-f', 'baz', '-f', 'dib', '-f'];
         $result = $this->optarg->parse($argv);
         $this->assertTrue($result);
         
-        $expect = ['-f' => [true, 'baz', 'dib']];
+        $expect = ['-f' => [2, 'baz', 'dib', 1]];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
     }
@@ -241,9 +241,9 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         $expect = [
-            '-f' => true,
-            '-b' => true,
-            '-z' => true,
+            '-f' => 1,
+            '-b' => 1,
+            '-z' => 1,
         ];
         $actual = $this->optarg->getValues();
         $this->assertSame($expect, $actual);
@@ -303,7 +303,7 @@ class OptargTest extends \PHPUnit_Framework_TestCase
         $expect = [
             '--foo-bar' => 'zim',
             '-z' => 'qux',
-            '-b' => true,
+            '-b' => 1,
             'abc',
             'def',
             'gir',

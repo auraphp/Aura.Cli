@@ -87,7 +87,7 @@ class Optarg
     public function setOptDefs($opt_defs)
     {
         $this->opt_defs = [];
-        foreach ($defs as $key => $val) {
+        foreach ($opt_defs as $key => $val) {
             
             $def = [
                 'name'  => null,
@@ -363,9 +363,9 @@ class Optarg
         // get the option object
         $def = $this->getOptDef($char);
 
-        // if the option does not need a param, flag as true and move on
+        // if the option does not need a param, set to integer 1 and move on
         if ($def['param'] == 'rejected') {
-            $this->setOptValue($def['name'], true);
+            $this->setOptValue($def['name'], 1);
             return;
         }
 
@@ -428,8 +428,8 @@ class Optarg
                 continue;
             }
 
-            // otherwise, set the value as a flag
-            $this->setOptValue($def['name'], true);
+            // otherwise, set the value as integer 1
+            $this->setOptValue($def['name'], 1);
         }
     }
     
@@ -458,7 +458,7 @@ class Optarg
             return;
         }
         
-        if (is_int($value)) {
+        if (is_int($value) && is_int($this->values[$name])) {
             $this->values[$name] += $value;
             return;
         }
