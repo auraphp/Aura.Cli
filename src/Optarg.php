@@ -243,9 +243,9 @@ class Optarg
 
             // long option, short option, or numeric argument?
             if (substr($arg, 0, 2) == '--') {
-                $this->loadLong($arg);
+                $this->setLongOptionValue($arg);
             } elseif (substr($arg, 0, 1) == '-') {
-                $this->loadShort($arg);
+                $this->setShortFlagValue($arg);
             } else {
                 $args[] = $arg;
             }
@@ -287,7 +287,7 @@ class Optarg
      * @return null
      * 
      */
-    protected function loadLong($key)
+    protected function setLongOptionValue($key)
     {
         // take the leading "--" off the specification
         $key = substr($key, 2);
@@ -322,7 +322,7 @@ class Optarg
         }
         
         // retain the value, and done
-        $this->setOpt('--' . $def['name'], $val);
+        $this->setOptValue($def['name'], $val);
     }
 
     /**
@@ -334,11 +334,11 @@ class Optarg
      * @return null
      * 
      */
-    protected function loadShort($spec)
+    protected function setShortFlagValue($spec)
     {
         // if we have a string like "-abcd", process as a cluster
         if (strlen($spec) > 2) {
-            return $this->loadShortCluster($spec);
+            return $this->setShortFlagValues($spec);
         }
 
         // get the option character (after the first "-")
@@ -349,7 +349,7 @@ class Optarg
 
         // if the option does not need a param, flag as true and move on
         if ($def['param'] == 'rejected') {
-            $this->setOpt('-' . $def['name'], true);
+            $this->setOptValue($def['name'], true);
             return;
         }
 
@@ -364,7 +364,7 @@ class Optarg
         if (! $is_param && $def['param'] == 'optional') {
             // the next value is not a param, but a param is optional,
             // so flag the option as true and move on.
-            $this->setOpt('-' . $def['name'], true);
+            $this->setOptValue($def['name'], true);
             return;
         }
 
@@ -379,32 +379,9 @@ class Optarg
         $value = array_shift($this->argv);
 
         // ... and set it.
-        $this->setOpt('-' . $def['name'], $value);
+        $this->setOptValue($def['name'], $value);
     }
 
-    /**
-     * 
-     * Sets an option value; if an option value is set multiple times, it is
-     * automatically converted to an array.
-     * 
-     * @param array $name The option name.
-     * 
-     * @param mixed $value The option value.
-     * 
-     * @return null
-     * 
-     */
-    protected function setOpt($name, $value)
-    {
-        if (isset($this->values[$name])) {
-            // force to an array
-            settype($this->values[$name], 'array');
-            $this->values[$name][] = $value;
-        } else {
-            $this->values[$name] = $value;
-        }
-    }
-    
     /**
      * 
      * Parses a cluster of short options.
@@ -414,7 +391,7 @@ class Optarg
      * @return null
      * 
      */
-    protected function loadShortCluster($spec)
+    protected function setShortFlagValues($spec)
     {
         // drop the leading dash
         $spec = substr($spec, 1);
@@ -436,7 +413,42 @@ class Optarg
             }
 
             // otherwise, set the value as a flag
-            $this->setOpt('-' . $def['name'], true);
+            $this->setOptValue($def['name'], true);
         }
+    }
+    
+    /**
+     * 
+     * Sets an option value; if an option value is set multiple times, it is
+     * automatically converted to an array.
+     * 
+     * @param array $name The option name.
+     * 
+     * @param mixed $value The option value.
+     * 
+     * @return null
+     * 
+     */
+    protected function setOptValue($name, $value)
+    {
+        if (strlen($name) == 1) {
+            $name = "-$name";
+        } else {
+            $name = "--$name";
+        }
+        
+        if (! isset($this->values[$name])) {
+            $this->values[$name] = $value;
+            return;
+        }
+        
+        if (is_int($value)) {
+            $this->values[$name] += $value;
+            return;
+        }
+        
+        // force to an array
+        settype($this->values[$name], 'array');
+        $this->values[$name][] = $value;
     }
 }
