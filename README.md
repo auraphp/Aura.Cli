@@ -358,7 +358,7 @@ class.  Save it in a file named `hello` and invoke it with
 ```php
 <?php
 use Aura\Cli\CliFactory;
-use Aura\Cli\Exit;
+use Aura\Cli\Status;
 
 require '/path/to/Aura.Cli/autoload.php';
 
