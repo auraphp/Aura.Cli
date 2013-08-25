@@ -107,7 +107,7 @@ params, along with positional and named arguments.
 
 To retrieve options and arguments parsed from the command-line `$argv` values,
 use the `getopt()` method on the _Context_ object. This will return a
-_GetoptValues_ object for you use as as you wish.
+_GetoptValues_ object for you to use as as you wish.
 
 #### Defining Options and Params
 
