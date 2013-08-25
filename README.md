@@ -337,6 +337,16 @@ $stdio->errln('%rThis is an error in red.%n');
 ?>
 ```
 
+
+## Exit Codes
+
+This library comes with a _Status_ class that defines constants for exit
+status codes. You should use these whenever possible.  For example, if a
+command is used with the wrong number of arguments or improper option flags,
+`exit()` with `Status::USAGE`.  The exit status codes are the same as those
+found in [sysexits.h](http://www.unix.com/man-page/freebsd/3/sysexits/).
+
+
 ## Writing Commands
 
 The Aura.Cli library does not come with an abstract or base command class to
@@ -348,6 +358,7 @@ class.  Save it in a file named `hello` and invoke it with
 ```php
 <?php
 use Aura\Cli\CliFactory;
+use Aura\Cli\Exit;
 
 require '/path/to/Aura.Cli/autoload.php';
 
@@ -366,7 +377,7 @@ $name = $getopt->get('name');
 if (! $name) {
     // print an error
     $stdio->errln("Please give a name to say hello to.");
-    exit(1);
+    exit(Status::USAGE);
 }
 
 // say hello
@@ -379,7 +390,7 @@ if ($getopt->get('--verbose')) {
 }
 
 // done!
-exit(0);
+exit(Status::SUCCESS);
 ?>
 ```
 
