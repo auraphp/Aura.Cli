@@ -30,8 +30,7 @@ class Vt100
      * 
      * Based on `ANSI VT100 Color/Style Codes` according to the
      * [VT100 User Guide](http://vt100.net/docs/vt100-ug) and the
-     * [ANSI/VT100 Terminal Control reference](
-     * http://www.termsys.demon.co.uk/vtansi.htm).
+     * [ANSI/VT100 Terminal Control reference](http://www.termsys.demon.co.uk/vtansi.htm).
      * Inspired by [PEAR Console_Color](http://pear.php.net/Console_Color).
      * 
      * @var array
