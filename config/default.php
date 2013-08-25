@@ -9,7 +9,7 @@ $di->set('cli_stdio', $di->lazyNew('Aura\Cli\Stdio'));
  * Aura\Cli\Context
  */
 $di->params['Aura\Cli\Context'] = [
-    'property_factory' => $di->lazyNew('Aura\Cli\Context\ValuesFactory'),
+    'values_factory' => $di->lazyNew('Aura\Cli\Context\ValuesFactory'),
 ];
 
 /**
