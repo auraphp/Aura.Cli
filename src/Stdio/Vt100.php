@@ -20,7 +20,6 @@ namespace Aura\Cli\Stdio;
  * 
  * @author Paul M. Jones <pmjones@paul-m-jones.com>
  * 
- * @todo Add methods like blackText(), blackBold(), blackBackground(), etc. to make adding 
  */
 class Vt100
 {
