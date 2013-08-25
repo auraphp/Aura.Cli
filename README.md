@@ -77,11 +77,11 @@ $context = $cli_factory->newContext($GLOBALS);
 
 ### Usage
 
-You can access the `$_ENV`, `$_SERVER`, and `$argv` values with the `$env` and
-`$server` property objects, respectively. (Note that these properties are
-copies of those superglobals as they were are at the time of _Context_
-instantiation.) You can pass an alternative default value if the related key
-is missing.
+You can access the `$_ENV`, `$_SERVER`, and `$argv` values with the `$env`,
+`$server`, and `$argv` property objects, respectively. (Note that these
+properties are copies of those superglobals as they were are at the time of
+_Context_ instantiation.) You can pass an alternative default value if the
+related key is missing.
 
 ```php
 <?php
