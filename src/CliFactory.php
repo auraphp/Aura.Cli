@@ -8,7 +8,7 @@ class CliFactory
         return new Context(
             new Context\ValuesFactory(
                 new Context\Getopt,
-                $GLOBALS
+                $globals
             )
         );
     }
