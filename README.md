@@ -63,19 +63,15 @@ line equivalent of a web request object.)
 
 ### Instantiation
 
-Instantiate a _Context_ object by giving it a _ValuesFactory_, which itself
-needs a _Getopt_ instance and a copy of `$GLOBALS`:
+Instantiate a _Context_ object using the _CliFactory_; pass it a copy of
+`$GLOBALS`.
 
 ```php
 <?php
-use Aura\Cli\Context;
+use Aura\Cli\CliFactory;
 
-$context = new Context(
-    new Context\ValuesFactory(
-        new Context\Getopt,
-        $GLOBALS
-    )
-);
+$cli_factory = new CliFactory;
+$context = $cli_factory->newContext($GLOBALS);
 ?>
 ```
 
@@ -298,23 +294,20 @@ The _Stdio_ object to allows you to work with standard input/output streams.
 
 ### Instantiation
 
-Instantiate a _Stdio_ object like so:
+Instantiate a _Stdio_ object using the _CliFactory_.
 
 ```php
 <?php
-use Aura\Cli\Stdio;
+use Aura\Cli\CliFactory;
 
-$stdio = new Stdio(
-    new Stdio\Handle('php://stdin', 'r'),
-    new Stdio\Handle('php://stdout', 'w+'),
-    new Stdio\Handle('php://stderr', 'w+'),
-    new Stdio\Vt100
-);
+$cli_factory = new CliFactory;
+$stdio = $cli_factory->newStdio();
 ?>
 ```
 
-You can pick any stream you like for the _stdin_, _stdout_, and _stderr_
-resource handles.
+It defaults to using `php://stdin`, `php://stdout`, and `php://stderr`, but
+you can pass whatever stream names you like as parameters to the `newStdio()`
+method.
 
 ### Usage
 
@@ -341,6 +334,52 @@ $stdio->outln('This is normal text.');
 
 // print to stderr
 $stdio->errln('%rThis is an error in red.%n');
+?>
+```
+
+## Writing Commands
+
+The Aura.Cli library does not come with an abstract or base command class to
+extend from, but writing commands for yourself is straightforward. The
+following is a standalone command script, but similar logic can be used in a
+class.  Save it in a file named `hello` and invoke it with
+`php hello [-v,--verbose] [name]`.
+
+```php
+<?php
+use Aura\Cli\CliFactory;
+
+require '/path/to/Aura.Cli/autoload.php';
+
+// get the context and stdio objects
+$cli_factory = new CliFactory;
+$context = $cli_factory->newContext($GLOBALS);
+$stdio = $cli_factory->newStdio();
+
+// define options and named arguments through getopt
+$opt_defs = ['v' => 'verbose', 'verbose'];
+$arg_defs = [1 => 'name'];
+$getopt = $context->getopt($opt_defs, $arg_defs);
+
+// do we have a name to say hello to?
+$name = $getopt->get('name');
+if (! $name) {
+    // print an error
+    $stdio->errln("Please give a name to say hello to.");
+    exit(1);
+}
+
+// say hello
+if ($getopt->get('--verbose')) {
+    // verbose output
+    $stdio->outln("Hello {$name}, it's nice to see you!");
+} else {
+    // plain output
+    $stdio->outln("Hello {$name}!");
+}
+
+// done!
+exit(0);
 ?>
 ```
 
