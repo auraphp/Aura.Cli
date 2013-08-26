@@ -3,7 +3,8 @@ namespace Aura\Cli;
 
 /**
  * 
- * Preferred exit status codes; cf. <http://www.unix.com/man-page/freebsd/3/sysexits/>.
+ * Preferred exit status codes;
+ * cf. <http://www.unix.com/man-page/freebsd/3/sysexits/>.
  * 
  * @package Aura.Cli
  * 
@@ -27,8 +28,9 @@ class Status
     const USAGE         = 64;
     
     /**
-     * The input data was incorrect in some way. This should only be used for user’s data and not system files.
-     */     
+     * The input data was incorrect in some way. This should only be used for
+     * user’s data and not system files.
+     */
     const DATAERR       = 65;
     
     /**

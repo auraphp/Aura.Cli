@@ -23,11 +23,18 @@ class ValuesFactory
      * 
      * A copy of $GLOBALS.
      * 
-     * @param array
+     * @var array
      * 
      */
     protected $globals;
     
+    /**
+     * 
+     * A getopt parser.
+     * 
+     * @var Getopt
+     * 
+     */
     protected $getopt;
     
     /**
@@ -36,10 +43,12 @@ class ValuesFactory
      * 
      * @param array $globals A copy of $GLOBALS.
      * 
+     * @param Getopt $getopt A getopt parser.
+     * 
      */
     public function __construct(
-        Getopt $getopt,
-        array $globals
+        array $globals,
+        Getopt $getopt
     ) {
         $this->globals = $globals;
         $this->getopt = $getopt;
@@ -49,9 +58,9 @@ class ValuesFactory
     
     /**
      * 
-     * Returns a Values object representing `$_SERVER`.
+     * Returns a values object representing `$_SERVER`.
      * 
-     * @return Values
+     * @return GlobalValues
      * 
      */
     public function newServer()
@@ -63,7 +72,7 @@ class ValuesFactory
      * 
      * Returns a Values object representing `$_ENV`.
      * 
-     * @return Values
+     * @return GlobalValues
      * 
      */
     public function newEnv()
@@ -71,11 +80,25 @@ class ValuesFactory
         return new GlobalValues($this->get('_ENV'));
     }
     
+    /**
+     * 
+     * Returns a values object representing `$argv`.
+     * 
+     * @return GlobalValues
+     * 
+     */
     public function newArgv()
     {
         return new GlobalValues($this->get('argv'));
     }
     
+    /**
+     * 
+     * Returns a values object representing options and arguments.
+     * 
+     * @return GetoptValues
+     * 
+     */
     public function newGetopt(array $opt_defs, array $arg_defs)
     {
         $this->getopt->setOptDefs($opt_defs);

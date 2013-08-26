@@ -11,8 +11,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $globals = array_merge($GLOBALS, $globals);
         return new Context(
             new ValuesFactory(
-                new Getopt,
-                $globals
+                $globals,
+                new Getopt
             )
         );
     }

@@ -68,11 +68,27 @@ class Getopt
      */
     protected $values = [];
     
+    /**
+     * 
+     * Set the input array, typically `$argv`.
+     * 
+     * @param array $input
+     * 
+     * @return null
+     * 
+     */
     public function setInput(array $input)
     {
         $this->input = $input;
     }
     
+    /**
+     * 
+     * Returns the input array.
+     * 
+     * @return array
+     * 
+     */
     public function getInput()
     {
         return $this->input;

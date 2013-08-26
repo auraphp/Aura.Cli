@@ -43,16 +43,15 @@ class Context
      * 
      * Constructor.
      * 
-     * @param ValuesFactory $property_factory A factory to create propery
+     * @param ValuesFactory $values_factory A factory to create propery
      * objects.
      * 
      */
     public function __construct(ValuesFactory $values_factory)
     {
         $this->values_factory = $values_factory;
-        
-        $this->argv   = $this->values_factory->newArgv();
-        $this->env    = $this->values_factory->newEnv();
+        $this->argv = $this->values_factory->newArgv();
+        $this->env = $this->values_factory->newEnv();
         $this->server = $this->values_factory->newServer();
     }
 
@@ -70,6 +69,19 @@ class Context
         return $this->$key;
     }
     
+    /**
+     * 
+     * Returns a new GetoptValues object.
+     * 
+     * @param array $opt_defs Use these option definitions when creating the
+     * GetoptValues object.
+     * 
+     * @param array $arg_defs Use these argument definitions when creating the
+     * GetoptValues object.
+     * 
+     * @return GetoptValues
+     * 
+     */
     public function getopt(array $opt_defs = [], array $arg_defs = [])
     {
         return $this->values_factory->newGetopt($opt_defs, $arg_defs);
