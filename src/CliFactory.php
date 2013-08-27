@@ -60,7 +60,7 @@ class CliFactory
             new Stdio\Handle($stdin, 'r'),
             new Stdio\Handle($stdout, 'w+'),
             new Stdio\Handle($stderr, 'w+'),
-            new Stdio\Vt100
+            new Stdio\Formatter
         );
     }
 }

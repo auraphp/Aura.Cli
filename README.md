@@ -325,7 +325,7 @@ The _Stdio_ object methods are ...
 
 You can use VT100 style %-codes in the output strings to set text color, text
 weight, background color, and other display characteristics. See the
-[VT100 cheat sheet](#vt100-cheat-sheet) below.
+[VT100 cheat sheet](#formatter-cheat-sheet) below.
 
 ```php
 <?php

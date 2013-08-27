@@ -159,7 +159,7 @@ class Handle
      * @return bool
      * 
      */
-    public function isPosixTty()
+    public function isPosix()
     {
         // silence posix_isatty() errors regarding non-standard resources,
         // e.g. php://memory

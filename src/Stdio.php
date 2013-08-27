@@ -11,7 +11,7 @@
 namespace Aura\Cli;
 
 use Aura\Cli\Stdio\Handle;
-use Aura\Cli\Stdio\Vt100;
+use Aura\Cli\Stdio\Formatter;
 
 /**
  * 
@@ -51,12 +51,12 @@ class Stdio
 
     /**
      * 
-     * A Vt100 object to format output.
+     * A Formatter object to format output.
      * 
-     * @var Vt100
+     * @var Formatter
      * 
      */
-    protected $vt100;
+    protected $formatter;
 
     /**
      * 
@@ -68,19 +68,19 @@ class Stdio
      * 
      * @param Handle $stderr A Handle object for standard error.
      * 
-     * @param Vt100 $vt100 A VT100 formatting object.
+     * @param Formatter $formatter A VT100 formatting object.
      * 
      */
     public function __construct (
         Handle $stdin,
         Handle $stdout,
         Handle $stderr,
-        Vt100 $vt100
+        Formatter $formatter
     ) {
         $this->stdin  = $stdin;
         $this->stdout = $stdout;
         $this->stderr = $stderr;
-        $this->vt100  = $vt100;
+        $this->formatter  = $formatter;
     }
 
     /**
@@ -146,7 +146,7 @@ class Stdio
 
     /**
      * 
-     * Prints text to standard output via the Vt100 formatter **without** 
+     * Prints text to standard output via the Formatter formatter **without** 
      * a trailing newline.
      * 
      * @param string $string The text to print to standard output.
@@ -156,12 +156,13 @@ class Stdio
      */
     public function out($string = null)
     {
-        $this->vt100->write($this->stdout, $string);
+        $string = $this->formatter->format($string, $this->stdout->isPosix());
+        $this->stdout->fwrite($string);
     }
 
     /**
      * 
-     * Prints text to standard output via the Vt100 formatter **with** 
+     * Prints text to standard output via the Formatter formatter **with** 
      * a trailing newline.
      * 
      * @param string $string The text to print to standard output.
@@ -171,12 +172,12 @@ class Stdio
      */
     public function outln($string = null)
     {
-        $this->vt100->writeln($this->stdout, $string);
+        $this->out($string . PHP_EOL);
     }
 
     /**
      * 
-     * Prints text to standard error via the Vt100 formatter **without** 
+     * Prints text to standard error via the Formatter formatter **without** 
      * a trailing newline.
      * 
      * @param string $string The text to print to standard error.
@@ -186,12 +187,13 @@ class Stdio
      */
     public function err($string = null)
     {
-        $this->vt100->write($this->stderr, $string);
+        $string = $this->formatter->format($string, $this->stderr->isPosix());
+        $this->stderr->fwrite($string);
     }
 
     /**
      * 
-     * Prints text to standard error via the Vt100 formatter **without** 
+     * Prints text to standard error via the Formatter formatter **without** 
      * a trailing newline.
      * 
      * @param string $string The text to print to standard error.
@@ -201,6 +203,6 @@ class Stdio
      */
     public function errln($string = null)
     {
-        $this->vt100->writeln($this->stderr, $string);
+        $this->err($string . PHP_EOL);
     }
 }
