@@ -1,49 +1,28 @@
 <?php
 namespace Aura\Cli\Stdio;
 
-/**
- * Test class for Vt100.
- */
 class Vt100Test extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Vt100
-     */
     protected $vt100;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         parent::setUp();
         $this->vt100 = new Vt100;
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
-     */
     public function testFormat()
     {
-        $text   = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $esc    = chr(27);
-        $expect = "{$esc}[30;1mbold%percent{$esc}[0m";
+        $expect = "{$esc}[1mbold%percent{$esc}[0m";
         $actual = $this->vt100->format($text);
         $this->assertSame($expect, $actual);
     }
 
     public function testStrip()
     {
-        $text   = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent";
         $actual = $this->vt100->strip($text);
         $this->assertSame($expect, $actual);
@@ -70,7 +49,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     
     public function testWrite()
     {
-        $text = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent";
         
         $handle = new Handle('php://memory', 'w+');
@@ -84,7 +63,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     
     public function testWriteln()
     {
-        $text = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent" . PHP_EOL;
         
         $handle = new Handle('php://memory', 'w+');
@@ -100,9 +79,9 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     {
         $this->vt100->setPosix(true);
         
-        $text   = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $esc    = chr(27);
-        $expect = "{$esc}[30;1mbold%percent{$esc}[0m";
+        $expect = "{$esc}[1mbold%percent{$esc}[0m";
         
         $handle = new Handle('php://memory', 'w+');
         $this->vt100->write($handle, $text);
@@ -117,9 +96,9 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     {
         $this->vt100->setPosix(true);
         
-        $text   = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $esc    = chr(27);
-        $expect = "{$esc}[30;1mbold%percent{$esc}[0m" . PHP_EOL;
+        $expect = "{$esc}[1mbold%percent{$esc}[0m" . PHP_EOL;
         
         $handle = new Handle('php://memory', 'w+');
         $this->vt100->writeln($handle, $text);
@@ -134,7 +113,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     {
         $this->vt100->setPhpOs('win');
         
-        $text = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent";
         
         $handle = new Handle('php://memory', 'w+');
@@ -150,7 +129,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
     {
         $this->vt100->setPhpOs('win');
         
-        $text = '%Kbold%%percent%n';
+        $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent" . PHP_EOL;
         
         $handle = new Handle('php://memory', 'w+');
