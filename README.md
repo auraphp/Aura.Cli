@@ -323,9 +323,9 @@ The _Stdio_ object methods are ...
 - `inln()` and `in()` to read from _stdin_ until the user hits enter; `inln()`
   leaves the trailing line ending in place, whereas `in()` strips it.
 
-You can use VT100 style %-codes in the output strings to set text color, text
-weight, background color, and other display characteristics. See the
-[VT100 cheat sheet](#formatter-cheat-sheet) below.
+You can use special formatting markup in the output and error strings to set
+text color, text weight, background color, and other display characteristics.
+See the [formatter cheat sheet](#formatter-cheat-sheet) below.
 
 ```php
 <?php
@@ -333,7 +333,8 @@ weight, background color, and other display characteristics. See the
 $stdio->outln('This is normal text.');
 
 // print to stderr
-$stdio->errln('%rThis is an error in red.%n');
+$stdio->errln('<<red>>This is an error in red.');
+$stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ?>
 ```
 
@@ -395,54 +396,38 @@ exit(Status::SUCCESS);
 ```
 
 
-## VT100 Cheat Sheet
+## Formatter Cheat Sheet
 
-Insert these VT100 %-codes into stdout or stderr text strings to get the
-related display behaviors.
+On POSIX terminals, `<<markup>>` strings will change the display
+characteristics. Note that these are not HTML tags; they will be converted
+into terminal control codes, and do not get "closed". You can place as many
+space-separated markup codes between the double angle-brackets as you like.
 
-Text color, normal weight:
+    reset       reset display to defaults
+    
+    black       black text
+    red         red text
+    green       green text
+    yellow      yellow text
+    blue        blue text
+    magenta     magenta (purple) text
+    cyan        cyan (light blue) text
+    white       white text
+    
+    blackbg     black background
+    redbg       red background
+    greenbg     green background
+    yellowbg    yellow background
+    bluebg      blue background
+    magentabg   magenta (purple) background
+    cyanbg      cyan (light blue) background
+    whitebg     white background
 
-    %k      black
-    %r      red
-    %g      green
-    %y      yellow
-    %b      blue
-    %m      magenta/purple
-    %p      magenta/purple
-    %c      cyan/light blue
-    %w      white
-    %n      reset to terminal default
+    bold        bold in the current text and background colors
+    dim         dim in the current text and background colors
+    ul          underline in the current text and background colors
+    blink       blinking in the current text and background colors
+    reverse     reverse the current text and background colors
 
-Text color, bold weight:
-
-    %K      black
-    %R      red
-    %G      green
-    %Y      yellow
-    %B      blue
-    %M      magenta/purple
-    %P      magenta/purple
-    %C      cyan/light blue
-    %W      white
-    %N      terminal default
-
-Background color:
-
-    %0      black background
-    %1      red background
-    %2      green background
-    %3      yellow background
-    %4      blue background
-    %5      magenta/purple background
-    %6      cyan/light blue background
-    %7      white background
-
-Assorted style shortcuts:
-
-    %F      blink/flash
-    %_      blink/flash
-    %U      underline
-    %I      reverse/inverse
-    %*      bold
-    %d      dim
-    %%      literal percent sign
+For example, to set bold white text on a red background, add `<<bold white redbg>>`
+into your output or error string. Reset back to normal with `<<reset>>`.
