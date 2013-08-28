@@ -12,7 +12,8 @@ namespace Aura\Cli\Stdio;
 
 /**
  * 
- * Text formatting for VT100 terminals.
+ * Converts <<markup>> to VT100 display control codes for POSIX, or strips
+ * the <<markup>> entirely for non-POSIX.
  * 
  * @package Aura.Cli
  * 
@@ -23,7 +24,7 @@ class Formatter
 {
     /**
      * 
-     * Array of <<markup>> mappings to control code numbers.
+     * Array of <<markup>> names to control code numbers.
      * 
      * Based on the `ANSI/VT100 Terminal Control reference` at
      * <http://www.termsys.demon.co.uk/vtansi.htm>.
@@ -56,6 +57,11 @@ class Formatter
         'whitebg'     => '47',
     ];
 
+    /**
+     * 
+     * Constructor.
+     * 
+     */
     public function __construct()
     {
         $this->regex = '<<\s*((('
@@ -66,11 +72,14 @@ class Formatter
     
     /**
      * 
-     * Converts <<markup>> in text to VT100 control codes.
+     * Converts <<markup>> in text to VT100 control codes for POSIX, or
+     * strips them for non-POSIX.
      * 
-     * @param string $text The text to format.
+     * @param string $string The text to format.
      * 
-     * @return string The formatted text.
+     * @param bool $posix Is the destination a POSIX terminal?
+     * 
+     * @return string The coverted string.
      * 
      */
     public function format($string, $posix)
@@ -86,6 +95,15 @@ class Formatter
         }
     }
 
+    /**
+     * 
+     * The callback to format <<markup>> for POSIX.
+     * 
+     * @param array $matches The matched <<markup>>.
+     * 
+     * @return string
+     * 
+     */
     protected function formatCallback(array $matches)
     {
         $str = preg_replace('/(\s+)/msi', ';', $matches[1]);

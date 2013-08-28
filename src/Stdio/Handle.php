@@ -46,9 +46,23 @@ class Handle
      */
     protected $mode;
 
-    protected $posix;
-    
+    /**
+     * 
+     * What is the current OS? (Used for POSIX checks.)
+     * 
+     * @var string
+     * 
+     */
     protected $php_os;
+    
+    /**
+     * 
+     * Is this a POSIX terminal?
+     * 
+     * @var bool
+     * 
+     */
+    protected $posix;
     
     /**
      * 
@@ -69,6 +83,16 @@ class Handle
         $this->setPosix($posix);
     }
 
+    /**
+     * 
+     * Sets `$php_os`.
+     * 
+     * @param string $php_os The operating system; if empty, uses the value of
+     * the PHP_OS constant.
+     * 
+     * @return null
+     * 
+     */
     protected function setPhpOs($php_os)
     {
         $this->php_os = $php_os;
@@ -77,6 +101,17 @@ class Handle
         }
     }
     
+    /**
+     * 
+     * Sets `$posix`.
+     * 
+     * @param mixed $posix If boolean, forces the $posix value; otherwise,
+     * checks the `$php_os` value and `posix_isatty()` to auto-determine the
+     * value.
+     * 
+     * @return null
+     * 
+     */
     protected function setPosix($posix)
     {
         // forcing it off or on?
