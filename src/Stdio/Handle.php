@@ -46,6 +46,10 @@ class Handle
      */
     protected $mode;
 
+    protected $posix;
+    
+    protected $php_os;
+    
     /**
      * 
      * Constructor.
@@ -56,13 +60,45 @@ class Handle
      * @param string $mode Open the resource in this mode; e.g., "w+".
      * 
      */
-    public function __construct($name, $mode)
+    public function __construct($name, $mode, $php_os = null, $posix = null)
     {
-        $this->name     = $name;
-        $this->mode     = $mode;
+        $this->name = $name;
+        $this->mode = $mode;
         $this->resource = fopen($this->name, $this->mode);
+        $this->setPhpOs($php_os);
+        $this->setPosix($posix);
     }
 
+    protected function setPhpOs($php_os)
+    {
+        $this->php_os = $php_os;
+        if (! $this->php_os) {
+            $this->php_os = PHP_OS;
+        }
+    }
+    
+    protected function setPosix($posix)
+    {
+        // forcing it off or on?
+        if (is_bool($posix)) {
+            $this->posix = $posix;
+            return;
+        }
+        
+        // windows?
+        if (strtolower(substr($this->php_os, 0, 3)) == 'win') {
+            // windows is not posix
+            $this->posix = false;
+            return;
+        }
+        
+        // auto-determine; silence posix_isatty() errors regarding
+        // non-standard resources, e.g. php://memory
+        $level = error_reporting(0);
+        $this->posix = posix_isatty($this->resource);
+        error_reporting($level);
+    }
+    
     /**
      * 
      * Destructor; closes the resource if it is not already closed.
@@ -161,11 +197,6 @@ class Handle
      */
     public function isPosix()
     {
-        // silence posix_isatty() errors regarding non-standard resources,
-        // e.g. php://memory
-        $level = error_reporting(0);
-        $value = posix_isatty($this->resource);
-        error_reporting($level);
-        return $value;
+        return $this->posix;
     }
 }

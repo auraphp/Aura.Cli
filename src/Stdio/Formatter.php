@@ -63,6 +63,7 @@ class Formatter
                      . ')(\s*))+)>>';
     }
     
+    
     /**
      * 
      * Converts <<markup>> in text to VT100 control codes.

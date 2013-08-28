@@ -3,28 +3,28 @@ namespace Aura\Cli\Stdio;
 
 class HandleTest extends \PHPUnit_Framework_TestCase
 {
-    protected $handle;
-    
-    protected function setUp()
+    public function testGetters()
     {
-        parent::setUp();
-        $this->handle = new Handle('php://memory', 'w+');
-    }
-
-    public function testGetName()
-    {
+        $handle = new Handle('php://memory', 'w+');
+        
         $expect = 'php://memory';
-        $actual = $this->handle->getName();
+        $actual = $handle->getName();
         $this->assertSame($expect, $actual);
-    }
-
-    public function testGetMode()
-    {
+        
         $expect = 'w+';
-        $actual = $this->handle->getMode();
+        $actual = $handle->getMode();
         $this->assertSame($expect, $actual);
     }
-    
-    /* everything else is covered in the StdioTest */
 
+    public function testWinPosix()
+    {
+        $handle = new Handle('php://memory', 'w+', 'win');
+        $this->assertFalse($handle->isPosix());
+    }
+
+    public function testForcePosix()
+    {
+        $handle = new Handle('php://memory', 'w+', null, false);
+        $this->assertFalse($handle->isPosix());
+    }
 }
