@@ -146,8 +146,7 @@ class Stdio
 
     /**
      * 
-     * Prints text to standard output via the Formatter formatter **without** 
-     * a trailing newline.
+     * Prints formatted text to standard output **without** a trailing newline.
      * 
      * @param string $string The text to print to standard output.
      * 
@@ -162,8 +161,7 @@ class Stdio
 
     /**
      * 
-     * Prints text to standard output via the Formatter formatter **with** 
-     * a trailing newline.
+     * Prints formatted text to standard output **with** a trailing newline.
      * 
      * @param string $string The text to print to standard output.
      * 
@@ -177,8 +175,7 @@ class Stdio
 
     /**
      * 
-     * Prints text to standard error via the Formatter formatter **without** 
-     * a trailing newline.
+     * Prints formatted text to standard error **without** a trailing newline.
      * 
      * @param string $string The text to print to standard error.
      * 
@@ -193,8 +190,7 @@ class Stdio
 
     /**
      * 
-     * Prints text to standard error via the Formatter formatter **without** 
-     * a trailing newline.
+     * Prints formatted text to standard error **with** a trailing newline.
      * 
      * @param string $string The text to print to standard error.
      * 
