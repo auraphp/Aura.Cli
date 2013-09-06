@@ -59,9 +59,7 @@ compliance oversights, please send a patch via pull request.
 
 ## Usage
 
-The two main objects _Context_ and _Stdio_.
-
-### The Context Object
+### Context Discovery
 
 The _Context_ object provides information about the command line environment,
 including any option flags passed via the command line. (This is the command
@@ -289,7 +287,7 @@ $a           = $getopt->get('-a');          // 1
 ```
 
 
-### The Stdio Object
+### Standard Input/Output Streams
 
 The _Stdio_ object to allows you to work with standard input/output streams.
 (This is the command line equivalent of a web response object.)
