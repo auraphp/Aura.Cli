@@ -23,6 +23,8 @@ As with all Aura libraries, this library has no external dependencies.
 
 ### Tests
 
+[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png)](https://travis-ci.org/auraphp/Aura.Cli)
+
 This library has 100% code coverage. To run the library tests, first install
 [PHPUnit][], then go to the library _tests_ directory and issue `phpunit` at
 the command line.
@@ -55,13 +57,15 @@ compliance oversights, please send a patch via pull request.
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 
 
-## The Context Object
+## Usage
+
+The two main objects _Context_ and _Stdio_.
+
+### The Context Object
 
 The _Context_ object provides information about the command line environment,
 including any option flags passed via the command line. (This is the command
 line equivalent of a web request object.)
-
-### Instantiation
 
 Instantiate a _Context_ object using the _CliFactory_; pass it a copy of
 `$GLOBALS`.
@@ -74,8 +78,6 @@ $cli_factory = new CliFactory;
 $context = $cli_factory->newContext($GLOBALS);
 ?>
 ```
-
-### Usage
 
 You can access the `$_ENV`, `$_SERVER`, and `$argv` values with the `$env`,
 `$server`, and `$argv` property objects, respectively. (Note that these
@@ -287,12 +289,10 @@ $a           = $getopt->get('-a');          // 1
 ```
 
 
-## The Stdio Object
+### The Stdio Object
 
 The _Stdio_ object to allows you to work with standard input/output streams.
 (This is the command line equivalent of a web response object.)
-
-### Instantiation
 
 Instantiate a _Stdio_ object using the _CliFactory_.
 
@@ -308,8 +308,6 @@ $stdio = $cli_factory->newStdio();
 It defaults to using `php://stdin`, `php://stdout`, and `php://stderr`, but
 you can pass whatever stream names you like as parameters to the `newStdio()`
 method.
-
-### Usage
 
 The _Stdio_ object methods are ...
 
@@ -339,7 +337,7 @@ $stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ```
 
 
-## Exit Codes
+### Exit Codes
 
 This library comes with a _Status_ class that defines constants for exit
 status codes. You should use these whenever possible.  For example, if a
@@ -348,7 +346,7 @@ command is used with the wrong number of arguments or improper option flags,
 found in [sysexits.h](http://www.unix.com/man-page/freebsd/3/sysexits/).
 
 
-## Writing Commands
+### Writing Commands
 
 The Aura.Cli library does not come with an abstract or base command class to
 extend from, but writing commands for yourself is straightforward. The
@@ -396,7 +394,7 @@ exit(Status::SUCCESS);
 ```
 
 
-## Formatter Cheat Sheet
+### Formatter Cheat Sheet
 
 On POSIX terminals, `<<markup>>` strings will change the display
 characteristics. Note that these are not HTML tags; they will be converted
