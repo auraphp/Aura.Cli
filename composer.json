@@ -1,19 +1,48 @@
 {
     "name": "aura/cli",
+    "version": "1.1.1",
     "type": "aura-package",
-    "description": "The Aura CLI package provides a system for creating and executing CLI command objects.  It includes facilities for parsing command-line options and handling standard input/output.",
-    "keywords": [ "command", "command line", "cli", "getopt", "options" ],
-    "homepage": "http://auraphp.github.com/Aura.Cli",
+    "description": "The Aura CLI package provides a system for creating and executing CLI command objects.  It includes facilities for parsing command-line(console) options and handling standard input/output.",
+    "keywords": [
+        "command",
+        "command line",
+        "cli",
+        "getopt",
+        "options",
+        "console"
+    ],
+    "homepage": "http://auraphp.com/Aura.Cli",
+    "time": "2013-09-09",
     "license": "BSD-2-Clause",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Cli Contributors",
             "homepage": "https://github.com/auraphp/Aura.Cli/contributors"
+        },
+        {
+            "name": "Paul M. Jones",
+            "email": "pmjones88@gmail.com",
+            "homepage": "http://paul-m-jones.com"
+        },
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com",
+            "homepage": "http://harikt.com"
+        },
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com",
+            "homepage": ""
+        },
+        {
+            "name": "Chris Cornutt",
+            "email": "ccornutt@phpdeveloper.org",
+            "homepage": "http://phpdeveloper.org"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": "1.0.0"
+        "aura/installer-default": ">=1.0.0"
     },
     "autoload": {
         "psr-0": {
