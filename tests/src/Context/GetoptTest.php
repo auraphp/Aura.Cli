@@ -5,94 +5,97 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
 {
     protected $getopt;
     
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->getopt = new Getopt;
     }
     
-    public function testInput()
+    public function testSetOptions()
     {
-        $input = ['foo', 'bar'];
-        $this->getopt->setInput($input);
-        $this->assertSame($input, $this->getopt->getInput());
-    }
-    
-    public function testSetAndGetDefs()
-    {
-        $opt_defs = [
-            'foo-bar', 
-            'f:' => 'foo-bar',
-            'baz-dib::',
-            'b' => 'baz-dib',
+        $options = [
+            'foo-bar,f*:', 
+            'baz-dib,b::' => 'Description for baz-dib option.',
+            'z,zim-gir',
         ];
         
+        $this->getopt->setOptions($options);
         $expect = [
-            'foo-bar' => [
-                'name' => 'foo-bar',
-                'param' => 'rejected',
-            ],
-            'f' => [
-                'name' => 'foo-bar',
+            '--foo-bar' => [
+                'name'  => '--foo-bar',
+                'alias' => '-f',
+                'multi' => true,
                 'param' => 'required',
+                'descr' => null,
             ],
-            'baz-dib' => [
-                'name' => 'baz-dib',
+            '--baz-dib' => [
+                'name'  => '--baz-dib',
+                'alias' => '-b',
+                'multi' => false,
                 'param' => 'optional',
+                'descr' => 'Description for baz-dib option.',
             ],
-            'b' => [
-                'name' => 'baz-dib',
+            '-z' => [
+                'name'  => '-z',
+                'alias' => '--zim-gir',
+                'multi' => false,
                 'param' => 'rejected',
+                'descr' => null,
             ],
         ];
         
-        $this->getopt->setOptDefs($opt_defs);
-        $actual = $this->getopt->getOptDefs();
+        $actual = $this->getopt->getOptions();
         $this->assertSame($expect, $actual);
         
-        $actual = $this->getopt->getOptDef('f');
-        $this->assertSame($expect['f'], $actual);
+        // get an aliased option
+        $actual = $this->getopt->getOption('--zim-gir');
+        $this->assertSame($expect['-z'], $actual);
         
         // get an undefined short flag
-        $actual = $this->getopt->getOptDef('n');
-        $expect = ['name' => 'n', 'param' => 'rejected'];
+        $actual = $this->getopt->getOption('n');
+        $expect = [
+            'name'  => '-n',
+            'alias' => null,
+            'multi' => false,
+            'param' => 'rejected',
+            'descr' => null,
+        ];
         $this->assertSame($expect, $actual);
         
         // get an undefined long option
-        $actual = $this->getopt->getOptDef('no-long');
-        $expect = ['name' => 'no-long', 'param' => 'optional'];
+        $actual = $this->getopt->getOption('no-long');
+        $expect = [
+            'name'  => '--no-long',
+            'alias' => null,
+            'multi' => false,
+            'param' => 'optional',
+            'descr' => NULL,
+        ];
         $this->assertSame($expect, $actual);
     }
     
-    public function testParse_noDefs()
+    public function testParse_noOptions()
     {
-        $this->getopt->setInput(['abc', 'def']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['abc', 'def']);
         $this->assertTrue($result);
         
         $expect = ['abc', 'def'];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_longRejected()
     {
-        $opt_defs = ['foo-bar'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['foo-bar'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['--foo-bar']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => 1];
-        $actual = $this->getopt->getValues();
+        $expect = ['--foo-bar' => true];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->setInput(['--foo-bar=baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar=baz']);
         $this->assertFalse($result);
         
         $errors = $this->getopt->getErrors();
@@ -105,19 +108,17 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longRequired()
     {
-        $opt_defs = ['foo-bar:'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['foo-bar:'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['--foo-bar=baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar=baz']);
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->setInput(['--foo-bar']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar']);
         $this->assertFalse($result);
         
         $errors = $this->getopt->getErrors();
@@ -130,83 +131,76 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longOptional()
     {
-        $opt_defs = ['foo-bar::'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['foo-bar::'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['--foo-bar']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => 1];
-        $actual = $this->getopt->getValues();
+        $expect = ['--foo-bar' => true];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->setInput(['--foo-bar=baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['--foo-bar=baz']);
         $this->assertTrue($result);
         
         $expect = ['--foo-bar' => 'baz'];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_longMultiple()
     {
-        $opt_defs = ['foo-bar::'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['foo-bar*::'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput([
+        $result = $this->getopt->parse([
             '--foo-bar',
             '--foo-bar',
             '--foo-bar=baz',
             '--foo-bar=dib',
             '--foo-bar'
         ]);
-        $result = $this->getopt->parse();
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => [2, 'baz', 'dib', 1]];
-        $actual = $this->getopt->getValues();
+        $expect = ['--foo-bar' => [true, true, 'baz', 'dib', true]];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortRejected()
     {
-        $opt_defs = ['f'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['-f']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => 1];
-        $actual = $this->getopt->getValues();
+        $expect = ['-f' => true];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->setInput(['-f', 'baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => 1, 'baz'];
-        $actual = $this->getopt->getValues();
+        $expect = ['-f' => true, 'baz'];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortRequired()
     {
-        $opt_defs = ['f:'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f:'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['-f', 'baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     
-        $this->getopt->setInput(['-f']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f']);
         $this->assertFalse($result);
         
         $errors = $this->getopt->getErrors();
@@ -219,65 +213,60 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortOptional()
     {
-        $opt_defs = ['f::'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f::'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['-f']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => 1];
-        $actual = $this->getopt->getValues();
+        $expect = ['-f' => true];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
-        $this->getopt->setInput(['-f', 'baz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
         $expect = ['-f' => 'baz'];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortMultiple()
     {
-        $opt_defs = ['f::'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f*::'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['-f', '-f', '-f', 'baz', '-f', 'dib', '-f']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-f', '-f', '-f', 'baz', '-f', 'dib', '-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => [2, 'baz', 'dib', 1]];
-        $actual = $this->getopt->getValues();
+        $expect = ['-f' => [true, true, 'baz', 'dib', true]];
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortCluster()
     {
-        $opt_defs = ['f', 'b', 'z'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f', 'b', 'z'];
+        $this->getopt->setOptions($options);
         
-        $this->getopt->setInput(['-fbz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-fbz']);
         $this->assertTrue($result);
         
         $expect = [
-            '-f' => 1,
-            '-b' => 1,
-            '-z' => 1,
+            '-f' => true,
+            '-b' => true,
+            '-z' => true,
         ];
-        $actual = $this->getopt->getValues();
+        $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortClusterRequired()
     {
-        $opt_defs = ['f', 'b:', 'z'];
-        $this->getopt->setOptDefs($opt_defs);
+        $options = ['f', 'b:', 'z'];
+        $this->getopt->setOptions($options);
     
-        $this->getopt->setInput(['-fbz']);
-        $result = $this->getopt->parse();
+        $result = $this->getopt->parse(['-fbz']);
         $this->assertFalse($result);
         
         $errors = $this->getopt->getErrors();
@@ -288,59 +277,52 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual->getMessage());
     }
     
-    public function testParse_namedArgs()
-    {
-        $expect = ['foo', 'bar', 'baz'];
-        $this->getopt->setArgDefs($expect);
-        $actual = $this->getopt->getArgDefs();
-        $this->assertSame($expect, $actual);
-        
-        $this->getopt->setInput(['dib', 'qux']);
-        $this->getopt->parse();
-        $expect = [
-            0 => 'dib',
-            'foo' => 'dib',
-            1 => 'qux',
-            'bar' => 'qux',
-        ];
-        $actual = $this->getopt->getValues();
-        $this->assertSame($expect, $actual);
-    }
-    
     public function testParseAndGet()
     {
-        $this->getopt->setOptDefs(['foo-bar:', 'b', 'z::']);
-        $this->getopt->setInput([
+        $this->getopt->setOptions(['foo-bar:', 'b', 'z::']);
+        $this->getopt->parse([
             'abc',
             '--foo-bar=zim',
+            '--undefined=undef',
             'def',
             '-z',
             'qux',
             '-b',
             'gir',
             '--',
-            '--no-such-option=123',
+            '--after-double-dash=123',
             '-n',
             '456',
             'ghi',
         ]);
-        $this->getopt->parse();
         
         // all values
         $expect = [
-            '--foo-bar' => 'zim',
-            '-z' => 'qux',
-            '-b' => 1,
             'abc',
+            '--foo-bar' => 'zim',
+            '--undefined' => 'undef',
             'def',
+            '-z' => 'qux',
+            '-b' => true,
             'gir',
-            '--no-such-option=123',
+            '--after-double-dash=123',
             '-n',
             '456',
             'ghi',
         ];
         
-        $actual = $this->getopt->getValues();
+        // get all values
+        $actual = $this->getopt->get();
+        $this->assertSame($expect, $actual);
+        
+        // get one value
+        $actual = $this->getopt->get('-z');
+        $expect = 'qux';
+        $this->assertSame($expect, $actual);
+        
+        // get alt value
+        $actual = $this->getopt->get('--no-such-key', 'DOOM');
+        $expect = 'DOOM';
         $this->assertSame($expect, $actual);
     }
 }

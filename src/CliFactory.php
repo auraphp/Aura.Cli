@@ -10,6 +10,14 @@
  */
 namespace Aura\Cli;
 
+use Aura\Cli\Context\Argv;
+use Aura\Cli\Context\Env;
+use Aura\Cli\Context\Getopt;
+use Aura\Cli\Context\Server;
+use Aura\Cli\Stdio;
+use Aura\Cli\Stdio\Formatter;
+use Aura\Cli\Stdio\Handle;
+
 /**
  * 
  * A factory for creating Context and Stdio objects.
@@ -30,11 +38,25 @@ class CliFactory
      */
     public function newContext(array $globals)
     {
+        $env    = isset($globals['_ENV'])
+                ? new Env($globals['_ENV'])
+                : new Env;
+        
+        $server = isset($globals['_SERVER'])
+                ? new Server($globals['_SERVER'])
+                : new Server;
+        
+        $argv   = isset($globals['argv'])
+                ? new Argv($globals['argv'])
+                : new Argv;
+        
+        $getopt = new Getopt;
+        
         return new Context(
-            new Context\ValuesFactory(
-                $globals,
-                new Context\Getopt
-            )
+            $env,
+            $server,
+            $argv,
+            $getopt
         );
     }
     
@@ -52,15 +74,15 @@ class CliFactory
      * 
      */
     public function newStdio(
-        $stdin = 'php://stdin',
+        $stdin  = 'php://stdin',
         $stdout = 'php://stdout',
         $stderr = 'php://stderr'
     ) {
         return new Stdio(
-            new Stdio\Handle($stdin, 'r'),
-            new Stdio\Handle($stdout, 'w+'),
-            new Stdio\Handle($stderr, 'w+'),
-            new Stdio\Formatter
+            new Handle($stdin, 'r'),
+            new Handle($stdout, 'w+'),
+            new Handle($stderr, 'w+'),
+            new Formatter
         );
     }
 }

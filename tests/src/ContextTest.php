@@ -1,23 +1,17 @@
 <?php
 namespace Aura\Cli;
 
-use Aura\Cli\Context\ValuesFactory;
-use Aura\Cli\Context\Getopt;
+use Aura\Cli\CliFactory;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
     protected function newContext(array $globals = [])
     {
-        $globals = array_merge($GLOBALS, $globals);
-        return new Context(
-            new ValuesFactory(
-                $globals,
-                new Getopt
-            )
-        );
+        $factory = new CliFactory;
+        return $factory->newContext($globals);
     }
     
-    public function testGlobalValues()
+    public function test__get()
     {
         $context = $this->newContext([
             '_ENV' => [
@@ -53,32 +47,31 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         ];
         $actual = $context->argv->get();
         $this->assertSame($expect, $actual);
+        
+        // get a nonexistent property
+        $this->assertNull($context->nosuchkey);
     }
     
     public function testGetopt()
     {
-        $opt_defs = ['f:'];
-        $arg_defs = ['arg0', 'arg1', 'arg2'];
+        $context = $this->newContext([
+            'argv' => [
+                'foo',
+                'bar',
+                '-f',
+            ]
+        ]);
         
-        $context = $this->newContext(['argv' => [
-            'foo',
-            'bar',
-            '-f',
-        ]]);
-        
-        $getopt = $context->getopt($opt_defs, $arg_defs);
-        $this->assertInstanceOf('Aura\Cli\Context\GetoptValues', $getopt);
+        $getopt = $context->getopt(['f:']);
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
         
         $actual = $getopt->get();
         $expect = [
             0 => 'foo',
-            'arg0' => 'foo',
             1 => 'bar',
-            'arg1' => 'bar',
         ];
         
         $this->assertTrue($getopt->hasErrors());
-        
         $errors = $getopt->getErrors();
         $actual = $errors[0];
         $expect = 'Aura\Cli\Exception\OptionParamRequired';

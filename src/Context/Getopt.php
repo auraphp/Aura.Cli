@@ -19,34 +19,16 @@ use Aura\Cli\Exception;
  * @package Aura.Cli
  * 
  */
-class Getopt
+class Getopt extends AbstractValues
 {
     /**
      * 
-     * Option definitions (both long option and short flag forms).
+     * Option definitions.
      *      
      * @var array
      * 
      */
-    protected $opt_defs = [];
-
-    /**
-     * 
-     * Argument definitions (sequential postion to argument name).
-     * 
-     * @var array
-     * 
-     */
-    protected $arg_defs = [];
-    
-    /**
-     * 
-     * The incoming arguments, typically from `$_SERVER['argv']`.
-     * 
-     * @var array
-     * 
-     */
-    protected $input = [];
+    protected $options = [];
 
     /**
      * 
@@ -59,9 +41,7 @@ class Getopt
     
     /**
      * 
-     * The values generated from parsing: options and flags are keyed on their
-     * dash-prefixed names, sequential arguments are keyed on their integer
-     * position, and named arguments are keyed on their names.
+     * The values generated from parsing.
      * 
      * @var array
      * 
@@ -70,83 +50,76 @@ class Getopt
     
     /**
      * 
-     * Set the input array, typically `$argv`.
+     * Sets the option definitions (both long options and short flags).
      * 
-     * @param array $input
-     * 
-     * @return null
-     * 
-     */
-    public function setInput(array $input)
-    {
-        $this->input = $input;
-    }
-    
-    /**
-     * 
-     * Returns the input array.
-     * 
-     * @return array
-     * 
-     */
-    public function getInput()
-    {
-        return $this->input;
-    }
-    
-    /**
-     * 
-     * Set the option definitions (both long options and short flags).
-     * 
-     * @param array $opt_defs Each element is a short flag character or a
-     * long option name followed by 0-2 colons: two colons means an optional
+     * @param array $options Each element is a short flag character or a
+     * long option name followed by 0, 1, or 2 colons: two colons means an optional
      * param, one colon means a required param, no colon means no param is
      * allowed. (Cf. <http://php.net/getopt>.)
      * 
      * @return null
      * 
      */
-    public function setOptDefs($opt_defs)
+    public function setOptions($options)
     {
-        $this->opt_defs = [];
-        foreach ($opt_defs as $key => $val) {
-            
-            $def = [
-                'name'  => null,
-                'param' => null,
-            ];
-            
-            // strip - off the value first
-            $val = ltrim($val, '-');
-            
-            // check if this is a mapped option (e.g., ['f:' => 'foo'])
+        $this->options = [];
+        foreach ($options as $key => $val) {
             if (is_int($key)) {
-                // not a mapped option:
-                // 0 => 'f:', 1 => 'bar::', etc
-                $key = $val;
-            }
-            
-            // retain the name minus any colons
-            $def['name'] = rtrim($val, ':');
-            
-            // now strip - off the key
-            $key = ltrim($key, '-');
-            
-            // is a param optional/required/rejected?
-            if (substr($key, -2) == '::') {
-                $def['param'] = 'optional';
-            } elseif (substr($key, -1) == ':') {
-                $def['param'] = 'required';
+                $this->setOption($val);
             } else {
-                $def['param'] = 'rejected';
+                $this->setOption($key, $val);
             }
-            
-            // strip : off the key
-            $key = rtrim($key, ':');
-            
-            // retain the definition
-            $this->opt_defs[$key] = $def;
         }
+    }
+    
+    public function setOption($string, $descr = null)
+    {
+        // option definition array
+        $option = [
+            'name'  => null,
+            'alias' => null,
+            'multi' => false,
+            'param' => 'rejected',
+            'descr' => $descr,
+        ];
+        
+        // is the param optional, required, or rejected?
+        if (substr($string, -2) == '::') {
+            $string = substr($string, 0, -2);
+            $option['param'] = 'optional';
+        } elseif (substr($string, -1) == ':') {
+            $string = substr($string, 0, -1);
+            $option['param'] = 'required';
+        }
+        
+        // remove any remaining colons
+        $string = rtrim($string, ':');
+        
+        // is the option allowed multiple times?
+        if (substr($string, -1) == '*') {
+            $option['multi'] = true;
+            $string = substr($string, 0, -1);
+        }
+        
+        // does the option have an alias?
+        $names = explode(',', $string);
+        $option['name'] = $this->fixName($names[0]);
+        if (isset($names[1])) {
+            $option['alias'] = $this->fixName($names[1]);
+        }
+        
+        // retain the definition under its primary name
+        $this->options[$option['name']] = $option;
+    }
+    
+    protected function fixName($name)
+    {
+        // trim dashes and spaces
+        $name = trim($name, ' -');
+        if (strlen($name) == 1) {
+            return "-$name";
+        }
+        return "--$name";
     }
     
     /**
@@ -156,9 +129,9 @@ class Getopt
      * @return array
      * 
      */
-    public function getOptDefs()
+    public function getOptions()
     {
-        return $this->opt_defs;
+        return $this->options;
     }
     
     /**
@@ -169,69 +142,58 @@ class Getopt
      * otherwise proceed.
      * 
      * - Looking for an undefined short flag (e.g., 'u') returns
-     *   `['name' => 'u', 'param' => 'rejected']`
+     *   `['name' => '-u', 'param' => 'rejected']`
      * 
      * - Looking for an undefined long option (e.g., 'undef') returns
-     *   `['name' => 'undef', 'param' => 'optional']`
+     *   `['name' => '--undef', 'param' => 'optional']`
      * 
-     * @param string $key The definition key to look for.
+     * @param string $name The definition key to look for.
      * 
      * @return array An option definition array with two keys, 'name' (the
      * option name) and 'param' (whether a param is rejected, required, or
      * optional).
      * 
      */
-    public function getOptDef($key)
+    public function getOption($name)
     {
         // is the option defined?
-        if (isset($this->opt_defs[$key])) {
-            return $this->opt_defs[$key];
+        if (isset($this->options[$name])) {
+            return $this->options[$name];
+        }
+        
+        // is the option aliased?
+        foreach ($this->options as $option) {
+            if ($option['alias'] == $name) {
+                return $option;
+            }
         }
         
         // undefined; retain a message about it then deal with it
-        if (strlen($key) == 1) {
-            $opt = "-$key";
-        } else {
-            $opt = "--$key";
-        }
         $this->errors[] = new Exception\OptionNotDefined(
-            "The option '$opt' is not recognized."
+            "The option '$name' is not recognized."
         );
         
-        // undefined short flags take no param
-        if (strlen($key) == 1) {
-            return ['name' => $key, 'param' => 'rejected'];
+        // return a temporary definition
+        $name = $this->fixName($name);
+        if (strlen($name) == 2) {
+            // undefined short flags do not take a param
+            return [
+                'name'  => $name,
+                'alias' => null,
+                'multi' => false,
+                'param' => 'rejected',
+                'descr' => null,
+            ];
         }
         
         // undefined long options take an optional param
-        return ['name' => $key, 'param' => 'optional'];
-    }
-    
-    /**
-     * 
-     * Sets the names for sequential arguments.
-     * 
-     * @param array $arg_defs An array where element 0 is the name for
-     * argument 0, element 1 for argument 1, etc.
-     * 
-     * @return null
-     * 
-     */
-    public function setArgDefs(array $arg_defs)
-    {
-        $this->arg_defs = $arg_defs;
-    }
-    
-    /**
-     * 
-     * Returns the names for sequential arguments.
-     * 
-     * @return array
-     * 
-     */
-    public function getArgDefs()
-    {
-        return $this->arg_defs;
+        return [
+            'name'  => $name,
+            'alias' => null,
+            'multi' => false,
+            'param' => 'optional',
+            'descr' => null,
+        ];
     }
     
     /**
@@ -242,20 +204,19 @@ class Getopt
      * were errors.
      * 
      */
-    public function parse()
+    public function parse(array $input)
     {
         // reset errors and values
         $this->errors = [];
         $this->values = [];
         
-        // retain args locally
-        $args = [];
-        
         // flag to say when we've reached the end of options
         $done = false;
 
+        // sequential argument count;
+        $args = 0;
+        
         // loop through a copy of the input values to be parsed
-        $input = $this->input;
         while ($input) {
 
             // shift each element from the top of the $input source
@@ -267,30 +228,13 @@ class Getopt
                 continue;
             }
 
-            // if we're reached the end of options, just add to the arguments
-            if ($done) {
-                $args[] = $arg;
-                continue;
-            }
-
             // long option, short option, or numeric argument?
-            if (substr($arg, 0, 2) == '--') {
+            if (! $done && substr($arg, 0, 2) == '--') {
                 $this->setLongOptionValue($arg);
-            } elseif (substr($arg, 0, 1) == '-') {
+            } elseif (! $done && substr($arg, 0, 1) == '-') {
                 $this->setShortFlagValue($input, $arg);
             } else {
-                $args[] = $arg;
-            }
-        }
-        
-        // retain the arguments as values, setting names as we go
-        foreach ($args as $key => $val) {
-            // retain the sequential version
-            $this->values[$key] = $val;
-            // also retain the named version
-            if (isset($this->arg_defs[$key])) {
-                $name = $this->arg_defs[$key];
-                $this->values[$name] = $val;
+                $this->values[$args ++] = $arg;
             }
         }
         
@@ -300,14 +244,14 @@ class Getopt
 
     /**
      * 
-     * Returns the parsed values.
+     * Are there error messages?
      * 
-     * @return array
+     * @return bool
      * 
      */
-    public function getValues()
+    public function hasErrors()
     {
-        return $this->values;
+        return $this->errors ? true : false;
     }
     
     /**
@@ -326,78 +270,72 @@ class Getopt
      * 
      * Parses a long option.
      * 
-     * @param string $key The `$input` element, e.g. "--foo" or "--bar=baz".
+     * @param string $name The `$input` element, e.g. "--foo" or "--bar=baz".
      * 
      * @return null
      * 
      */
-    protected function setLongOptionValue($key)
+    protected function setLongOptionValue($name)
     {
-        // take the leading "--" off the specification
-        $key = substr($key, 2);
-        
         // split the spec into name and value
-        $pos = strpos($key, '=');
+        $pos = strpos($name, '=');
         if ($pos === false) {
-            $val = null;
+            $value = null;
         } else {
-            $val = substr($key, $pos + 1);
-            $key = substr($key, 0, $pos);
+            $value = substr($name, $pos + 1);
+            $name = substr($name, 0, $pos);
         }
 
         // get the option definition
-        $def = $this->getOptDef($key);
+        $option = $this->getOption($name);
 
         // if param is required but not present, error
-        if ($def['param'] == 'required' && trim($val) === '') {
+        if ($option['param'] == 'required' && trim($value) === '') {
             $this->errors[] = new Exception\OptionParamRequired(
-                "The option '--$key' requires a parameter."
+                "The option '$name' requires a parameter."
             );
             return;
         }
 
         // if params are rejected and one is present, error
-        if ($def['param'] == 'rejected' && trim($val) !== '') {
+        if ($option['param'] == 'rejected' && trim($value) !== '') {
             $this->errors[] = new Exception\OptionParamRejected(
-                "The option '--$key' does not accept a parameter."
+                "The option '$name' does not accept a parameter."
             );
             return;
         }
 
-        // if param is not present, set to integer 1
-        if (trim($val) === '') {
-            $val = 1;
+        // if param is not present, set to true
+        if (trim($value) === '') {
+            $value = true;
         }
         
         // retain the value, and done
-        $this->setOptValue($def['name'], $val);
+        $this->setValue($option, $value);
     }
 
     /**
      * 
      * Parses a short-form option (or cluster of options).
      * 
-     * @param string $spec The `$input` element, e.g. "-f" or "-fbz".
+     * @param string $name The `$input` element, e.g. "-f" or "-fbz".
      * 
      * @return null
      * 
      */
-    protected function setShortFlagValue(&$input, $spec)
+    protected function setShortFlagValue(&$input, $name)
     {
         // if we have a string like "-abcd", process as a cluster
-        if (strlen($spec) > 2) {
-            return $this->setShortFlagValues($spec);
+        if (strlen($name) > 2) {
+            return $this->setShortFlagValues($name);
         }
 
-        // get the option character (after the first "-")
-        $char = substr($spec, 1);
+        // get the option
+        $option = $this->getOption($name);
 
-        // get the option def
-        $def = $this->getOptDef($char);
-
-        // if the option does not need a param, set to integer 1 and move on
-        if ($def['param'] == 'rejected') {
-            $this->setOptValue($def['name'], 1);
+        // if the option does not need a param, set as true and move on
+        if ($option['param'] == 'rejected') {
+            $this->setValue($option, true);
             return;
         }
 
@@ -406,20 +344,20 @@ class Getopt
         $value = reset($input);
 
         // ... and see if it's a param. can be empty, too, which indicates
-        // then end of the input.
+        // the end of the input.
         $is_param = ! empty($value) && substr($value, 0, 1) != '-';
 
-        if (! $is_param && $def['param'] == 'optional') {
+        if (! $is_param && $option['param'] == 'optional') {
             // the next value is not a param, but a param is optional,
-            // so flag the option as integer 1 and move on.
-            $this->setOptValue($def['name'], 1);
+            // so flag the option as true and move on.
+            $this->setValue($option, true);
             return;
         }
 
-        if (! $is_param && $def['param'] == 'required') {
+        if (! $is_param && $option['param'] == 'required') {
             // the next value is not a param, but a param is required
             $this->errors[] = new Exception\OptionParamRequired(
-                "The option '-$char' requires a parameter."
+                "The option '$name' requires a parameter."
             );
             return;
         }
@@ -429,43 +367,40 @@ class Getopt
         $value = array_shift($input);
 
         // ... and set it.
-        $this->setOptValue($def['name'], $value);
+        $this->setValue($option, $value);
     }
 
     /**
      * 
      * Parses a cluster of short options.
      * 
-     * @param string $spec The short-option cluster (e.g. "-abcd").
+     * @param string $chars The short-option cluster (e.g. "-abcd").
      * 
      * @return null
      * 
      */
-    protected function setShortFlagValues($spec)
+    protected function setShortFlagValues($chars)
     {
-        // drop the leading dash
-        $spec = substr($spec, 1);
+        // drop the leading dash in the cluster
+        $chars = substr($chars, 1);
 
-        // loop through each character in the cluster
-        $k = strlen($spec);
-        for ($i = 0; $i < $k; $i ++) {
-
-            // get the right character from the cluster
-            $char = $spec[$i];
-
+        // go through each character in the cluster
+        $chars = str_split($chars);
+        while ($char = array_shift($chars)) {
+            
             // get the option definition
-            $def = $this->getOptDef($char);
+            $option = $this->getOption("-$char");
 
             // can't process params in a cluster
-            if ($def['param'] == 'required') {
+            if ($option['param'] == 'required') {
                 $this->errors[] = new Exception\OptionParamRequired(
                     "The option '-$char' requires a parameter."
                 );
                 continue;
             }
 
-            // otherwise, set the value as integer 1
-            $this->setOptValue($def['name'], 1);
+            // otherwise, set the value as true
+            $this->setValue($option, true);
         }
     }
     
@@ -481,26 +416,12 @@ class Getopt
      * @return null
      * 
      */
-    protected function setOptValue($name, $value)
+    protected function setValue($option, $value)
     {
-        if (strlen($name) == 1) {
-            $name = "-$name";
+        if ($option['multi']) {
+            $this->values[$option['name']][] = $value;
         } else {
-            $name = "--$name";
+            $this->values[$option['name']] = $value;
         }
-        
-        if (! isset($this->values[$name])) {
-            $this->values[$name] = $value;
-            return;
-        }
-        
-        if (is_int($value) && is_int($this->values[$name])) {
-            $this->values[$name] += $value;
-            return;
-        }
-        
-        // force to an array
-        settype($this->values[$name], 'array');
-        $this->values[$name][] = $value;
     }
 }

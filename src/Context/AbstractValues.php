@@ -17,7 +17,7 @@ namespace Aura\Cli\Context;
  * @package Aura.Cli
  * 
  */
-class GlobalValues
+class AbstractValues
 {
     /**
      * 

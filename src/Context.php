@@ -10,7 +10,10 @@
  */
 namespace Aura\Cli;
 
-use Aura\Cli\Context\ValuesFactory;
+use Aura\Cli\Context\Argv;
+use Aura\Cli\Context\Env;
+use Aura\Cli\Context\Getopt;
+use Aura\Cli\Context\Server;
 
 /**
  * 
@@ -23,18 +26,36 @@ class Context
 {
     /**
      * 
+     * Imported $argv values.
+     * 
+     * @var Argv
+     * 
+     */
+    protected $argv;
+
+    /**
+     * 
      * Imported $_ENV values.
      * 
-     * @var Context\Values
+     * @var Env
      * 
      */
     protected $env;
 
     /**
      * 
+     * A prototype Getopt object.
+     * 
+     * @var Getopt
+     * 
+     */
+    protected $getopt;
+    
+    /**
+     * 
      * Imported $_SERVER values.
      * 
-     * @var array
+     * @var Server
      * 
      */
     protected $server;
@@ -43,16 +64,17 @@ class Context
      * 
      * Constructor.
      * 
-     * @param ValuesFactory $values_factory A factory to create propery
-     * objects.
-     * 
      */
-    public function __construct(ValuesFactory $values_factory)
-    {
-        $this->values_factory = $values_factory;
-        $this->argv = $this->values_factory->newArgv();
-        $this->env = $this->values_factory->newEnv();
-        $this->server = $this->values_factory->newServer();
+    public function __construct(
+        Env $env,
+        Server $server,
+        Argv $argv,
+        Getopt $getopt
+    ) {
+        $this->env    = $env;
+        $this->server = $server;
+        $this->argv   = $argv;
+        $this->getopt = $getopt;
     }
 
     /**
@@ -61,29 +83,30 @@ class Context
      * 
      * @param string $key The property to get.
      * 
-     * @return Context\Value A property object.
+     * @return mixed A property object.
      * 
      */
     public function __get($key)
     {
-        return $this->$key;
+        if (in_array($key, ['env', 'server', 'argv'])) {
+            return $this->$key;
+        }
     }
     
     /**
      * 
-     * Returns a new GetoptValues object.
+     * Returns a new Getopt instance.
      * 
-     * @param array $opt_defs Use these option definitions when creating the
-     * GetoptValues object.
+     * @param array $options Option definitions for the Getopt instance.
      * 
-     * @param array $arg_defs Use these argument definitions when creating the
-     * GetoptValues object.
-     * 
-     * @return GetoptValues
+     * @return Getopt
      * 
      */
-    public function getopt(array $opt_defs = [], array $arg_defs = [])
+    public function getopt(array $options)
     {
-        return $this->values_factory->newGetopt($opt_defs, $arg_defs);
+        $getopt = clone $this->getopt;
+        $getopt->setOptions($options);
+        $getopt->parse($this->argv->get());
+        return $getopt;
     }
 }

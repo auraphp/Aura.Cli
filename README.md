@@ -23,7 +23,7 @@ As with all Aura libraries, this library has no external dependencies.
 
 ### Tests
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png)](https://travis-ci.org/auraphp/Aura.Cli)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
 
 This library has 100% code coverage. To run the library tests, first install
 [PHPUnit][], then go to the library _tests_ directory and issue `phpunit` at
@@ -116,19 +116,22 @@ option definitions. The definitions array format is similar to, but not
 exactly the same as, the one used by the [getopt()](http://php.net/getopt)
 function in PHP. Instead of defining short flags in a string and long options
 in a separate array, they are both defined as elements in a single array.
+Adding a `*` after the option name indicates it can be passed multiple times;
+its values will be stored in an array.
 
 ```php
 <?php
-$opt_defs = [
-    'a',     // short flag -a, parameter is not allowed
-    'b:',    // short flag -b, parameter is required
-    'c::',   // short flag -c, parameter is optional
-    'foo',   // long option --foo, parameter is not allowed
-    'bar:',  // long option --bar, parameter is required
-    'baz::', // long option --baz, parameter is optional
+$options = [
+    'a',        // short flag -a, parameter is not allowed
+    'b:',       // short flag -b, parameter is required
+    'c::',      // short flag -c, parameter is optional
+    'foo',      // long option --foo, parameter is not allowed
+    'bar:',     // long option --bar, parameter is required
+    'baz::',    // long option --baz, parameter is optional
+    'g*::',     // short flag -g, parameter is optional, multi-pass
 ];
 
-$getopt = $context->getopt($opt_defs);
+$getopt = $context->getopt($options);
 ?>
 ```
 
@@ -138,50 +141,49 @@ option is missing.
 
 ```php
 <?php
-$a   = $getopt->get('-a', 0); // 1 if -a was passed, 0 if not
+$a   = $getopt->get('-a', false); // true if -a was passed, false if not
 $b   = $getopt->get('-b');
 $c   = $getopt->get('-c', 'default value');
-$foo = $getopt->get('--foo', 0); // 1 if --foo was passed, 0 if not
+$foo = $getopt->get('--foo', 0); // true if --foo was passed, false if not
 $bar = $getopt->get('--bar');
 $baz = $getopt->get('--baz', 'default value');
+$g   = $getopt->get('-g', []);
 ?>
 ```
 
-If you want a short flag and a long option to be mapped to the same long
-option name, pass the short flag as an array key and the long option name as
-its value:
+If you want alias one option name to another, comma-separate the two names.
+The values will be stored under both names;
 
 ```php
 <?php
-// map -f to --foo
-$opt_defs = [
-    'f:' => 'foo',  // short flag -f, parameter required
-    'foo:',         // long option --foo, parameter required
+// alias -f to --foo
+$options = [
+    'foo,f:',  // long option --foo or short flag -f, parameter required
 ];
 
-$getopt = $context->getopt($opt_defs);
+$getopt = $context->getopt($options);
 
-$foo = $getopt->get('--foo'); // both -f and --foo map to '--foo'
+$foo = $getopt->get('--foo'); // both -f and --foo have the same values
+$f   = $getopt->get('-f'); // both -f and --foo have the same values
 ?>
 ```
 
 If an option is passed multiple times, it will result in an array of multiple
-values. Options that do not take parameters will result in a count of how many
-times the option was passed.
+values.
 
 ```php
 <?php
-$opt_defs = [
+$options = [
     'f',
     'foo:'
 ];
 
-$getopt = $context->getopt($opt_defs);
+$getopt = $context->getopt($options);
 
 // if the script was invoked with:
 // php script.php --foo=foo --foo=bar --foo=baz -f -f -f
 $foo = $getopt->get('--foo'); // ['foo', 'bar', 'baz']
-$f   = $getopt->get('-f'); // 3
+$f   = $getopt->get('-f'); // [true, true, true]
 ?>
 ```
 
@@ -194,7 +196,7 @@ ignore the different kinds of errors as you like.)
 
 ```php
 <?php
-$getopt = $context->getopt($opt_defs);
+$getopt = $context->getopt($options);
 if ($getopt->hasErrors()) {
     $errors = $getopt->getErrors();
     foreach ($errors as $error) {
@@ -229,12 +231,12 @@ Defined options will be removed from the arguments automatically.
 
 ```php
 <?php
-$opt_defs = [
+$options = [
     'a',
     'foo:',
 ];
 
-$getopt = $context->getopt($opt_defs);
+$getopt = $context->getopt($options);
 
 // if the script was invoked with:
 // php script.php arg1 --foo=bar -a arg2
@@ -248,43 +250,6 @@ $a    = $getopt->get('-a'); // 1
 
 > N.b.: If an short flag has an optional parameter, the argument immediately
 > after it will it will be treated as the option value, not as an argument.
-
-
-#### Named Arguments
-
-To set names on positional arguments, pass a second array to `getopt()` where
-the key is the argument position and the value is the argument name you would
-like to use. (The positional arguments will also be retained.)
-
-```php
-<?php
-// the option definitions
-$opt_defs = [
-    'a',
-    'foo:',
-];
-
-// the names for argument positions
-$arg_defs = [
-    0 => 'script_name',
-    1 => 'first_arg',
-    2 => 'second_arg',
-];
-
-$getopt = $context->getopt($opt_defs, $arg_defs);
-
-// if the script was invoked with:
-// php script.php arg1 --foo=bar -a arg2
-$arg0        = $getopt->get(0);             // script.php
-$script_name = $getopt->get('script_name'); // script.php
-$arg1        = $getopt->get(1);             // arg1
-$first_arg   = $getopt->get('first_arg');   // arg1
-$arg2        = $getopt->get(2);             // arg2
-$second_arg  = $getopt->get('second_arg');  // arg2
-$foo         = $getopt->get('--foo');       // bar
-$a           = $getopt->get('-a');          // 1
-?>
-```
 
 
 ### Standard Input/Output Streams
@@ -334,7 +299,6 @@ $stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ?>
 ```
 
-
 ### Exit Codes
 
 This library comes with a _Status_ class that defines constants for exit
@@ -342,7 +306,6 @@ status codes. You should use these whenever possible.  For example, if a
 command is used with the wrong number of arguments or improper option flags,
 `exit()` with `Status::USAGE`.  The exit status codes are the same as those
 found in [sysexits.h](http://www.unix.com/man-page/freebsd/3/sysexits/).
-
 
 ### Writing Commands
 
@@ -365,12 +328,11 @@ $context = $cli_factory->newContext($GLOBALS);
 $stdio = $cli_factory->newStdio();
 
 // define options and named arguments through getopt
-$opt_defs = ['v' => 'verbose', 'verbose'];
-$arg_defs = [1 => 'name'];
-$getopt = $context->getopt($opt_defs, $arg_defs);
+$options = ['verbose,v'];
+$getopt = $context->getopt($options);
 
 // do we have a name to say hello to?
-$name = $getopt->get('name');
+$name = $getopt->get(0);
 if (! $name) {
     // print an error
     $stdio->errln("Please give a name to say hello to.");
