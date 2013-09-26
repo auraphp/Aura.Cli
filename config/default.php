@@ -33,5 +33,5 @@ $di->params['Aura\Cli\Stdio'] = [
         'name' => 'php://stderr',
         'mode' => 'w+',
     ]),
-    'formatter' => $di->lazyNew('Aura\Cli\Formatter'),
+    'formatter' => $di->lazyNew('Aura\Cli\Stdio\Formatter'),
 ];
