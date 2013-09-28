@@ -13,7 +13,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     
     public function test__get()
     {
-        $context = $this->newContext([
+        $context = $this->newContext(array(
             '_ENV' => array(
                 'foo' => 'bar',
                 'baz' => 'dib',
@@ -27,7 +27,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 '-b',
                 '--cee',
             ),
-        ]);
+        ));
         
         // get a key
         $expect = 'gir';
@@ -62,7 +62,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             )
         ));
         
-        $getopt = $context->getopt(['f:']);
+        $getopt = $context->getopt(array('f:'));
         $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
         
         $actual = $getopt->get();
