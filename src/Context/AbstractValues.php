@@ -35,7 +35,7 @@ class AbstractValues
      * @param array $values The values to be represented by this object.
      * 
      */
-    public function __construct(array $values = [])
+    public function __construct(array $values = array())
     {
         $this->values = $values;
     }

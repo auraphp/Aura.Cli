@@ -5,7 +5,7 @@ use Aura\Cli\CliFactory;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
-    protected function newContext(array $globals = [])
+    protected function newContext(array $globals = array())
     {
         $factory = new CliFactory;
         return $factory->newContext($globals);
@@ -14,19 +14,19 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function test__get()
     {
         $context = $this->newContext([
-            '_ENV' => [
+            '_ENV' => array(
                 'foo' => 'bar',
                 'baz' => 'dib',
-            ],
-            '_SERVER' => [
+            ),
+            '_SERVER' => array(
                 'zim' => 'gir',
                 'irk' => 'doom',
-            ],
-            'argv' => [
+            ),
+            'argv' => array(
                 'a',
                 '-b',
                 '--cee',
-            ],
+            ),
         ]);
         
         // get a key
@@ -40,11 +40,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
         
         // get all of one
-        $expect = [
+        $expect = array(
                 'a',
                 '-b',
                 '--cee',
-        ];
+        );
         $actual = $context->argv->get();
         $this->assertSame($expect, $actual);
         
@@ -54,22 +54,22 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     
     public function testGetopt()
     {
-        $context = $this->newContext([
-            'argv' => [
+        $context = $this->newContext(array(
+            'argv' => array(
                 'foo',
                 'bar',
                 '-f',
-            ]
-        ]);
+            )
+        ));
         
         $getopt = $context->getopt(['f:']);
         $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
         
         $actual = $getopt->get();
-        $expect = [
+        $expect = array(
             0 => 'foo',
             1 => 'bar',
-        ];
+        );
         
         $this->assertTrue($getopt->hasErrors());
         $errors = $getopt->getErrors();

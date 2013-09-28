@@ -12,36 +12,36 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testSetOptions()
     {
-        $options = [
+        $options = array(
             'foo-bar,f*:', 
             'baz-dib,b::' => 'Description for baz-dib option.',
             'z,zim-gir',
-        ];
+        );
         
         $this->getopt->setOptions($options);
-        $expect = [
-            '--foo-bar' => [
+        $expect = array(
+            '--foo-bar' => array(
                 'name'  => '--foo-bar',
                 'alias' => '-f',
                 'multi' => true,
                 'param' => 'required',
                 'descr' => null,
-            ],
-            '--baz-dib' => [
+            ),
+            '--baz-dib' => array(
                 'name'  => '--baz-dib',
                 'alias' => '-b',
                 'multi' => false,
                 'param' => 'optional',
                 'descr' => 'Description for baz-dib option.',
-            ],
-            '-z' => [
+            ),
+            '-z' => array(
                 'name'  => '-z',
                 'alias' => '--zim-gir',
                 'multi' => false,
                 'param' => 'rejected',
                 'descr' => null,
-            ],
-        ];
+            ),
+        );
         
         $actual = $this->getopt->getOptions();
         $this->assertSame($expect, $actual);
@@ -52,24 +52,24 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         
         // get an undefined short flag
         $actual = $this->getopt->getOption('n');
-        $expect = [
+        $expect = array(
             'name'  => '-n',
             'alias' => null,
             'multi' => false,
             'param' => 'rejected',
             'descr' => null,
-        ];
+        );
         $this->assertSame($expect, $actual);
         
         // get an undefined long option
         $actual = $this->getopt->getOption('no-long');
-        $expect = [
+        $expect = array(
             'name'  => '--no-long',
             'alias' => null,
             'multi' => false,
             'param' => 'optional',
             'descr' => NULL,
-        ];
+        );
         $this->assertSame($expect, $actual);
     }
     
@@ -78,20 +78,20 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $result = $this->getopt->parse(['abc', 'def']);
         $this->assertTrue($result);
         
-        $expect = ['abc', 'def'];
+        $expect = array('abc', 'def');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_longRejected()
     {
-        $options = ['foo-bar'];
+        $options = array('foo-bar');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['--foo-bar']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => true];
+        $expect = array('--foo-bar' => true);
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
@@ -108,13 +108,13 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longRequired()
     {
-        $options = ['foo-bar:'];
+        $options = array('foo-bar:');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['--foo-bar=baz']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => 'baz'];
+        $expect = array('--foo-bar' => 'baz');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
@@ -131,27 +131,27 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_longOptional()
     {
-        $options = ['foo-bar::'];
+        $options = array('foo-bar::');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['--foo-bar']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => true];
+        $expect = array('--foo-bar' => true);
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
         $result = $this->getopt->parse(['--foo-bar=baz']);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => 'baz'];
+        $expect = array('--foo-bar' => 'baz');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_longMultiple()
     {
-        $options = ['foo-bar*::'];
+        $options = array('foo-bar*::');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse([
@@ -163,40 +163,40 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertTrue($result);
         
-        $expect = ['--foo-bar' => [true, true, 'baz', 'dib', true]];
+        $expect = array('--foo-bar' => array(true, true, 'baz', 'dib', true));
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortRejected()
     {
-        $options = ['f'];
+        $options = array('f');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true];
+        $expect = array('-f' => true);
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
         $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true, 'baz'];
+        $expect = array('-f' => true, 'baz');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortRequired()
     {
-        $options = ['f:'];
+        $options = array('f:');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => 'baz'];
+        $expect = array('-f' => 'baz');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     
@@ -213,57 +213,57 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_shortOptional()
     {
-        $options = ['f::'];
+        $options = array('f::');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => true];
+        $expect = array('-f' => true);
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
         
         $result = $this->getopt->parse(['-f', 'baz']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => 'baz'];
+        $expect = array('-f' => 'baz');
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortMultiple()
     {
-        $options = ['f*::'];
+        $options = array('f*::');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['-f', '-f', '-f', 'baz', '-f', 'dib', '-f']);
         $this->assertTrue($result);
         
-        $expect = ['-f' => [true, true, 'baz', 'dib', true]];
+        $expect = array('-f' => array(true, true, 'baz', 'dib', true));
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortCluster()
     {
-        $options = ['f', 'b', 'z'];
+        $options = array('f', 'b', 'z');
         $this->getopt->setOptions($options);
         
         $result = $this->getopt->parse(['-fbz']);
         $this->assertTrue($result);
         
-        $expect = [
+        $expect = array(
             '-f' => true,
             '-b' => true,
             '-z' => true,
-        ];
+        );
         $actual = $this->getopt->get();
         $this->assertSame($expect, $actual);
     }
     
     public function testParse_shortClusterRequired()
     {
-        $options = ['f', 'b:', 'z'];
+        $options = array('f', 'b:', 'z');
         $this->getopt->setOptions($options);
     
         $result = $this->getopt->parse(['-fbz']);
@@ -297,7 +297,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         ]);
         
         // all values
-        $expect = [
+        $expect = array(
             'abc',
             '--foo-bar' => 'zim',
             '--undefined' => 'undef',
@@ -309,7 +309,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
             '-n',
             '456',
             'ghi',
-        ];
+        );
         
         // get all values
         $actual = $this->getopt->get();

@@ -32,7 +32,7 @@ class Formatter
      * @var array
      * 
      */
-    protected $codes = [
+    protected $codes = array(
         'reset'       => '0',
         'bold'        => '1',
         'dim'         => '2',
@@ -55,7 +55,7 @@ class Formatter
         'magentabg'   => '45',
         'cyanbg'      => '46',
         'whitebg'     => '47',
-    ];
+    );
 
     /**
      * 
@@ -87,7 +87,7 @@ class Formatter
         if ($posix) {
             return preg_replace_callback(
                 "/{$this->regex}/Umsi",
-                [$this, 'formatCallback'],
+                array($this, 'formatCallback'),
                 $string
             );
         } else {

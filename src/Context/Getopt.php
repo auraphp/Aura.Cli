@@ -28,7 +28,7 @@ class Getopt extends AbstractValues
      * @var array
      * 
      */
-    protected $options = [];
+    protected $options = array();
 
     /**
      * 
@@ -37,7 +37,7 @@ class Getopt extends AbstractValues
      * @var array
      * 
      */
-    protected $errors = [];
+    protected $errors = array();
     
     /**
      * 
@@ -46,7 +46,7 @@ class Getopt extends AbstractValues
      * @var array
      * 
      */
-    protected $values = [];
+    protected $values = array();
     
     /**
      * 
@@ -62,7 +62,7 @@ class Getopt extends AbstractValues
      */
     public function setOptions($options)
     {
-        $this->options = [];
+        $this->options = array();
         foreach ($options as $key => $val) {
             if (is_int($key)) {
                 $this->setOption($val);
@@ -75,13 +75,13 @@ class Getopt extends AbstractValues
     public function setOption($string, $descr = null)
     {
         // option definition array
-        $option = [
+        $option = array(
             'name'  => null,
             'alias' => null,
             'multi' => false,
             'param' => 'rejected',
             'descr' => $descr,
-        ];
+        );
         
         // is the param optional, required, or rejected?
         if (substr($string, -2) == '::') {
@@ -177,23 +177,23 @@ class Getopt extends AbstractValues
         $name = $this->fixName($name);
         if (strlen($name) == 2) {
             // undefined short flags do not take a param
-            return [
+            return array(
                 'name'  => $name,
                 'alias' => null,
                 'multi' => false,
                 'param' => 'rejected',
                 'descr' => null,
-            ];
+            );
         }
         
         // undefined long options take an optional param
-        return [
+        return array(
             'name'  => $name,
             'alias' => null,
             'multi' => false,
             'param' => 'optional',
             'descr' => null,
-        ];
+        );
     }
     
     /**
@@ -207,8 +207,8 @@ class Getopt extends AbstractValues
     public function parse(array $input)
     {
         // reset errors and values
-        $this->errors = [];
-        $this->values = [];
+        $this->errors = array();
+        $this->values = array();
         
         // flag to say when we've reached the end of options
         $done = false;

@@ -88,7 +88,7 @@ class Context
      */
     public function __get($key)
     {
-        if (in_array($key, ['env', 'server', 'argv'])) {
+        if (in_array($key, array('env', 'server', 'argv'))) {
             return $this->$key;
         }
     }
