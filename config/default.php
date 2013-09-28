@@ -21,5 +21,5 @@ $di->params['Aura\Cli\Stdio'] = array(
         'name' => 'php://stderr',
         'mode' => 'w+',
     )),
-    'formatter' => $di->lazyNew('Aura\Cli\Formatter'),
-];
+    'formatter' => $di->lazyNew('Aura\Cli\Stdio\Formatter'),
+);
