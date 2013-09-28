@@ -1,63 +1,47 @@
 # Aura.Cli
 
-## Overview
+Provides the equivalent of request ( _Context_ ) and response ( _Stdio_ )
+objects for the command line interface, including _Getopt_ support.
 
-The Aura.Cli library provides the equivalent of request ( _Context_ ) and
-response ( _Stdio_ ) objects for the command line interface, including
-_Getopt_ support. Note that it does not provide commands or other
-controller-like objects; it is strictly for environment discovery and standard
-input/ouput operations.
+## Foreword
 
 ### Installation and Autoloading
 
-This library is installable via Composer and is registered on Packagist at
-<https://packagist.org/packages/aura/cli>. Installing via Composer will set up
-autoloading automatically.
+This library is installable and autoloadable via Composer with the following
+`require` element in your `composer.json` file:
 
+    "require": {
+        "aura/cli": "dev-develop-2"
+    }
+    
 Alternatively, download or clone this repository, then require or include its
 _autoload.php_ file.
 
-### Dependencies
+### Dependencies and PHP Version
 
-As with all Aura libraries, this library has no external dependencies.
+As with all Aura libraries, this library has no userland dependencies. It
+requires PHP version 5.3 or later.
 
 ### Tests
 
 [![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
 
-This library has 100% code coverage. To run the library tests, first install
-[PHPUnit][], then go to the library _tests_ directory and issue `phpunit` at
-the command line.
+This library has 100% code coverage with [PHPUnit][]. To run the tests at the
+command line, go to the _tests_ directory and issue `phpunit`.
 
-[PHPUnit]: http://phpunit.de/manual/
-
-### API Documentation
-
-This library has embedded DocBlock API documentation. To generate the
-documentation in HTML, first install [PHPDocumentor][] or [ApiGen][], then go
-to the library directory and issue one of the following at the command line:
-
-    # for PHPDocumentor
-    phpdoc -d ./src/ -t /path/to/output/
-    
-    # for ApiGen
-    apigen --source=./src/ --destination=/path/to/output/
-
-You can then browse the HTML-formatted API documentation at _/path/to/output_.
-
-[PHPDocumentor]: http://phpdoc.org/docs/latest/for-users/installation.html
-[ApiGen]: http://apigen.org/#installation
+[phpunit]: http://phpunit.de/manual/
 
 ### PSR Compliance
 
-This library is compliant with [PSR-1][] and [PSR-2][]. If you notice
-compliance oversights, please send a patch via pull request.
+This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
+you notice compliance oversights, please send a patch via pull request.
 
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
 
 
-## Usage
+## Getting Started
 
 ### Context Discovery
 
@@ -352,7 +336,6 @@ if ($getopt->get('--verbose')) {
 exit(Status::SUCCESS);
 ?>
 ```
-
 
 ### Formatter Cheat Sheet
 
