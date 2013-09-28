@@ -12,7 +12,7 @@ namespace Aura\Cli\Context;
 
 /**
  * 
- * A read-only representation of $_SERVER.
+ * A read-only representation of $_SERVER values.
  * 
  * @package Aura.Cli
  * 

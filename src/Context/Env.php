@@ -12,7 +12,7 @@ namespace Aura\Cli\Context;
 
 /**
  * 
- * A read-only representation of $_ENV.
+ * A read-only representation of $_ENV values.
  * 
  * @package Aura.Cli
  * 
