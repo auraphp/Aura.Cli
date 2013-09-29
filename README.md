@@ -104,7 +104,7 @@ its values will be stored in an array.
 
 ```php
 <?php
-$options = [
+$options = array(
     'a',        // short flag -a, parameter is not allowed
     'b:',       // short flag -b, parameter is required
     'c::',      // short flag -c, parameter is optional
@@ -112,7 +112,7 @@ $options = [
     'bar:',     // long option --bar, parameter is required
     'baz::',    // long option --baz, parameter is optional
     'g*::',     // short flag -g, parameter is optional, multi-pass
-];
+);
 
 $getopt = $context->getopt($options);
 ?>
@@ -140,9 +140,9 @@ The values will be stored under both names;
 ```php
 <?php
 // alias -f to --foo
-$options = [
+$options = array(
     'foo,f:',  // long option --foo or short flag -f, parameter required
-];
+);
 
 $getopt = $context->getopt($options);
 
@@ -156,10 +156,10 @@ values.
 
 ```php
 <?php
-$options = [
+$options = array(
     'f',
     'foo:'
-];
+);
 
 $getopt = $context->getopt($options);
 
@@ -214,10 +214,10 @@ Defined options will be removed from the arguments automatically.
 
 ```php
 <?php
-$options = [
+$options = array(
     'a',
     'foo:',
-];
+);
 
 $getopt = $context->getopt($options);
 
