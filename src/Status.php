@@ -1,10 +1,19 @@
 <?php
+/**
+ * 
+ * This file is part of Aura for PHP.
+ * 
+ * @package Aura.Cli
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Cli;
 
 /**
  * 
- * Preferred exit status codes;
- * cf. <http://www.unix.com/man-page/freebsd/3/sysexits/>.
+ * Constants for preferred exit status codes; cf.
+ * <http://www.unix.com/man-page/freebsd/3/sysexits/>.
  * 
  * @package Aura.Cli
  * 

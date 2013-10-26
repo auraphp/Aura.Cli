@@ -72,6 +72,17 @@ class Getopt extends AbstractValues
         }
     }
     
+    /**
+     * 
+     * Sets one option.
+     * 
+     * @param string $string The option definition string.
+     * 
+     * @param string $descr The option description (e.g. for help text).
+     * 
+     * @return null
+     * 
+     */
     public function setOption($string, $descr = null)
     {
         // option definition array
@@ -112,6 +123,15 @@ class Getopt extends AbstractValues
         $this->options[$option['name']] = $option;
     }
     
+    /**
+     * 
+     * Normalizes the option name.
+     * 
+     * @param string $name The option character or long name.
+     * 
+     * @return The fixes name with leading dash or dashes.
+     * 
+     */
     protected function fixName($name)
     {
         // trim dashes and spaces
@@ -318,6 +338,8 @@ class Getopt extends AbstractValues
      * 
      * Parses a short-form option (or cluster of options).
      * 
+     * @param array $input The input array.
+     * 
      * @param string $name The `$input` element, e.g. "-f" or "-fbz".
      * 
      * @return null
@@ -409,7 +431,7 @@ class Getopt extends AbstractValues
      * Sets an option value; if an option value is set multiple times, it is
      * automatically converted to an array.
      * 
-     * @param array $name The option name.
+     * @param array $option The option array.
      * 
      * @param mixed $value The option value.
      * 

@@ -73,6 +73,10 @@ class Handle
      * 
      * @param string $mode Open the resource in this mode; e.g., "w+".
      * 
+     * @param string $php_os Force this PHP OS value; generally for testing.
+     * 
+     * @param bool $posix Force this POSIX flag; generally for testing.
+     * 
      */
     public function __construct($name, $mode, $php_os = null, $posix = null)
     {
