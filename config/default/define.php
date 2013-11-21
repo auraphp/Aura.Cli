@@ -1,9 +1,13 @@
 <?php
 /**
- * Services
+ * Aura\Cli\Context
  */
-$di->set('cli_context', $di->lazyNew('Aura\Cli\Context'));
-$di->set('cli_stdio', $di->lazyNew('Aura\Cli\Stdio'));
+$di->params['Aura\Cli\Context'] = array(
+    'env'    => $_ENV,
+    'server' => $_SERVER,
+    'argv'   => $GLOBALS['argv'],
+    'getopt' => $di->lazyNew('Aura\Cli\Context\Getopt'),
+);
 
 /**
  * Aura\Cli\Stdio
