@@ -3,10 +3,31 @@
  * Aura\Cli\Context
  */
 $di->params['Aura\Cli\Context'] = array(
-    'env'    => $_ENV,
-    'server' => $_SERVER,
-    'argv'   => $GLOBALS['argv'],
+    'env'    => $di->lazyNew('Aura\Cli\Context\Env'),
+    'server' => $di->lazyNew('Aura\Cli\Context\Server'),
+    'argv'   => $di->lazyNew('Aura\Cli\Context\Argv'),
     'getopt' => $di->lazyNew('Aura\Cli\Context\Getopt'),
+);
+
+/**
+ * Aura\Cli\Context\Argv
+ */
+$di->params['Aura\Cli\Context\Argv'] = array(
+    'values' => $GLOBALS['argv'],
+);
+
+/**
+ * Aura\Cli\Context\Env
+ */
+$di->params['Aura\Cli\Context\Env'] = array(
+    'values' => $_ENV,
+);
+
+/**
+ * Aura\Cli\Context\Server
+ */
+$di->params['Aura\Cli\Context\Server'] = array(
+    'values' => $_SERVER,
 );
 
 /**
