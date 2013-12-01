@@ -46,7 +46,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testExec_exceptionMessageOnly()
+    public function testExecExceptionMessageOnly()
     {
         $command = $this->newMockCommand([], 'Aura\Cli\MockCommandWrong');
         $command->exec();
@@ -54,14 +54,14 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Aura\Cli\MockException', $actual);
     }
     
-    public function testExec_exceptionRethrown()
+    public function testExecExceptionRethrown()
     {
         $command = $this->newMockCommand([], 'Aura\Cli\MockCommandWrongAgain');
         $this->setExpectedException('UnexpectedValueException');
         $command->exec();
     }
     
-    public function testExec_hooks()
+    public function testExecHooks()
     {
         $command = $this->newMockCommand();
         $command->exec();

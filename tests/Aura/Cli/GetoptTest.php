@@ -66,7 +66,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\GetoptInitialized
      */
-    public function testInit_getoptInitialized()
+    public function testInitGetoptInitialized()
     {
         $opts = [
             'foo_bar' => [
@@ -86,7 +86,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParam
      */
-    public function testInit_optionParam()
+    public function testInitOptionParam()
     {
         $opts = [
             'foo_bar' => [
@@ -102,7 +102,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \UnexpectedValueException
      */
-    public function testInit_unexpected()
+    public function testInitUnexpected()
     {
         $opts = [
             'foo_bar' => true,
@@ -153,13 +153,13 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
-    public function testGetOption_optionNotDefined()
+    public function testGetOptionOptionNotDefined()
     {
         $this->testInit();
         $actual = $this->getopt->getOption('no_such_option');
     }
     
-    public function testGetOption_optionNotDefined_nonStrict()
+    public function testGetOptionOptionNotDefinedNonStrict()
     {
         $this->testInit(Getopt::NON_STRICT);
         $actual = $this->getopt->getOption('no_such_option');
@@ -184,13 +184,13 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
-    public function testGetLongOption_optionNotDefined()
+    public function testGetLongOptionOptionNotDefined()
     {
         $this->testInit();
         $actual = $this->getopt->getLongOption('no_such_option');
     }
     
-    public function testGetLongOption_optionNotDefined_nonStrict()
+    public function testGetLongOptionOptionNotDefinedNonStrict()
     {
         $this->testInit(Getopt::NON_STRICT);
         $actual = $this->getopt->getLongOption('no_such_option');
@@ -215,20 +215,20 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionNotDefined
      */
-    public function testGetShortOption_optionNotDefined()
+    public function testGetShortOptionOptionNotDefined()
     {
         $this->testInit();
         $actual = $this->getopt->getShortOption('z');
     }
     
-    public function testGetShortOption_optionNotDefined_nonStrict()
+    public function testGetShortOptionOptionNotDefinedNonStrict()
     {
         $this->testInit(Getopt::NON_STRICT);
         $actual = $this->getopt->getShortOption('z');
         $this->assertNull($actual);
     }
     
-    public function testLoad_noOptions()
+    public function testLoadNoOptions()
     {
         $this->testInit();
         
@@ -255,7 +255,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testLoad_longOptions()
+    public function testLoadLongOptions()
     {
         $this->testInit();
         
@@ -293,7 +293,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testLoad_longOptions_nonStrict()
+    public function testLoadLongOptionsNonStrict()
     {
         $this->testInit(Getopt::NON_STRICT);
         
@@ -307,7 +307,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($actual);
     }
     
-    public function testLoad_shortOptions()
+    public function testLoadShortOptions()
     {
         $this->testInit();
         
@@ -346,7 +346,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testLoad_shortOptions_nonStrict()
+    public function testLoadShortOptionsNonStrict()
     {
         $this->testInit(Getopt::NON_STRICT);
         
@@ -360,7 +360,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($actual);
     }
     
-    public function testLoad_mixedOptionsAndParams()
+    public function testLoadMixedOptionsAndParams()
     {
         $this->testInit();
         
@@ -407,7 +407,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testLoad_optionalParamsAsFlags()
+    public function testLoadOptionalParamsAsFlags()
     {
         $this->testInit();
         
@@ -445,7 +445,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
-    public function testLoad_longOptionParamRequired()
+    public function testLoadLongOptionParamRequired()
     {
         $opts = [
             'foo_bar' => [
@@ -467,7 +467,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParamRejected
      */
-    public function testLoad_longOptionParamRejected()
+    public function testLoadLongOptionParamRejected()
     {
         $opts = [
             'foo_bar' => [
@@ -489,7 +489,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
-    public function testLoad_shortOptionParamRequired()
+    public function testLoadShortOptionParamRequired()
     {
         $opts = [
             'foo_bar' => [
@@ -508,7 +508,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         ]);
     }
     
-    public function testLoad_shortOptionParamRejected()
+    public function testLoadShortOptionParamRejected()
     {
         $opts = [
             'foo_bar' => [
@@ -530,7 +530,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($actual);
     }
     
-    public function testLoad_shortOptionCluster()
+    public function testLoadShortOptionCluster()
     {
         $opts = [
             'foo_bar' => [
@@ -563,7 +563,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testLoad_shortOptionCluster_nonStrict()
+    public function testLoadShortOptionClusterNonStrict()
     {
         $this->getopt->init([], Getopt::NON_STRICT);
         
@@ -581,7 +581,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParamRequired
      */
-    public function testLoad_shortOptionClusterRequired()
+    public function testLoadShortOptionClusterRequired()
     {
         $opts = [
             'foo_bar' => [

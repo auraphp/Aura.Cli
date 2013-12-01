@@ -48,7 +48,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionName
      */
-    public function testInit_noName()
+    public function testInitNoName()
     {
         $spec = [
             'long' => 'foo-bar',
@@ -58,7 +58,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $option = $this->factory->newInstance($spec);
     }
     
-    public function testInit_noLongOrShort()
+    public function testInitNoLongOrShort()
     {
         $spec = [
             'name' => 'foo_bar',
@@ -75,7 +75,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Aura\Cli\Exception\OptionParam
      */
-    public function testInit_badParamValue()
+    public function testInitBadParamValue()
     {
         $spec = [
             'name' => 'foo_bar',
@@ -133,7 +133,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('zim', $option->getValue());
     }
 
-    public function testGetValue_default()
+    public function testGetValueDefault()
     {
         $spec = [
             'name' => 'foo_bar',
