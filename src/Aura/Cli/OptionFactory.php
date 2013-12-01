@@ -64,7 +64,7 @@ class OptionFactory
 
         // always need a param value
         if (! $args['param']) {
-            $args['param'] = Option::PARAM_OPTIONAL;            
+            $args['param'] = Option::PARAM_OPTIONAL;
         }
         
         $ok = $args['param'] === Option::PARAM_REQUIRED

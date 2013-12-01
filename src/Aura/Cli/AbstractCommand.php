@@ -115,12 +115,12 @@ abstract class AbstractCommand
     protected function init()
     {
         // set signal handlers
-        $this->signal->handler($this, 'pre_exec',        [$this, 'preExec']);
-        $this->signal->handler($this, 'pre_action',      [$this, 'preAction']);
-        $this->signal->handler($this, 'post_action',     [$this, 'postAction']);
-        $this->signal->handler($this, 'pre_render',      [$this, 'preRender']);
-        $this->signal->handler($this, 'post_render',     [$this, 'postRender']);
-        $this->signal->handler($this, 'post_exec',       [$this, 'postExec']);
+        $this->signal->handler($this, 'pre_exec', [$this, 'preExec']);
+        $this->signal->handler($this, 'pre_action', [$this, 'preAction']);
+        $this->signal->handler($this, 'post_action', [$this, 'postAction']);
+        $this->signal->handler($this, 'pre_render', [$this, 'preRender']);
+        $this->signal->handler($this, 'post_render', [$this, 'postRender']);
+        $this->signal->handler($this, 'post_exec', [$this, 'postExec']);
         
         // the exception-catching signal handler on this class is intended as
         // a final fallback; other handlers most likely need to run before it.

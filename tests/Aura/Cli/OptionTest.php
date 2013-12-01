@@ -40,9 +40,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         
         $option = $this->factory->newInstance($spec);
         
-        $this->assertSame('foo_bar',    $option->getName());
-        $this->assertSame('foo-bar',    $option->getLong());
-        $this->assertSame('f',          $option->getShort());
+        $this->assertSame('foo_bar', $option->getName());
+        $this->assertSame('foo-bar', $option->getLong());
+        $this->assertSame('f', $option->getShort());
     }
     
     /**
@@ -66,9 +66,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         
         $option = $this->factory->newInstance($spec);
         
-        $this->assertSame('foo_bar',    $option->getName());
-        $this->assertSame('foo-bar',    $option->getLong());
-        $this->assertSame('',           $option->getShort());
+        $this->assertSame('foo_bar', $option->getName());
+        $this->assertSame('foo-bar', $option->getLong());
+        $this->assertSame('', $option->getShort());
     }
     
     
