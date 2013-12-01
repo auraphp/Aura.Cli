@@ -118,8 +118,13 @@ $getopt = $context->getopt($options);
 ?>
 ```
 
-Then use the `get()` method on the returned _GetoptValues_ object to retrieve
-the option values; you can provide an alternative default value for when the
+> N.b.: When we say "required" here, it means "the option, when present,
+> must have a parameter."  It does *not* mean "the option must be present."
+> These are options, after all. If a particular value *must* be passed,
+> consider using [positional arguments](#positional-arguments) instead.
+
+Use the `get()` method on the returned _GetoptValues_ object to retrieve the
+option values. You can provide an alternative default value for when the
 option is missing.
 
 ```php
@@ -151,14 +156,14 @@ $f   = $getopt->get('-f'); // both -f and --foo have the same values
 ?>
 ```
 
-If an option is passed multiple times, it will result in an array of multiple
-values.
+If you want to allow an option to passed multiple times, add a '*' to the end
+of the option name.
 
 ```php
 <?php
 $options = array(
-    'f',
-    'foo:'
+    'f*',
+    'foo*:'
 );
 
 $getopt = $context->getopt($options);
