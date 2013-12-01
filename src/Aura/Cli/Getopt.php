@@ -1,96 +1,96 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 /**
- * 
+ *
  * Retrieves and validates command-line options and parameter values.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Getopt
 {
     /**
-     * 
+     *
      * If an option is passed that is not defined, throw an exception.
-     * 
+     *
      * @const bool
-     * 
+     *
      */
     const STRICT = true;
 
     /**
-     * 
+     *
      * Do not throw exceptions when undefined options are passed.
-     * 
+     *
      * @const bool
-     * 
+     *
      */
     const NON_STRICT = false;
 
     /**
-     * 
+     *
      * A factory to create Option objects.
-     * 
+     *
      * @var OptionFactory
-     * 
+     *
      */
     protected $option_factory;
 
     /**
-     * 
+     *
      * Definitions for recognized options.
-     *      
+     *
      * @var array
-     * 
+     *
      */
     protected $options = [];
 
     /**
-     * 
+     *
      * Remaining non-option params after loading option values.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params = [];
 
     /**
-     * 
+     *
      * The incoming arguments, typically from $_SERVER['argv'].
-     * 
+     *
      * @param array
-     * 
+     *
      */
     protected $argv = [];
 
     /**
-     * 
+     *
      * Has Getopt been initialized in strict mode or not?
-     * 
+     *
      * @var bool
-     * 
+     *
      */
     protected $strict;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param OptionFactory $option_factory A factory for Option objects.
-     * 
+     *
      * @param ExceptionFactory $exception_factory A factory for Exception
      * objects.
-     * 
+     *
      */
     public function __construct(
         OptionFactory $option_factory,
@@ -101,13 +101,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Make Option values available as magic readonly properties.
-     * 
+     *
      * @param string $key The option name.
-     * 
+     *
      * @return mixed The option value.
-     * 
+     *
      */
     public function __get($key)
     {
@@ -118,17 +118,17 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Initializes the instance with option definitions.
-     * 
+     *
      * @param array $opts An array of key-value pairs where the key is the
      * option name and the value is the option spec.
-     * 
+     *
      * @param bool $strict Initialize in strict (true) or non-strict (false)
      * mode?
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function init(array $opts, $strict = self::STRICT)
     {
@@ -157,11 +157,11 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns all the Option definition objects.
-     * 
+     *
      * @return array An array of Option objects.
-     * 
+     *
      */
     public function getOptions()
     {
@@ -169,13 +169,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns a single Option definition object by its property name.
-     * 
+     *
      * @param string $prop The property name of the option.
-     * 
+     *
      * @return Option
-     * 
+     *
      */
     public function getOption($prop)
     {
@@ -192,11 +192,11 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns an array of all Option names and their values.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getOptionValues()
     {
@@ -208,13 +208,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns the value of a single Option by name.
-     * 
+     *
      * @param string $name The option name to get a value for.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function getOptionValue($name)
     {
@@ -225,11 +225,11 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns an array of all numeric parameters.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getParams()
     {
@@ -237,13 +237,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns a single Option definition object by its long-format name.
-     * 
+     *
      * @param string $long The long-format name of the option.
-     * 
+     *
      * @return Option
-     * 
+     *
      */
     public function getLongOption($long)
     {
@@ -262,13 +262,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Returns a single Option definition object by its short-format name.
-     * 
+     *
      * @param string $char The long-format name of the option.
-     * 
+     *
      * @return Option
-     * 
+     *
      */
     public function getShortOption($char)
     {
@@ -287,15 +287,15 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Loads Option values from an argument array, placing option values
      * in the defined Option objects and placing non-option params in a 
      * `$params` variable.
-     * 
+     *
      * @param array $argv An argument array, typically from $_SERVER['argv'].
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function load(array $argv)
     {
@@ -338,13 +338,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Parses a long-form option.
-     * 
+     *
      * @param string $spec The `$argv` element, e.g. "--foo" or "--bar=baz".
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function loadLong($spec)
     {
@@ -392,13 +392,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Parses a short-form option (or cluster of options).
-     * 
+     *
      * @param string $spec The `$argv` element, e.g. "-f" or "-fbz".
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function loadShort($spec)
     {
@@ -455,13 +455,13 @@ class Getopt
     }
 
     /**
-     * 
+     *
      * Parses a cluster of short options.
-     * 
+     *
      * @param string $spec The short-option cluster (e.g. "-abcd").
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function loadShortCluster($spec)
     {

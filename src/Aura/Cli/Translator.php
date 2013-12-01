@@ -1,39 +1,39 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura Project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 /**
- * 
+ *
  * Translator to translate the message
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Translator implements TranslatorInterface
 {
     /**
-     * 
+     *
      * The array of message keys and translations.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $messages = [];
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param array $package The package internationalization values.
-     * 
+     *
      */
     public function __construct(array $package)
     {
@@ -41,16 +41,16 @@ class Translator implements TranslatorInterface
     }
 
     /**
-     * 
+     *
      * Translate the key with the token values replaced.
-     * 
+     *
      * @param string $key The message key.
-     * 
+     *
      * @param array $tokens_values The message placeholder tokens and their
      * replacement values.
-     * 
+     *
      * @return string The translated string.
-     * 
+     *
      */
     public function translate($key, array $tokens_values = [])
     {

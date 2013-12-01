@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
@@ -14,83 +14,83 @@ use Exception;
 use Aura\Cli\Exception as CliException;
 
 /**
- * 
+ *
  * The CLI equivalent of a page-controller to perform a single action.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 abstract class AbstractCommand
 {
     /**
-     * 
+     *
      * A Getopt object for the Command; retains the short and long options
      * passed at the command line.
-     * 
+     *
      * @var Aura\Cli\Getopt
-     * 
+     *
      */
     protected $getopt;
 
     /**
-     * 
+     *
      * The option definitions for the Getopt object.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $options = [];
 
     /**
-     * 
+     *
      * Should Getopt be strict about how options are processed?  In strict
      * mode, passing an undefined option will throw an exception; in
      * non-strict, it will not.
-     * 
+     *
      * @var bool
-     * 
+     *
      */
     protected $options_strict = Getopt::STRICT;
 
     /**
-     * 
+     *
      * The positional (numeric) arguments passed at the command line.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params = [];
 
     /**
-     * 
+     *
      * The return code when this command is done.
-     * 
+     *
      * @var int
-     * 
+     *
      */
     protected $return = 0;
 
     /**
-     * 
+     *
      * Exception caught in the exec() loop.
-     * 
+     *
      * @var Exception
-     * 
+     *
      */
     protected $exception;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param \Aura\Cli\Context $context The command-line context.
-     * 
+     *
      * @param \Aura\Cli\Stdio $stdio Standard input/output streams.
-     * 
+     *
      * @param \Aura\Cli\Getopt $getopt An options processor and reader.
-     * 
+     *
      * @param \Aura\Cli\SignalInterface $signal A signal manager.
-     * 
+     *
      */
     public function __construct(
         Context         $context,
@@ -106,11 +106,11 @@ abstract class AbstractCommand
     }
 
     /**
-     * 
+     *
      * Post-constructor initialization.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function init()
     {
@@ -136,32 +136,32 @@ abstract class AbstractCommand
     }
     
     /**
-     * 
+     *
      * Executes the Command.  In order, it does these things:
-     * 
+     *
      * - signals `pre_exec`, thereby calling `preExec()`
-     * 
+     *
      * - loads $getopt and sets $params
-     * 
+     *
      * - signals `pre_action`, thereby calling `preAction()`
-     * 
+     *
      * - calls `action()`
-     * 
+     *
      * - signals `post_action`, thereby calling `postAction()`
-     * 
+     *
      * - signals `post_exec`, thereby calling `postExec()`
-     * 
+     *
      * - signals `catch_exception` when a exception is thrown, thereby
      *   calling `catchException()`
-     * 
+     *
      * - resets the terminal to normal
-     * 
+     *
      * - returns the `$return` code
-     * 
+     *
      * @see action()
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function exec()
     {
@@ -203,11 +203,11 @@ abstract class AbstractCommand
     }
 
     /**
-     * 
+     *
      * Returns the exception caught in exec().
-     * 
+     *
      * @return \Exception
-     * 
+     *
      */
     public function getException()
     {
@@ -215,13 +215,13 @@ abstract class AbstractCommand
     }
     
     /**
-     * 
+     *
      * Sets the return (exit) code for exec().
-     * 
+     *
      * @param int $return The return (exit) code.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setReturn($return)
     {
@@ -229,11 +229,11 @@ abstract class AbstractCommand
     }
     
     /**
-     * 
+     *
      * Gets the return (exit) code for exec().
-     * 
+     *
      * @return int The return (exit) code.
-     * 
+     *
      */
     public function getReturn()
     {
@@ -241,64 +241,64 @@ abstract class AbstractCommand
     }
     
     /**
-     * 
+     *
      * Runs at the beginning of `exec()` before `preAction()`.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function preExec()
     {
     }
 
     /**
-     * 
+     *
      * Runs before `action()` but after `preExec()`.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function preAction()
     {
     }
 
     /**
-     * 
+     *
      * The main logic for the Command.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     abstract protected function action();
 
     /**
-     * 
+     *
      * Runs after `action()` but before `postExec()`.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function postAction()
     {
     }
 
     /**
-     * 
+     *
      * Runs at the end of `exec()` after `postAction()`.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function postExec()
     {
     }
     
     /**
-     * 
+     *
      * Runs when `exec()` catches an exception.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function catchException()
     {
