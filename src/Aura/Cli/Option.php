@@ -1,133 +1,133 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 /**
- * 
+ *
  * Defines a single command-line option.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Option
 {
     /**
-     * 
+     *
      * A parameter value is required to be present for this option.
-     * 
+     *
      * @const string
-     * 
+     *
      */
     const PARAM_REQUIRED = 'required';
 
     /**
-     * 
+     *
      * Any parameter value on this option will be rejected.
-     * 
+     *
      * @const string
-     * 
+     *
      */
     const PARAM_REJECTED = 'rejected';
 
     /**
-     * 
+     *
      * A parameter value may or may not be present on this option.
-     * 
+     *
      * @const string
-     * 
+     *
      */
     const PARAM_OPTIONAL = 'optional';
 
     /**
-     * 
+     *
      * The property name of the option.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $name = null;
 
     /**
-     * 
+     *
      * The long name of the option.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $long = null;
 
     /**
-     * 
+     *
      * The short name of the option.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $short = null;
 
     /**
-     * 
+     *
      * When the option is present, will a be parameter required, optional, or
      * rejected (i.e., no param allowed) ?
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $param = self::PARAM_OPTIONAL;
 
     /**
-     * 
+     *
      * Can the option be specified multiple times?
-     * 
+     *
      * @var bool
-     * 
+     *
      */
     protected $multi = null;
 
     /**
-     * 
+     *
      * The default value for the option param.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $default = null;
 
     /**
-     * 
+     *
      * The option value as set from the command line.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $value = null;
 
     /**
-     * 
+     *
      * Initialized the object with an option definition array.
-     * 
+     *
      * @param string $name The option property name.
-     * 
+     *
      * @param string $long The long form of the option flag.
-     * 
+     *
      * @param string $short The short form of the option flag.
-     * 
+     *
      * @param string $param Whether a param is required, optional, or rejected.
-     * 
+     *
      * @param bool $multi Can the option be specified multiple times?
-     * 
+     *
      * @param string $default The default value of the option param.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function __construct(
         $name    = null,
@@ -154,13 +154,13 @@ class Option
     }
 
     /**
-     * 
+     *
      * Sets the option value.
-     * 
+     *
      * @param mixed $value The value to set.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setValue($value)
     {
@@ -172,12 +172,12 @@ class Option
     }
 
     /**
-     * 
+     *
      * Gets the option value.
-     * 
+     *
      * @return mixed The value as set from the command line, or the default
      * value if not set from the command line.
-     * 
+     *
      */
     public function getValue()
     {
@@ -189,11 +189,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Gets the long name for this option.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getLong()
     {
@@ -201,11 +201,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Gets the short name for this option.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getShort()
     {
@@ -213,11 +213,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Gets the property name for this option.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getName()
     {
@@ -225,11 +225,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Gets the default value of this option.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function getDefault()
     {
@@ -237,11 +237,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Can this option be present multiple times?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function isMulti()
     {
@@ -249,11 +249,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Is a param value required to be present on this option?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function isParamRequired()
     {
@@ -261,11 +261,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Is a param value required *not* to be present on this option?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function isParamRejected()
     {
@@ -273,11 +273,11 @@ class Option
     }
 
     /**
-     * 
+     *
      * Is a param value optional on this option?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function isParamOptional()
     {

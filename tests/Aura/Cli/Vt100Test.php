@@ -96,7 +96,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testWrite_posix()
+    public function testWritePosix()
     {
         $this->vt100->setPosix(true);
         
@@ -113,7 +113,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testWriteln_posix()
+    public function testWritelnPosix()
     {
         $this->vt100->setPosix(true);
         
@@ -130,7 +130,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testWrite_win()
+    public function testWriteWin()
     {
         $this->vt100->setPhpOs('win');
         
@@ -146,7 +146,7 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testWriteln_win()
+    public function testWritelnWin()
     {
         $this->vt100->setPhpOs('win');
         
@@ -161,5 +161,4 @@ class Vt100Test extends \PHPUnit_Framework_TestCase
         
         $this->assertSame($expect, $actual);
     }
-    
 }

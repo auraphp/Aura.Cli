@@ -1,74 +1,74 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 use Aura\Cli\Vt100;
 
 /**
- * 
+ *
  * Provides a wrapper for standard input/output handles.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Stdio
 {
     /**
-     * 
+     *
      * A handle for standard input.
-     * 
+     *
      * @var StdioResource
-     * 
+     *
      */
     protected $stdin;
 
     /**
-     * 
+     *
      * A handle for standard output.
-     * 
+     *
      * @var StdioResource
-     * 
+     *
      */
     protected $stdout;
 
     /**
-     * 
+     *
      * A handle for standard error.
-     * 
+     *
      * @var StdioResource
-     * 
+     *
      */
     protected $stderr;
 
     /**
-     * 
+     *
      * A Vt100 object to format output.
-     * 
+     *
      * @var Vt100
-     * 
+     *
      */
     protected $vt100;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param StdioResource $stdin A handle for standard input.
-     * 
+     *
      * @param StdioResource $stdout A handle for standard output.
-     * 
+     *
      * @param StdioResource $stderr A handle for standard error.
-     * 
+     *
      * @param Vt100 $vt100 A VT100 formatting object.
-     * 
+     *
      */
     public function __construct (
         StdioResource $stdin,
@@ -83,11 +83,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard input handle.
-     * 
+     *
      * @return resource
-     * 
+     *
      */
     public function getStdin()
     {
@@ -95,11 +95,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard output handle.
-     * 
+     *
      * @return resource
-     * 
+     *
      */
     public function getStdout()
     {
@@ -107,11 +107,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard error handle.
-     * 
+     *
      * @return resource
-     * 
+     *
      */
     public function getStderr()
     {
@@ -119,11 +119,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Gets user input from the command line and trims the end-of-line.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function in()
     {
@@ -131,12 +131,12 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Gets user input from the command line and leaves the end-of-line in
      * place.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function inln()
     {
@@ -144,14 +144,14 @@ class Stdio
     }
 
     /**
-     * 
-     * Prints text to standard output via the Vt100 formatter **without** 
+     *
+     * Prints text to standard output via the Vt100 formatter **without**
      * a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard output.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function out($string = null)
     {
@@ -159,14 +159,14 @@ class Stdio
     }
 
     /**
-     * 
-     * Prints text to standard output via the Vt100 formatter **with** 
+     *
+     * Prints text to standard output via the Vt100 formatter **with**
      * a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard output.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function outln($string = null)
     {
@@ -174,14 +174,14 @@ class Stdio
     }
 
     /**
-     * 
-     * Prints text to standard error via the Vt100 formatter **without** 
+     *
+     * Prints text to standard error via the Vt100 formatter **without**
      * a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard error.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function err($string = null)
     {
@@ -189,14 +189,14 @@ class Stdio
     }
 
     /**
-     * 
-     * Prints text to standard error via the Vt100 formatter **without** 
+     *
+     * Prints text to standard error via the Vt100 formatter **without**
      * a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard error.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function errln($string = null)
     {
