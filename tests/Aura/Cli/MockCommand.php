@@ -5,11 +5,11 @@ use Aura\Cli\AbstractCommand;
 
 class MockCommand extends AbstractCommand
 {
-    private $action;
+    private $_action;
     
-    private $pre_action = false;
+    private $_pre_action = false;
     
-    private $post_action = false;
+    private $_post_action = false;
     
     protected $options = [
         'option' => [],
@@ -23,18 +23,18 @@ class MockCommand extends AbstractCommand
     public function preAction()
     {
         parent::preAction();
-        $this->pre_action = true;
+        $this->_pre_action = true;
     }
     
     public function postAction()
     {
         parent::postAction();
-        $this->post_action = true;
+        $this->_post_action = true;
     }
     
     protected function action()
     {
-        $this->action = __METHOD__;
+        $this->_action = __METHOD__;
         $this->stdio->out($this->_action);
         return 0;
     }
