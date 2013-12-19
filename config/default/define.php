@@ -13,7 +13,7 @@ $di->params['Aura\Cli\Context'] = array(
  * Aura\Cli\Context\Argv
  */
 $di->params['Aura\Cli\Context\Argv'] = array(
-    'values' => $GLOBALS['argv'],
+    'values' => (isset($_SERVER['argv']) ? $_SERVER['argv'] : array()),
 );
 
 /**
