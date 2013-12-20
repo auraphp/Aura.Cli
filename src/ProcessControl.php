@@ -10,6 +10,7 @@
  */
 namespace Aura\Cli;
 
+use Aura\Cli\Exception\ExtensionNotAvailable;
 use Aura\Cli\Exception\FunctionNotAvailable;
 use Aura\Cli\Exception\SignalNotCatchable;
 
@@ -35,6 +36,10 @@ class ProcessControl
      */
     public function __construct()
     {
+        if (! extension_loaded('pcntl')) {
+            throw new ExtensionNotAvailable('The pcntl extension is not available.');
+        }
+
         $required_functions = [
             'pcntl_signal'
         ];
