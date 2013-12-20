@@ -13,10 +13,26 @@ namespace Aura\Cli;
 use Aura\Cli\Exception\FunctionNotAvailable;
 use Aura\Cli\Exception\SignalNotCatchable;
 
+/**
+ * Helper for dealing with pcntl signal functions.
+ *
+ * @package Aura.Cli
+ */
 class ProcessControl
 {
+    /**
+     * List of catchable signals
+     *
+     * @var array
+     */
     protected $catchable_signals = [];
 
+    /**
+     * The construct will check for any required function that may not be set. Exception is thrown
+     * if the functions are not available. The catchable signals list is set after this, if it's
+     * done before and pcntl isn't installed we get a load more errors from the constant not
+     * existing.
+     */
     public function __construct()
     {
         $required_functions = [
@@ -52,15 +68,32 @@ class ProcessControl
         ];
     }
 
-    public function __invoke($signal, callable $closure)
+    /**
+     * Check if the signal is catchable, then set the signal to be caught by $callable
+     *
+     * @param int $signal
+     * @param callable $callable
+     *
+     * @return bool
+     * @throws Exception\SignalNotCatchable
+     */
+    public function __invoke($signal, callable $callable)
     {
         if (! array_key_exists($signal, $this->catchable_signals)) {
             throw new SignalNotCatchable(sprintf("The singal '%d' is not catchable.", $signal));
         };
+
+        return $this->catchSignal($signal, $callable);
     }
 
-    protected function catchSignal($signal, callable $closure)
+    /**
+     * @param int $signal
+     * @param callable $callable
+     *
+     * @return bool
+     */
+    protected function catchSignal($signal, callable $callable)
     {
-        pcntl_signal($signal, $closure);
+        return pcntl_signal($signal, $callable);
     }
 }
