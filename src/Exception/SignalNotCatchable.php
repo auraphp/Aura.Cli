@@ -14,7 +14,7 @@ use Aura\Cli\Exception;
 
 /**
  *
- * Asked for an option that is not defined.
+ * Trying to catch a signal that isn't catchable or that isn't a signal.
  *
  * @package Aura.Cli
  *

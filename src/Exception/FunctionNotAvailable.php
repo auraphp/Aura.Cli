@@ -14,7 +14,7 @@ use Aura\Cli\Exception;
 
 /**
  *
- * Asked for an option that is not defined.
+ * Trying to use functionality that isn't available.
  *
  * @package Aura.Cli
  *
