@@ -77,33 +77,35 @@ class ProcessControl
      * Check if the signal is catchable, then set the signal to be caught by $callable
      *
      * @param int $signal
-     * @param callable $callable
+     * @param callable|int $handler
+     * @param bool $restart_syscalls
      *
      * @return bool
      * @throws Exception\SignalNotCatchable
      * @throws \InvalidArgumentException
      */
-    public function __invoke($signal, $callable)
+    public function __invoke($signal, $handler, $restart_syscalls = true)
     {
         if (! array_key_exists($signal, $this->catchable_signals)) {
             throw new SignalNotCatchable(sprintf("The singal '%d' is not catchable.", $signal));
         };
 
-        if (! is_callable($callable)) {
-            throw new \InvalidArgumentException('$callable must be a callable.');
+        if (! is_callable($handler) && ! is_int($handler)) {
+            throw new \InvalidArgumentException('handler must be of type callable or int.');
         }
 
-        return $this->catchSignal($signal, $callable);
+        return $this->catchSignal($signal, $handler, $restart_syscalls);
     }
 
     /**
      * @param int $signal
-     * @param callable $callable
+     * @param callable|int $handler
+     * @param bool $restart_syscalls
      *
      * @return bool
      */
-    protected function catchSignal($signal, $callable)
+    protected function catchSignal($signal, $handler, $restart_syscalls)
     {
-        return pcntl_signal($signal, $callable);
+        return pcntl_signal($signal, $handler, $restart_syscalls);
     }
 }
