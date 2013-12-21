@@ -87,7 +87,7 @@ class ProcessControl
     public function __invoke($signal, $handler, $restart_syscalls = true)
     {
         if (! array_key_exists($signal, $this->catchable_signals)) {
-            throw new SignalNotCatchable(sprintf("The singal '%d' is not catchable.", $signal));
+            throw new SignalNotCatchable(sprintf("The signal '%d' is not catchable.", $signal));
         };
 
         if (! is_callable($handler) && ! is_int($handler)) {

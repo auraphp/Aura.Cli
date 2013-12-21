@@ -10,6 +10,17 @@ class ProcessControlTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    protected function hasDependencies()
+    {
+        if (! function_exists('pcntl_signal')) {
+            $this->markTestSkipped('The pcntl_signal function is not availalbe.');
+
+            return false;
+        }
+
+        return true;
+    }
+
     protected function newProcessControl()
     {
         return new ProcessControl();
@@ -22,11 +33,24 @@ class ProcessControlTest extends \PHPUnit_Framework_TestCase
 
     public function testInvoke()
     {
-        if (! function_exists('pcntl_signal')) {
-            $this->markTestSkipped('The pcntl_signal function is not availalbe.');
-            return;
+        if ($this->hasDependencies()) {
+            $this->assertTrue($this->newProcessControl()->__invoke(SIGINT, function(){}));
         }
+    }
 
-        $this->assertTrue($this->newProcessControl()->__invoke(SIGINT, function(){}));
+    public function testExceptionWhenBadSignalPassed()
+    {
+        if ($this->hasDependencies()) {
+            $this->setExpectedException('Aura\\Cli\\Exception\\SignalNotCatchable');
+            $this->newProcessControl()->__invoke(99999, 1);
+        }
+    }
+
+    public function testExceptionWhenBadParamPassed()
+    {
+        if ($this->hasDependencies()) {
+            $this->setExpectedException('\InvalidArgumentException');
+            $this->newProcessControl()->__invoke(SIGINT, "string");
+        }
     }
 }
