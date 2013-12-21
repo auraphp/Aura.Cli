@@ -26,7 +26,7 @@ class ProcessControl
      *
      * @var array
      */
-    protected $catchable_signals = [];
+    protected $catchable_signals = array();
 
     /**
      * The construct will check for any required function that may not be set. Exception is thrown
@@ -40,9 +40,9 @@ class ProcessControl
             throw new ExtensionNotAvailable('The pcntl extension is not available.');
         }
 
-        $required_functions = [
+        $required_functions = array(
             'pcntl_signal'
-        ];
+        );
 
         foreach ($required_functions as $required_function) {
             if (! function_exists($required_function)) {
@@ -52,7 +52,7 @@ class ProcessControl
             }
         }
 
-        $this->catchable_signals = [
+        $this->catchable_signals = array(
             SIGHUP => SIGHUP,
             SIGINT => SIGINT,
             SIGUSR1 => SIGUSR1,
@@ -70,7 +70,7 @@ class ProcessControl
             SIGTSTP => SIGTSTP,
             SIGTTIN => SIGTTIN,
             SIGTTOU => SIGTTOU,
-        ];
+        );
     }
 
     /**
@@ -81,12 +81,17 @@ class ProcessControl
      *
      * @return bool
      * @throws Exception\SignalNotCatchable
+     * @throws \InvalidArgumentException
      */
-    public function __invoke($signal, callable $callable)
+    public function __invoke($signal, $callable)
     {
         if (! array_key_exists($signal, $this->catchable_signals)) {
             throw new SignalNotCatchable(sprintf("The singal '%d' is not catchable.", $signal));
         };
+
+        if (! is_callable($callable)) {
+            throw new \InvalidArgumentException('$callable must be a callable.');
+        }
 
         return $this->catchSignal($signal, $callable);
     }
@@ -97,7 +102,7 @@ class ProcessControl
      *
      * @return bool
      */
-    protected function catchSignal($signal, callable $callable)
+    protected function catchSignal($signal, $callable)
     {
         return pcntl_signal($signal, $callable);
     }
