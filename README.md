@@ -1,7 +1,8 @@
 # Aura.Cli
 
 Provides the equivalent of request ( _Context_ ) and response ( _Stdio_ )
-objects for the command line interface, including _Getopt_ support.
+objects for the command line interface, including _Getopt_ and _Pcntl_
+support.
 
 ## Foreword
 
@@ -17,7 +18,7 @@ This library is installable and autoloadable via Composer with the following
     "require": {
         "aura/cli": "2.*@dev"
     }
-    
+
 Alternatively, download or clone this repository, then require or include its
 _autoload.php_ file.
 
@@ -287,6 +288,37 @@ $stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ?>
 ```
 
+### Catching Signals
+
+The _ProcessControl_ class lets you interface with the `pcntl_*` family so
+that you can catch signals usually sent from the command line.
+
+```php
+<?php
+use Aura\Cli\ProcessControl;
+
+$process_control = new ProcessControl();
+
+declare(ticks = 5);
+
+$process_control->__invoke(SIGINT, function() {
+    echo "You hit 'Ctrl + C'";
+    exit;
+});
+
+do {
+    echo '.';
+    sleep(1);
+} while (true);
+```
+
+Running the above will put you into an endless loop _echoing_ a '.' every
+second. 'Ctrl + C' will send the _SIGINT_ signal to the script that we will
+catch allowing us to kill the script ourselves.
+
+The `declare(ticks = 5)` line is important and it is you the user who has to
+_declare_ this in your code, in the correct scope.
+
 ### Exit Codes
 
 This library comes with a _Status_ class that defines constants for exit
@@ -349,7 +381,7 @@ into terminal control codes, and do not get "closed". You can place as many
 space-separated markup codes between the double angle-brackets as you like.
 
     reset       reset display to defaults
-    
+
     black       black text
     red         red text
     green       green text
@@ -358,7 +390,7 @@ space-separated markup codes between the double angle-brackets as you like.
     magenta     magenta (purple) text
     cyan        cyan (light blue) text
     white       white text
-    
+
     blackbg     black background
     redbg       red background
     greenbg     green background
