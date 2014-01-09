@@ -19,15 +19,4 @@ namespace Aura\Cli\Context;
  */
 class Argv extends AbstractValues
 {
-    /**
-     * 
-     * Shifts the first element off the data values and returns it.
-     * 
-     * @return mixed
-     * 
-     */
-    public function shift()
-    {
-        return array_shift($this->values);
-    }
 }
