@@ -21,12 +21,12 @@ use InvalidArgumentException;
 class ProcessControl
 {
     /**
-     * List of catchable signals.
      * 
-     * We set them in the constructor, not here, because if pcntl isn't
-     * installed then the constants won't exist.
+     * List of catchable signals. We set them in the constructor, not here,
+     * because if pcntl isn't available then the constants won't exist.
      *
      * @var array
+     * 
      */
     protected $catchable_signals = array();
 
@@ -46,34 +46,38 @@ class ProcessControl
         }
         
         $this->catchable_signals = array(
-            SIGHUP => SIGHUP,
-            SIGINT => SIGINT,
-            SIGUSR1 => SIGUSR1,
-            SIGUSR2 => SIGUSR2,
-            SIGQUIT => SIGQUIT,
-            SIGILL => SIGILL,
-            SIGABRT => SIGABRT,
-            SIGFPE => SIGFPE,
-            SIGSEGV => SIGSEGV,
-            SIGPIPE => SIGPIPE,
-            SIGALRM => SIGALRM,
-            SIGTERM => SIGTERM,
-            SIGCHLD => SIGCHLD,
-            SIGCONT => SIGCONT,
-            SIGTSTP => SIGTSTP,
-            SIGTTIN => SIGTTIN,
-            SIGTTOU => SIGTTOU,
+            SIGHUP,
+            SIGINT,
+            SIGUSR1,
+            SIGUSR2,
+            SIGQUIT,
+            SIGILL,
+            SIGABRT,
+            SIGFPE,
+            SIGSEGV,
+            SIGPIPE,
+            SIGALRM,
+            SIGTERM,
+            SIGCHLD,
+            SIGCONT,
+            SIGTSTP,
+            SIGTTIN,
+            SIGTTOU,
         );
     }
 
     /**
+     * 
      * Check if the signal is catchable, then set the signal to be caught by $handler.
      *
      * @param int $signal The signal to be caught.
      * 
-     * @param callable|int $handler The handler to be use for the signal.
+     * @param callable|int $handler The handler to be use for the signal; pass
+     * the constant SIG_IGN to ignore the signal, or SIG_DFL to restore the
+     * default handler for the signal.
      * 
-     * @param bool $restart_syscalls
+     * @param bool $restart_syscalls Specifies whether system call restarting
+     * should be used when this signal arrives.
      *
      * @return bool
      * 
@@ -82,9 +86,9 @@ class ProcessControl
      * @throws InvalidArgumentException
      * 
      */
-    public function __invoke($signal, $handler, $restart_syscalls = true)
+    public function handle($signal, $handler, $restart_syscalls = true)
     {
-        if (! array_key_exists($signal, $this->catchable_signals)) {
+        if (! isset($this->catchable_signals[$signal])) {
             throw new Exception\SignalNotCatchable($signal);
         }
 
@@ -92,24 +96,6 @@ class ProcessControl
             throw new InvalidArgumentException('Handler must be of type callable or int.');
         }
 
-        return $this->catchSignal($signal, $handler, $restart_syscalls);
-    }
-
-    /**
-     * 
-     * Catches a signal.
-     * 
-     * @param int $signal
-     * 
-     * @param callable|int $handler
-     * 
-     * @param bool $restart_syscalls
-     * 
-     * @return bool
-     * 
-     */
-    protected function catchSignal($signal, $handler, $restart_syscalls)
-    {
         return pcntl_signal($signal, $handler, $restart_syscalls);
     }
 }

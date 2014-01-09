@@ -301,7 +301,7 @@ $process_control = new ProcessControl();
 
 declare(ticks = 5);
 
-$process_control->__invoke(SIGINT, function() {
+$process_control->handle(SIGINT, function() {
     echo "You hit 'Ctrl + C'";
     exit;
 });
@@ -310,6 +310,7 @@ do {
     echo '.';
     sleep(1);
 } while (true);
+?>
 ```
 
 Running the above will put you into an endless loop _echoing_ a '.' every

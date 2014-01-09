@@ -34,7 +34,7 @@ class ProcessControlTest extends \PHPUnit_Framework_TestCase
     public function testInvoke()
     {
         if ($this->hasDependencies()) {
-            $this->assertTrue($this->newProcessControl()->__invoke(SIGINT, function(){}));
+            $this->assertTrue($this->newProcessControl()->handle(SIGINT, function(){}));
         }
     }
 
@@ -42,7 +42,7 @@ class ProcessControlTest extends \PHPUnit_Framework_TestCase
     {
         if ($this->hasDependencies()) {
             $this->setExpectedException('Aura\\Cli\\Exception\\SignalNotCatchable');
-            $this->newProcessControl()->__invoke(99999, 1);
+            $this->newProcessControl()->handle(99999, 1);
         }
     }
 
@@ -50,7 +50,7 @@ class ProcessControlTest extends \PHPUnit_Framework_TestCase
     {
         if ($this->hasDependencies()) {
             $this->setExpectedException('\InvalidArgumentException');
-            $this->newProcessControl()->__invoke(SIGINT, "string");
+            $this->newProcessControl()->handle(SIGINT, "string");
         }
     }
 }
