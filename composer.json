@@ -1,16 +1,14 @@
 {
     "name": "aura/cli",
     "type": "library",
-    "description": "Provides the equivalent of request (Context) and response (Stdio) classes for a command line environment, including Getopt and process control support.",
+    "description": "Provides the equivalent of request (Context) and response (Stdio) classes for a command line environment, including Getopt support.",
     "keywords": [
         "command",
         "command line",
         "cli",
         "getopt",
         "options",
-        "stdio",
-        "pcntl",
-        "process control"
+        "stdio"
     ],
     "homepage": "https://github.com/auraphp/Aura.Cli/releases",
     "license": "BSD-2-Clause",
