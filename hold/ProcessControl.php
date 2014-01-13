@@ -14,9 +14,13 @@ use Aura\Cli\Exception;
 use InvalidArgumentException;
 
 /**
+ * 
  * Helper for dealing with pcntl signal functions.
- *
+ * 
+ * <http://www.tuxradar.com/practicalphp/16/1/0>
+ * 
  * @package Aura.Cli
+ * 
  */
 class ProcessControl
 {
