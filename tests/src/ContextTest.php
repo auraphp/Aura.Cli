@@ -103,5 +103,23 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($getopt->get('-f'));
         $this->assertTrue($getopt->get('--foo'));
+        
+        $context = $this->newContext(array(
+            'argv' => array(
+                '-foo',
+            )
+        ));
+
+        $getopt = $context->getopt(array('f,foo'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
+
+        $getopt = $context->getopt(array('foo,f'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
     }
 }
