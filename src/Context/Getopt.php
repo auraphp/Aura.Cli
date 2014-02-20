@@ -446,4 +446,31 @@ class Getopt extends AbstractValues
             $this->values[$option['name']] = $value;
         }
     }
+    
+    /**
+     *
+     * Returns a value.
+     *
+     * @param string $key The key, if any, to get the value of; if null, will
+     * return all values.
+     *
+     * @param string $alt The alternative default value to return if the
+     * requested key does not exist.
+     *
+     * @return mixed The requested value, or the alternative default
+     * value.
+     *
+     */
+    public function get($key = null, $alt = null)
+    {
+        // We need to check if the key we're asking for is an alias
+        foreach ($this->options as $option) {
+            if (!empty($option['alias']) && $option['alias'] == $key) {
+                return parent::get($option['name'], $alt);
+            }
+        }
+
+        // Otherwise use default behaviour
+        return parent::get($key, $alt);
+    }
 }
