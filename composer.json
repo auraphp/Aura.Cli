@@ -23,7 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Aura\\Cli\\": "src/"
+            "Aura\\Cli\\": "src/",
+            "Aura\\Cli\\_Config\\": "common/"
         }
     },
     "extra": {
