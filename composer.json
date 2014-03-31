@@ -27,9 +27,11 @@
         }
     },
     "extra": {
-        "type": "library",
-        "config": {
-            "common": "Aura\\Cli\\_Config\\Common"
+        "aura": {
+            "type": "library",
+            "config": {
+                "common": "Aura\\Cli\\_Config\\Common"
+            }
         },
         "branch-alias": {
             "dev-develop-2": "2.0.x-dev"
