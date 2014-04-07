@@ -428,8 +428,7 @@ class Getopt extends AbstractValues
     
     /**
      * 
-     * Sets an option value; if an option value is set multiple times, it is
-     * automatically converted to an array.
+     * Sets an option value, adding to a value array for 'multi' values.
      * 
      * @param array $option The option array.
      * 
@@ -441,19 +440,25 @@ class Getopt extends AbstractValues
     protected function setValue($option, $value)
     {
         if ($option['multi']) {
-            $this->values[$option['name']][] = $value;
+            $this->addMultiValue($option['name'], $value, $option['alias']);
         } else {
-            $this->values[$option['name']] = $value;
+            $this->setSingleValue($option['name'], $value, $option['alias']);
         }
+    }
 
-        if (! $option['alias']) {
-            return;
+    protected function addMultiValue($name, $value, $alias = null)
+    {
+        $this->values[$name][] = $value;
+        if ($alias) {
+            $this->values[$alias][] = $value;
         }
+    }
 
-        if ($option['multi']) {
-            $this->values[$option['alias']][] = $value;
-        } else {
-            $this->values[$option['alias']] = $value;
+    protected function setSingleValue($name, $value, $alias = null)
+    {
+        $this->values[$name] = $value;
+        if ($alias) {
+            $this->values[$alias] = $value;
         }
     }
 }
