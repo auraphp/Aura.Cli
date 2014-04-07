@@ -79,4 +79,47 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $expect = "The option '-f' requires a parameter.";
         $this->assertSame($expect, $actual->getMessage());
     }
+    
+    /**
+     * Test that when using a getopt alias that whichever order you use
+     * them in the result is the same
+     */
+    public function testGetoptAlias()
+    {
+        $context = $this->newContext(array(
+            'argv' => array(
+                '-f',
+            )
+        ));
+
+        $getopt = $context->getopt(array('f,foo'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
+
+        $getopt = $context->getopt(array('foo,f'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
+        
+        $context = $this->newContext(array(
+            'argv' => array(
+                '-foo',
+            )
+        ));
+
+        $getopt = $context->getopt(array('f,foo'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
+
+        $getopt = $context->getopt(array('foo,f'));
+        $this->assertInstanceOf('Aura\Cli\Context\Getopt', $getopt);
+
+        $this->assertTrue($getopt->get('-f'));
+        $this->assertTrue($getopt->get('--foo'));
+    }
 }
