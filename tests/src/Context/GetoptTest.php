@@ -1,18 +1,21 @@
 <?php
 namespace Aura\Cli\Context;
 
+use Aura\Cli\OptionParser;
+
 class GetoptTest extends \PHPUnit_Framework_TestCase
 {
     protected $getopt;
     
     protected function setUp()
     {
-        $this->getopt = new Getopt;
+        $this->getopt = new Getopt(new OptionParser);
     }
     
     public function testSetOptions()
     {
         $options = array(
+            'z*',
             'foo-bar,f*:', 
             'baz-dib,b::' => 'Description for baz-dib option.',
             'z,zim-gir',

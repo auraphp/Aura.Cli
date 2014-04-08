@@ -14,7 +14,6 @@ use Aura\Cli\Context\Argv;
 use Aura\Cli\Context\Env;
 use Aura\Cli\Context\Getopt;
 use Aura\Cli\Context\Server;
-use Aura\Cli\Stdio;
 use Aura\Cli\Stdio\Formatter;
 use Aura\Cli\Stdio\Handle;
 
@@ -50,7 +49,7 @@ class CliFactory
                 ? new Argv($globals['argv'])
                 : new Argv;
         
-        $getopt = new Getopt;
+        $getopt = new Getopt(new OptionParser);
         
         return new Context(
             $env,

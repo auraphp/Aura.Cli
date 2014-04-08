@@ -11,6 +11,7 @@
 namespace Aura\Cli\Context;
 
 use Aura\Cli\Exception;
+use Aura\Cli\OptionParser;
 
 /**
  * 
@@ -48,6 +49,13 @@ class Getopt extends AbstractValues
      */
     protected $values = array();
     
+    protected $option_parser;
+
+    public function __construct(OptionParser $option_parser)
+    {
+        $this->option_parser = $option_parser;
+    }
+
     /**
      * 
      * Sets the option definitions (both long options and short flags).
@@ -64,11 +72,7 @@ class Getopt extends AbstractValues
     {
         $this->options = array();
         foreach ($options as $key => $val) {
-            if (is_int($key)) {
-                $this->setOption($val);
-            } else {
-                $this->setOption($key, $val);
-            }
+            $this->setOption($key, $val);
         }
     }
     
@@ -85,61 +89,8 @@ class Getopt extends AbstractValues
      */
     public function setOption($string, $descr = null)
     {
-        // option definition array
-        $option = array(
-            'name'  => null,
-            'alias' => null,
-            'multi' => false,
-            'param' => 'rejected',
-            'descr' => $descr,
-        );
-        
-        // is the param optional, required, or rejected?
-        if (substr($string, -2) == '::') {
-            $string = substr($string, 0, -2);
-            $option['param'] = 'optional';
-        } elseif (substr($string, -1) == ':') {
-            $string = substr($string, 0, -1);
-            $option['param'] = 'required';
-        }
-        
-        // remove any remaining colons
-        $string = rtrim($string, ':');
-        
-        // is the option allowed multiple times?
-        if (substr($string, -1) == '*') {
-            $option['multi'] = true;
-            $string = substr($string, 0, -1);
-        }
-        
-        // does the option have an alias?
-        $names = explode(',', $string);
-        $option['name'] = $this->fixName($names[0]);
-        if (isset($names[1])) {
-            $option['alias'] = $this->fixName($names[1]);
-        }
-        
-        // retain the definition under its primary name
+        $option = $this->option_parser->getDefined($string, $descr);
         $this->options[$option['name']] = $option;
-    }
-    
-    /**
-     * 
-     * Normalizes the option name.
-     * 
-     * @param string $name The option character or long name.
-     * 
-     * @return The fixes name with leading dash or dashes.
-     * 
-     */
-    protected function fixName($name)
-    {
-        // trim dashes and spaces
-        $name = trim($name, ' -');
-        if (strlen($name) == 1) {
-            return "-$name";
-        }
-        return "--$name";
     }
     
     /**
@@ -188,32 +139,11 @@ class Getopt extends AbstractValues
             }
         }
         
-        // undefined; retain a message about it then deal with it
         $this->errors[] = new Exception\OptionNotDefined(
             "The option '$name' is not recognized."
         );
         
-        // return a temporary definition
-        $name = $this->fixName($name);
-        if (strlen($name) == 2) {
-            // undefined short flags do not take a param
-            return array(
-                'name'  => $name,
-                'alias' => null,
-                'multi' => false,
-                'param' => 'rejected',
-                'descr' => null,
-            );
-        }
-        
-        // undefined long options take an optional param
-        return array(
-            'name'  => $name,
-            'alias' => null,
-            'multi' => false,
-            'param' => 'optional',
-            'descr' => null,
-        );
+        return $this->option_parser->getUndefined($name);
     }
     
     /**

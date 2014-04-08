@@ -33,10 +33,24 @@ class Common extends Config
         );
 
         /**
+         * Aura\Cli\Context\Getopt
+         */
+        $di->params['Aura\Cli\Context\Getopt'] = array(
+            'option_parser' => $di->lazyNew('Aura\Cli\OptionParser'),
+        );
+
+        /**
          * Aura\Cli\Context\Server
          */
         $di->params['Aura\Cli\Context\Server'] = array(
             'values' => $_SERVER,
+        );
+
+        /**
+         * Aura\Cli\Help
+         */
+        $di->params['Aura\Cli\Help'] = array(
+            'option_parser' => $di->lazyNew('Aura\Cli\OptionParser'),
         );
 
         /**
