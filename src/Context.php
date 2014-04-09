@@ -13,6 +13,7 @@ namespace Aura\Cli;
 use Aura\Cli\Context\Argv;
 use Aura\Cli\Context\Env;
 use Aura\Cli\Context\Getopt;
+use Aura\Cli\Context\GetoptFactory;
 use Aura\Cli\Context\Server;
 
 /**
@@ -44,7 +45,7 @@ class Context
 
     /**
      * 
-     * A prototype Getopt object.
+     * A factory for Getopt objects.
      * 
      * @var Getopt
      * 
@@ -64,6 +65,14 @@ class Context
      * 
      * Constructor.
      * 
+     * @param Env $env Imported $_ENV values.
+     * 
+     * @param Server $server Imported $_SERVER values.
+     * 
+     * @param Argv $argv Imported $argv values.
+     * 
+     * @param GetoptFactory $getopt_factory A factory for Getopt objects.
+     * 
      */
     public function __construct(
         Env $env,
@@ -71,9 +80,9 @@ class Context
         Argv $argv,
         GetoptFactory $getopt_factory
     ) {
-        $this->env    = $env;
+        $this->env = $env;
         $this->server = $server;
-        $this->argv   = $argv;
+        $this->argv = $argv;
         $this->getopt_factory = $getopt_factory;
     }
 
@@ -104,6 +113,9 @@ class Context
      */
     public function getopt(array $options)
     {
-        return $this->getopt_factory->newInstance($options, $this->argv->get());
+        return $this->getopt_factory->newInstance(
+            $this->argv->get(),
+            $options
+        );
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Cli;
+namespace Aura\Cli\Context;
 
 class GetoptParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +62,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $actual);
         
         // get an undefined long option
-        $actual = $this->getopt_parser->getOption('no-long');
+        $actual = $this->getopt_parser->getOption('--no-long');
         $expect = (object) array(
             'name'  => '--no-long',
             'alias' => null,
@@ -75,7 +75,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
     
     public function testParse_noOptions()
     {
-        $result = $this->getopt_parser->parse(array('abc', 'def'));
+        $result = $this->getopt_parser->parseInput(array('abc', 'def'));
         $this->assertTrue($result);
         
         $expect = array('abc', 'def');
@@ -88,14 +88,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('foo-bar');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertTrue($result);
         
         $expect = array('--foo-bar' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar=baz'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertFalse($result);
         
         $errors = $this->getopt_parser->getErrors();
@@ -111,14 +111,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('foo-bar:');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar=baz'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertTrue($result);
         
         $expect = array('--foo-bar' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertFalse($result);
         
         $errors = $this->getopt_parser->getErrors();
@@ -134,14 +134,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('foo-bar::');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertTrue($result);
         
         $expect = array('--foo-bar' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
         
-        $result = $this->getopt_parser->parse(array('--foo-bar=baz'));
+        $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertTrue($result);
         
         $expect = array('--foo-bar' => 'baz');
@@ -154,7 +154,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('foo-bar*::');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array(
+        $result = $this->getopt_parser->parseInput(array(
             '--foo-bar',
             '--foo-bar',
             '--foo-bar=baz',
@@ -173,14 +173,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('-f'));
+        $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertTrue($result);
         
         $expect = array('-f' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
         
-        $result = $this->getopt_parser->parse(array('-f', 'baz'));
+        $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
         
         $expect = array('-f' => true, 'baz');
@@ -193,14 +193,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f:');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('-f', 'baz'));
+        $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
         
         $expect = array('-f' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     
-        $result = $this->getopt_parser->parse(array('-f'));
+        $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertFalse($result);
         
         $errors = $this->getopt_parser->getErrors();
@@ -216,14 +216,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f::');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('-f'));
+        $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertTrue($result);
         
         $expect = array('-f' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
         
-        $result = $this->getopt_parser->parse(array('-f', 'baz'));
+        $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
         
         $expect = array('-f' => 'baz');
@@ -236,7 +236,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f*::');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
+        $result = $this->getopt_parser->parseInput(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
         $this->assertTrue($result);
         
         $expect = array('-f' => array(true, true, 'baz', 'dib', true));
@@ -249,7 +249,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f', 'b', 'z');
         $this->getopt_parser->setOptions($options);
         
-        $result = $this->getopt_parser->parse(array('-fbz'));
+        $result = $this->getopt_parser->parseInput(array('-fbz'));
         $this->assertTrue($result);
         
         $expect = array(
@@ -266,7 +266,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('f', 'b:', 'z');
         $this->getopt_parser->setOptions($options);
     
-        $result = $this->getopt_parser->parse(array('-fbz'));
+        $result = $this->getopt_parser->parseInput(array('-fbz'));
         $this->assertFalse($result);
         
         $errors = $this->getopt_parser->getErrors();
@@ -280,7 +280,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
     public function testParseAndGet()
     {
         $this->getopt_parser->setOptions(array('foo-bar:', 'b', 'z::'));
-        $this->getopt_parser->parse(array(
+        $this->getopt_parser->parseInput(array(
             'abc',
             '--foo-bar=zim',
             '--undefined=undef',

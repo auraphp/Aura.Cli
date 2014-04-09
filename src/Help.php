@@ -1,49 +1,184 @@
 <?php
+/**
+ * 
+ * This file is part of Aura for PHP.
+ * 
+ * @package Aura.Cli
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Cli;
 
+use Aura\Cli\Context\GetoptParser;
+
+/**
+ * 
+ * Represents the "help" information for a command.
+ * 
+ * @package Aura.Cli
+ * 
+ */
 class Help
 {
+    /**
+     * 
+     * The long-form help text.
+     * 
+     * @var string
+     * 
+     */
     protected $descr;
+
+    /**
+     * 
+     * A getopt parser.
+     * 
+     * @var GetoptParser
+     * 
+     */
+    protected $getopt_parser = array();
+
+    /**
+     * 
+     * The option definitions.
+     * 
+     * @var array
+     * 
+     */
     protected $options = array();
+
+    /**
+     * 
+     * A single-line summary for the command.
+     * 
+     * @var string
+     * 
+     */
     protected $summary;
+
+    /**
+     * 
+     * One or more single-line usage examples.
+     * 
+     * @var string|array
+     * 
+     */
     protected $usage;
 
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param GetoptParser $getopt_parser A getopt parser.
+     * 
+     */
     public function __construct(GetoptParser $getopt_parser)
     {
         $this->getopt_parser = $getopt_parser;
         $this->init();
     }
 
+    /**
+     * 
+     * Use this to initialize the help object in child classes.
+     * 
+     * @return null
+     * 
+     */
     protected function init()
     {
-        // ...
     }
 
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
+    /**
+     * 
+     * Sets the option definitions.
+     * 
+     * @param array $options The option definitions.
+     * 
+     * @return null
+     * 
+     */
     public function setOptions(array $options)
     {
         $this->options = $options;
     }
 
+    /**
+     * 
+     * Gets the option definitions.
+     * 
+     * @return array
+     * 
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * 
+     * Sets the single-line summary.
+     * 
+     * @param string $summary The single-line summary.
+     * 
+     * @return null
+     * 
+     */
     public function setSummary($summary)
     {
         $this->summary = $summary;
     }
 
+    /**
+     * 
+     * Gets the single-line summary.
+     * 
+     * @return string
+     * 
+     */
+    public function getSummary($summary)
+    {
+        return $this->summary;
+    }
+    
+    /**
+     * 
+     * Sets the usage line(s).
+     * 
+     * @param string|array $usage The usage line(s).
+     * 
+     * @return null
+     * 
+     */
     public function setUsage($usage)
     {
-        $this->usage = $usage;
+        $this->usage = (array) $usage;
     }
 
+    /**
+     * 
+     * Sets the long-form description.
+     * 
+     * @param string $descr The long-form description.
+     * 
+     * @return null
+     * 
+     */
     public function setDescr($descr)
     {
         $this->descr = $descr;
     }
 
+    /**
+     * 
+     * Gets the formatted help output.
+     * 
+     * @param string $name The command name.
+     * 
+     * @return string
+     * 
+     */
     public function getHelp($name)
     {
         $help = $this->getHelpSummary($name)
@@ -59,6 +194,15 @@ class Help
         return rtrim($help) . PHP_EOL;
     }
 
+    /**
+     * 
+     * Gets the formatted summary output.
+     * 
+     * @param string $name The command name.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpSummary($name)
     {
         if (! $this->summary) {
@@ -70,6 +214,15 @@ class Help
              . PHP_EOL . PHP_EOL;
     }
 
+    /**
+     * 
+     * Gets the formatted usage output.
+     * 
+     * @param string $name The command name.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpUsage($name)
     {
         if (! $this->usage) {
@@ -77,12 +230,19 @@ class Help
         }
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
-        foreach ((array) $this->usage as $usage) {
+        foreach ($this->usage as $usage) {
              $text .= "    <<ul>>$name<<reset>> {$usage}" . PHP_EOL;
         }
         return $text . PHP_EOL;
     }
 
+    /**
+     * 
+     * Gets the formatted options output.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpOptions()
     {
         if (! $this->options) {
@@ -96,6 +256,17 @@ class Help
         return $text;
     }
 
+    /**
+     * 
+     * Gets the formatted output for one option.
+     * 
+     * @param string $string The option definition string.
+     * 
+     * @param string $descr The option description.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpOption($string, $descr)
     {
         // $name, $alias, $multi, $param, $descr
@@ -120,6 +291,19 @@ class Help
              . "        " . trim($descr) . PHP_EOL;
     }
 
+    /**
+     * 
+     * Gets the formatted output for an option param.
+     * 
+     * @param string $name The option name.
+     * 
+     * @param string $param The option param flag.
+     * 
+     * @param bool $multi The option multi flag.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpOptionParam($name, $param, $multi)
     {
         $text = "{$name}";
@@ -135,6 +319,17 @@ class Help
         return $text;
     }
 
+    /**
+     * 
+     * Gets the formatted output for a short option param.
+     * 
+     * @param string $name The option name.
+     * 
+     * @param string $param The option param flag.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpOptionParamShort($name, $param)
     {
         if ($param == 'required') {
@@ -146,6 +341,17 @@ class Help
         }
     }
 
+    /**
+     * 
+     * Gets the formatted output for a long option param.
+     * 
+     * @param string $name The option name.
+     * 
+     * @param string $param The option param flag.
+     * 
+     * @return string
+     * 
+     */
     protected function getHelpOptionParamLong($name, $param)
     {
         if ($param == 'required') {
@@ -157,6 +363,13 @@ class Help
         }
     }
 
+    /**
+     * 
+     * Gets the formatted output for the long-form description.
+     * 
+     * @return string
+     * 
+     */
     public function getHelpDescr()
     {
         if (! $this->descr) {

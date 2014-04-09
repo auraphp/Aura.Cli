@@ -10,12 +10,9 @@
  */
 namespace Aura\Cli\Context;
 
-use Aura\Cli\Exception;
-use Aura\Cli\GetoptParser;
-
 /**
  * 
- * Parses and retains command line option and argument values.
+ * A read-only representation of named option and numeric argument values.
  * 
  * @package Aura.Cli
  * 
@@ -24,13 +21,22 @@ class Getopt extends AbstractValues
 {
     /**
      * 
-     * An array of error messages related to getopt parsing.
+     * Any getopt parsing errors.
      * 
      * @var array
      * 
      */
     protected $errors = array();
     
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param array $values The values to be represented by this object.
+     * 
+     * @param array $errors Any getopt parsing errors.
+     * 
+     */
     public function __construct(
         array $values = array(),
         array $errors = array()

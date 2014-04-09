@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli;
 
-use Aura\Cli\GetoptParser;
+use Aura\Cli\Context\GetoptParser;
 
 class HelpTest extends \PHPUnit_Framework_TestCase
 {
