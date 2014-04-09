@@ -90,7 +90,6 @@ class Help
         }
         
         $text = "<<bold>>OPTIONS<<reset>>" . PHP_EOL;
-        ksort($this->options);
         foreach ($this->options as $string => $descr) {
             $text .= $this->getHelpOption($string, $descr). PHP_EOL;
         }

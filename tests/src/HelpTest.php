@@ -66,29 +66,29 @@ EOT
     Lorem ipsum dolor and all the rest.
 
 <<bold>>OPTIONS<<reset>>
-    --bar[=<value>]
-        A bar option.
-
-    -d [-d [...]]
-    --doom [--doom [...]]
-        A repeatable flag.
-
     -z [<value>] [-z [<value>] [...]]
     --zim[=<value>] [--zim[=<value>] [...]]
         A zim option.
-
-    -b <value>
-        No description.
-
-    --baz[=<value>] [--baz[=<value>] [...]]
-        A baz option.
 
     -f
     --foo
         A foo option.
 
+    -b <value>
+        No description.
+
     --irk=<value>
         No description.
+
+    -d [-d [...]]
+    --doom [--doom [...]]
+        A repeatable flag.
+
+    --bar[=<value>]
+        A bar option.
+
+    --baz[=<value>] [--baz[=<value>] [...]]
+        A baz option.
 
 EOT;
         $this->assertSame($expect, $actual);
