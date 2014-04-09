@@ -251,7 +251,8 @@ class Help
         
         $text = "<<bold>>OPTIONS<<reset>>" . PHP_EOL;
         foreach ($this->options as $string => $descr) {
-            $text .= $this->getHelpOption($string, $descr). PHP_EOL;
+            $option = $this->getopt_parser->newOption($string, $descr);
+            $text .= $this->getHelpOption($option). PHP_EOL;
         }
         return $text;
     }
@@ -260,18 +261,13 @@ class Help
      * 
      * Gets the formatted output for one option.
      * 
-     * @param string $string The option definition string.
-     * 
-     * @param string $descr The option description.
+     * @param StdClass An option struct.
      * 
      * @return string
      * 
      */
-    protected function getHelpOption($string, $descr)
+    protected function getHelpOption($option)
     {
-        // $name, $alias, $multi, $param, $descr
-        $option = $this->getopt_parser->newOption($string, $descr);
-
         $text = "    "
               . $this->getHelpOptionParam($option->name, $option->param, $option->multi)
               . PHP_EOL;
@@ -282,13 +278,12 @@ class Help
                    . PHP_EOL;
         }
 
-        $descr = $option->descr;
-        if (! $descr) {
-            $descr = 'No description.';
+        if (! $option->descr) {
+            $option->descr = 'No description.';
         }
-
+        
         return $text
-             . "        " . trim($descr) . PHP_EOL;
+             . "        " . trim($option->descr) . PHP_EOL;
     }
 
     /**
