@@ -14,7 +14,7 @@ use Aura\Cli\Exception;
 
 /**
  * 
- * Parses command line input for named option numeric argument values.
+ * Parses command line input for named option and numeric argument values.
  * 
  * @package Aura.Cli
  * 

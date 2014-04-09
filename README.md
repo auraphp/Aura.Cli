@@ -1,7 +1,8 @@
 # Aura.Cli
 
 Provides the equivalent of request ( _Context_ ) and response ( _Stdio_ )
-objects for the command line interface, including _Getopt_ support.
+objects for the command line interface, including _Getopt_ support, and an
+independent _Help_ object for describing commands.
 
 ## Foreword
 
@@ -344,6 +345,10 @@ if ($getopt->get('--verbose')) {
 exit(Status::SUCCESS);
 ?>
 ```
+
+### Writing Command Help
+
+TBD
 
 ### Formatter Cheat Sheet
 
