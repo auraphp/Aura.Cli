@@ -15,7 +15,6 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     public function testSetOptions()
     {
         $options = array(
-            'z*',
             'foo-bar,f*:', 
             'baz-dib,b::' => 'Description for baz-dib option.',
             'z,zim-gir',
