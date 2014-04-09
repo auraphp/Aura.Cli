@@ -11,7 +11,7 @@
 namespace Aura\Cli\Context;
 
 use Aura\Cli\Exception;
-use Aura\Cli\OptionParser;
+use Aura\Cli\GetoptParser;
 
 /**
  * 
@@ -49,11 +49,11 @@ class Getopt extends AbstractValues
      */
     protected $values = array();
     
-    protected $option_parser;
+    protected $getopt_parser;
 
-    public function __construct(OptionParser $option_parser)
+    public function __construct(GetoptParser $getopt_parser)
     {
-        $this->option_parser = $option_parser;
+        $this->getopt_parser = $getopt_parser;
     }
 
     /**
@@ -89,7 +89,7 @@ class Getopt extends AbstractValues
      */
     public function setOption($string, $descr = null)
     {
-        $option = $this->option_parser->getDefined($string, $descr);
+        $option = $this->getopt_parser->getDefined($string, $descr);
         $this->options[$option['name']] = $option;
     }
     
@@ -143,7 +143,7 @@ class Getopt extends AbstractValues
             "The option '$name' is not recognized."
         );
         
-        return $this->option_parser->getUndefined($name);
+        return $this->getopt_parser->getUndefined($name);
     }
     
     /**

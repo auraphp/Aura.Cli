@@ -36,7 +36,7 @@ class Common extends Config
          * Aura\Cli\Context\Getopt
          */
         $di->params['Aura\Cli\Context\Getopt'] = array(
-            'option_parser' => $di->lazyNew('Aura\Cli\OptionParser'),
+            'getopt_parser' => $di->lazyNew('Aura\Cli\GetoptParser'),
         );
 
         /**
@@ -50,7 +50,7 @@ class Common extends Config
          * Aura\Cli\Help
          */
         $di->params['Aura\Cli\Help'] = array(
-            'option_parser' => $di->lazyNew('Aura\Cli\OptionParser'),
+            'getopt_parser' => $di->lazyNew('Aura\Cli\GetoptParser'),
         );
 
         /**

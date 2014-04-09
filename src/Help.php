@@ -8,9 +8,9 @@ class Help
     protected $summary;
     protected $usage;
 
-    public function __construct(OptionParser $option_parser)
+    public function __construct(GetoptParser $getopt_parser)
     {
-        $this->option_parser = $option_parser;
+        $this->getopt_parser = $getopt_parser;
         $this->init();
     }
 
@@ -99,7 +99,7 @@ class Help
     protected function getHelpOption($string, $descr)
     {
         // $name, $alias, $multi, $param, $descr
-        extract($this->option_parser->getDefined($string, $descr));
+        extract($this->getopt_parser->getDefined($string, $descr));
 
         $text = "    "
               . $this->getHelpOptionParam($name, $param, $multi)

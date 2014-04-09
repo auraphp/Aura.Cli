@@ -49,7 +49,7 @@ class CliFactory
                 ? new Argv($globals['argv'])
                 : new Argv;
         
-        $getopt = new Getopt(new OptionParser);
+        $getopt = new Getopt(new GetoptParser);
         
         return new Context(
             $env,

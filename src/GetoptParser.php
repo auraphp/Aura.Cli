@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli;
 
-class OptionParser
+class GetoptParser
 {
     public function getDefined($string, $descr = null)
     {

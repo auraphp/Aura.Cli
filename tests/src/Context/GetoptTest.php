@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli\Context;
 
-use Aura\Cli\OptionParser;
+use Aura\Cli\GetoptParser;
 
 class GetoptTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,7 +9,7 @@ class GetoptTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->getopt = new Getopt(new OptionParser);
+        $this->getopt = new Getopt(new GetoptParser);
     }
     
     public function testSetOptions()

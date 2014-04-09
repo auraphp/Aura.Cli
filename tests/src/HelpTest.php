@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli;
 
-use Aura\Cli\OptionParser;
+use Aura\Cli\GetoptParser;
 
 class HelpTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class HelpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->help = new Help(new OptionParser);
+        $this->help = new Help(new GetoptParser);
     }
 
     public function testSetAndGetOptions()
