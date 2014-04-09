@@ -49,7 +49,7 @@ class Context
      * @var Getopt
      * 
      */
-    protected $getopt;
+    protected $getopt_factory;
     
     /**
      * 
@@ -69,12 +69,12 @@ class Context
         Env $env,
         Server $server,
         Argv $argv,
-        Getopt $getopt
+        GetoptFactory $getopt_factory
     ) {
         $this->env    = $env;
         $this->server = $server;
         $this->argv   = $argv;
-        $this->getopt = $getopt;
+        $this->getopt_factory = $getopt_factory;
     }
 
     /**
@@ -104,9 +104,6 @@ class Context
      */
     public function getopt(array $options)
     {
-        $getopt = clone $this->getopt;
-        $getopt->setOptions($options);
-        $getopt->parse($this->argv->get());
-        return $getopt;
+        return $this->getopt_factory->newInstance($options, $this->argv->get());
     }
 }

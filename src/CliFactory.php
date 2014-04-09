@@ -49,13 +49,13 @@ class CliFactory
                 ? new Argv($globals['argv'])
                 : new Argv;
         
-        $getopt = new Getopt(new GetoptParser);
+        $getopt_factory = new GetoptFactory(new GetoptParser);
         
         return new Context(
             $env,
             $server,
             $argv,
-            $getopt
+            $getopt_factory
         );
     }
     

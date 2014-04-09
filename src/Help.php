@@ -99,18 +99,19 @@ class Help
     protected function getHelpOption($string, $descr)
     {
         // $name, $alias, $multi, $param, $descr
-        extract($this->getopt_parser->getDefined($string, $descr));
+        $option = $this->getopt_parser->newOption($string, $descr);
 
         $text = "    "
-              . $this->getHelpOptionParam($name, $param, $multi)
+              . $this->getHelpOptionParam($option->name, $option->param, $option->multi)
               . PHP_EOL;
 
-        if ($alias) {
+        if ($option->alias) {
             $text .= "    "
-                   . $this->getHelpOptionParam($alias, $param, $multi)
+                   . $this->getHelpOptionParam($option->alias, $option->param, $option->multi)
                    . PHP_EOL;
         }
 
+        $descr = $option->descr;
         if (! $descr) {
             $descr = 'No description.';
         }
