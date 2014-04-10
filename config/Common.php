@@ -33,17 +33,17 @@ class Common extends Config
         );
 
         /**
+         * Aura\Cli\Context\GetoptFactory
+         */
+        $di->params['Aura\Cli\Context\GetoptFactory'] = array(
+            'getopt_parser' => $di->lazyNew('Aura\Cli\Context\GetoptParser'),
+        );
+
+        /**
          * Aura\Cli\Context\Server
          */
         $di->params['Aura\Cli\Context\Server'] = array(
             'values' => $_SERVER,
-        );
-
-        /**
-         * Aura\Cli\GetoptFactory
-         */
-        $di->params['Aura\Cli\GetoptFactory'] = array(
-            'getopt_parser' => $di->lazyNew('Aura\Cli\Context\GetoptParser'),
         );
 
         /**
