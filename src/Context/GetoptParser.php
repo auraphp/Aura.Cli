@@ -100,6 +100,7 @@ class GetoptParser
             'descr' => $descr,
         );
 
+        $this->setNewOptionMulti($option, $string);
         $this->setNewOptionParam($option, $string);
         $this->setNewOptionMulti($option, $string);
         $this->setNewOptionNameAlias($option, $string);
