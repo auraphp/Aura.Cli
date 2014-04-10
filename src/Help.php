@@ -137,7 +137,7 @@ class Help
      * @return string
      * 
      */
-    public function getSummary($summary)
+    public function getSummary()
     {
         return $this->summary;
     }
@@ -210,7 +210,7 @@ class Help
         }
 
         return "<<bold>>SUMMARY<<reset>>" . PHP_EOL
-             . "    <<bold>>{$name}<<reset>> -- {$this->summary}"
+             . "    <<bold>>{$name}<<reset>> -- " . $this->getSummary()
              . PHP_EOL . PHP_EOL;
     }
 
