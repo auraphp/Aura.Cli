@@ -15,7 +15,7 @@ class Common extends Config
             'env'    => $di->lazyNew('Aura\Cli\Context\Env'),
             'server' => $di->lazyNew('Aura\Cli\Context\Server'),
             'argv'   => $di->lazyNew('Aura\Cli\Context\Argv'),
-            'getopt_factory' => $di->lazyNew('Aura\Cli\GetoptFactory'),
+            'getopt_factory' => $di->lazyNew('Aura\Cli\Context\GetoptFactory'),
         );
 
         /**
@@ -43,14 +43,14 @@ class Common extends Config
          * Aura\Cli\GetoptFactory
          */
         $di->params['Aura\Cli\GetoptFactory'] = array(
-            'getopt_parser' => $di->lazyNew('Aura\Cli\GetoptParser'),
+            'getopt_parser' => $di->lazyNew('Aura\Cli\Context\GetoptParser'),
         );
 
         /**
          * Aura\Cli\Help
          */
         $di->params['Aura\Cli\Help'] = array(
-            'getopt_parser' => $di->lazyNew('Aura\Cli\GetoptParser'),
+            'getopt_parser' => $di->lazyNew('Aura\Cli\Context\GetoptParser'),
         );
 
         /**
