@@ -91,7 +91,7 @@ $value = $context->env->get('key', 'other_value');
 ### Getopt Support
 
 The _Context_ object provides support for retrieving command-line options and
-params, along with positional and named arguments.
+params, along with positional arguments.
 
 To retrieve options and arguments parsed from the command-line `$argv` values,
 use the `getopt()` method on the _Context_ object. This will return a
@@ -348,7 +348,72 @@ exit(Status::SUCCESS);
 
 ### Writing Command Help
 
-TBD
+Sometimes it will be useful to provide help output for your commands. With Aura.Cli, the _Help_ object is separate from any command you may write. It may be manipulated externally or extended.
+
+For example, extend the _Help_ object and override the `init()` method.
+
+```php
+<?php
+use Aura\Cli\Help;
+
+class MyCommandHelp extends Help
+{
+    protected function init()
+    {
+        $this->setSummary('A single-line summary.');
+        $this->setUsage('<arg1> <arg2>');
+        $this->setOptions(array(
+            'f,foo' => "The -f/--foo option description",
+            'bar::' => "The --bar option description",
+        ));
+        $this->setDescr("A multi-line description of the command.");
+    }
+}
+?>
+```
+
+Then instantiate the new class and pass its `getHelp()` output through _Stdio_:
+
+```php
+<?php
+use Aura\Cli\CliFactory;
+use Aura\Cli\Context\GetoptParser;
+
+$cli_factory = new CliFactory;
+$stdio = $cli_factory->newStdio();
+
+$help = new MyCommandHelp(new GetoptParser);
+$stdio->outln($help->getHelp('my-command'));
+?>
+```
+
+
+> - We keep the command name itself outside of the help class, because the command name may be mapped differently in different projects.
+> 
+> - We pass a _GetoptParser_ to the _Help_ object so it can parse the option defintions.
+> 
+> - We can get the option definitions out of the _Help_ object using `getOptions()`; this allows us to pass a _Help_ object into a hypothetical command object and reuse the definitions.
+
+The output will look something like this:
+
+```
+SUMMARY
+    my-command -- A single-line summary.
+
+USAGE
+    my-command <arg1> <arg2>
+
+DESCRIPTION
+    A multi-line description of the command.
+
+OPTIONS
+    -f
+    --foo
+        The -f/--foo option description.
+
+    --bar[=<value>]
+        The --bar option description.
+```
 
 ### Formatter Cheat Sheet
 
