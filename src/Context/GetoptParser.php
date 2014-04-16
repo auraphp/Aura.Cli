@@ -11,6 +11,7 @@
 namespace Aura\Cli\Context;
 
 use Aura\Cli\Exception;
+use StdClass;
 
 /**
  * 
