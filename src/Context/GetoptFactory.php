@@ -10,6 +10,8 @@
  */
 namespace Aura\Cli\Context;
 
+use Aura\Cli\Context\Getopt;
+
 /**
  * 
  * A factory to create Getopt objects.
