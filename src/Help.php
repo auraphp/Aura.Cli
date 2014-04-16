@@ -153,7 +153,7 @@ class Help
      */
     public function setUsage($usage)
     {
-        $this->usage = (array) $usage;
+        $this->usage = $usage;
     }
 
     /**
@@ -230,7 +230,7 @@ class Help
         }
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
-        foreach ($this->usage as $usage) {
+        foreach ((array) $this->usage as $usage) {
              $text .= "    <<ul>>$name<<reset>> {$usage}" . PHP_EOL;
         }
         return $text . PHP_EOL;
@@ -303,7 +303,7 @@ class Help
     {
         $text = "{$name}";
         if (strlen($name) == 2) {
-            $text .= $this->getHelpOptionParamShort($name, $param);
+            $text .= $this->getHelpOptionParamShort($param);
         } else {
             $text .= $this->getHelpOptionParamLong($name, $param);
         }
@@ -318,14 +318,12 @@ class Help
      * 
      * Gets the formatted output for a short option param.
      * 
-     * @param string $name The option name.
-     * 
      * @param string $param The option param flag.
      * 
      * @return string
      * 
      */
-    protected function getHelpOptionParamShort($name, $param)
+    protected function getHelpOptionParamShort($param)
     {
         if ($param == 'required') {
             return " <value>";
@@ -340,14 +338,12 @@ class Help
      * 
      * Gets the formatted output for a long option param.
      * 
-     * @param string $name The option name.
-     * 
      * @param string $param The option param flag.
      * 
      * @return string
      * 
      */
-    protected function getHelpOptionParamLong($name, $param)
+    protected function getHelpOptionParamLong($param)
     {
         if ($param == 'required') {
             return "=<value>";

@@ -57,6 +57,8 @@ class Formatter
         'whitebg'     => '47',
     );
 
+    protected $regex;
+    
     /**
      * 
      * Constructor.
