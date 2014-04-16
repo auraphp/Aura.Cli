@@ -7,7 +7,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->getopt_parser = new GetoptParser;
+        $this->getopt_parser = new GetoptParser(new OptionFactory);
     }
     
     public function testSetOptions()

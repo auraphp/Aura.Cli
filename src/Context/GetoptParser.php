@@ -58,6 +58,13 @@ class GetoptParser
      */
     protected $values;
 
+    protected $option_factory;
+
+    public function __construct(OptionFactory $option_factory)
+    {
+        $this->option_factory = $option_factory;
+    }
+
     /**
      * 
      * Sets the options to be used when parsing input.
@@ -69,124 +76,9 @@ class GetoptParser
     {
         $this->options = array();
         foreach ($options as $string => $descr) {
-            $option = $this->newOption($string, $descr);
+            $option = $this->option_factory->newInstance($string, $descr);
             $this->options[$option->name] = $option;
         }
-    }
-
-    /**
-     * 
-     * Returns a new option struct from an option definition string and
-     * description.
-     * 
-     * @param string $string The option definition string.
-     * 
-     * @param string $descr The option description.
-     * 
-     * @return StdClass
-     * 
-     */
-    public function newOption($string, $descr = null)
-    {
-        if (is_int($string)) {
-            $string = $descr;
-            $descr = null;
-        }
-        
-        $option = (object) array(
-            'name'  => null,
-            'alias' => null,
-            'multi' => false,
-            'param' => 'rejected',
-            'descr' => $descr,
-        );
-
-        $this->setNewOptionMulti($option, $string);
-        $this->setNewOptionParam($option, $string);
-        $this->setNewOptionMulti($option, $string);
-        $this->setNewOptionNameAlias($option, $string);
-        return $option;
-    }
-
-    /**
-     * 
-     * Sets the $param property on a new option struct.
-     * 
-     * @param StdClass $option The option struct.
-     * 
-     * @param $string The option definition string.
-     * 
-     * @return null
-     * 
-     */
-    protected function setNewOptionParam($option, &$string)
-    {
-        if (substr($string, -2) == '::') {
-            $option->param = 'optional';
-            $string = substr($string, 0, -2);
-        } elseif (substr($string, -1) == ':') {
-            $option->param = 'required';
-            $string = substr($string, 0, -1);
-        }
-
-        $string = rtrim($string, ':');
-    }
-
-    /**
-     * 
-     * Sets the $multi property on a new option struct.
-     * 
-     * @param StdClass $option The option struct.
-     * 
-     * @param $string The option definition string.
-     * 
-     * @return null
-     * 
-     */
-    protected function setNewOptionMulti($option, &$string)
-    {
-        if (substr($string, -1) == '*') {
-            $option->multi = true;
-            $string = substr($string, 0, -1);
-        }
-    }
-
-    /**
-     * 
-     * Sets the $name and $alias properties on a new option struct.
-     * 
-     * @param StdClass $option The option struct.
-     * 
-     * @param $string The option definition string.
-     * 
-     * @return null
-     * 
-     */
-    protected function setNewOptionNameAlias($option, &$string)
-    {
-        $names = explode(',', $string);
-        $option->name = $this->fixOptionName($names[0]);
-        if (isset($names[1])) {
-            $option->alias = $this->fixOptionName($names[1]);
-        }
-    }
-
-   /**
-     * 
-     * Normalizes the option name.
-     * 
-     * @param string $name The option character or long name.
-     * 
-     * @return The fixed name with a leading dash or dashes.
-     * 
-     */
-    protected function fixOptionName($name)
-    {
-        $name = trim($name, ' -');
-        if (strlen($name) == 1) {
-            return "-$name";
-        }
-        return "--$name";
     }
 
     /**
@@ -261,7 +153,7 @@ class GetoptParser
             $this->errors[] = new Exception\OptionNotDefined(
                 "The option '$name' is not defined."
             );
-            $option = $this->newUndefinedOption($name);
+            $option = $this->option_factory->newUndefined($name);
         }
 
         return $option;
@@ -284,24 +176,6 @@ class GetoptParser
                 return $option;
             }
         }
-    }
-
-    /**
-     * 
-     * Given an undefined option name, returns a default option struct for it.
-     * 
-     * @param string $name The undefined option name.
-     * 
-     * @return StdClass An option struct.
-     * 
-     */
-    protected function newUndefinedOption($name)
-    {
-        if (strlen($name) == 1) {
-            return $this->newOption($name);
-        }
-
-        return $this->newOption("{$name}::");
     }
 
     /**

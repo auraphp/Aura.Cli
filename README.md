@@ -377,12 +377,12 @@ Then instantiate the new class and pass its `getHelp()` output through _Stdio_:
 ```php
 <?php
 use Aura\Cli\CliFactory;
-use Aura\Cli\Context\GetoptParser;
+use Aura\Cli\Context\OptionFactory;
 
 $cli_factory = new CliFactory;
 $stdio = $cli_factory->newStdio();
 
-$help = new MyCommandHelp(new GetoptParser);
+$help = new MyCommandHelp(new OptionFactory);
 $stdio->outln($help->getHelp('my-command'));
 ?>
 ```

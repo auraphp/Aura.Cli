@@ -10,7 +10,7 @@
  */
 namespace Aura\Cli;
 
-use Aura\Cli\Context\GetoptParser;
+use Aura\Cli\Context\OptionFactory;
 
 /**
  * 
@@ -32,12 +32,12 @@ class Help
 
     /**
      * 
-     * A getopt parser.
+     * A option factory.
      * 
-     * @var GetoptParser
+     * @var OptionFactory
      * 
      */
-    protected $getopt_parser = array();
+    protected $option_factory = array();
 
     /**
      * 
@@ -70,12 +70,12 @@ class Help
      * 
      * Constructor.
      * 
-     * @param GetoptParser $getopt_parser A getopt parser.
+     * @param OptionFactory $option_factory An option factory.
      * 
      */
-    public function __construct(GetoptParser $getopt_parser)
+    public function __construct(OptionFactory $option_factory)
     {
-        $this->getopt_parser = $getopt_parser;
+        $this->option_factory = $option_factory;
         $this->init();
     }
 
@@ -252,7 +252,7 @@ class Help
         
         $text = "<<bold>>OPTIONS<<reset>>" . PHP_EOL;
         foreach ($this->options as $string => $descr) {
-            $option = $this->getopt_parser->newOption($string, $descr);
+            $option = $this->option_factory->newInstance($string, $descr);
             $text .= $this->getHelpOption($option). PHP_EOL;
         }
         return $text;
