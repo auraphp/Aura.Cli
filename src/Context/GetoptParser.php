@@ -246,9 +246,7 @@ class GetoptParser
      * 
      * @param string $name The definition key to look for.
      * 
-     * @return array An option definition array with two keys, 'name' (the
-     * option name) and 'param' (whether a param is rejected, required, or
-     * optional).
+     * @return StdClass An option struct.
      * 
      */
     public function getOption($name)
@@ -313,7 +311,7 @@ class GetoptParser
      * @param string $input The current input element, e.g. "--foo" or
      * "--bar=baz".
      * 
-     * @return null
+     * @return bool|null
      * 
      */
     protected function setLongOptionValue($input)
@@ -503,7 +501,7 @@ class GetoptParser
      * 
      * Sets an option value, adding to a value array for multi-values.
      * 
-     * @param array $option The option struct.
+     * @param StdClass $option The option struct.
      * 
      * @param mixed $value The option value.
      * 
