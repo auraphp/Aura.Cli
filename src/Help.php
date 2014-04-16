@@ -88,6 +88,7 @@ class Help
      */
     protected function init()
     {
+        $this->summary = '';
     }
 
     /**
