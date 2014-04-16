@@ -23,7 +23,7 @@ class Handle
      *
      * The resource represented by the handle.
      * 
-     * @var int|resource 
+     * @var resource 
      * 
      */
     protected $resource;
@@ -134,7 +134,7 @@ class Handle
         // auto-determine; silence posix_isatty() errors regarding
         // non-standard resources, e.g. php://memory
         $level = error_reporting(0);
-        $this->posix = posix_isatty($this->resource);
+        $this->posix = posix_isatty((int) $this->resource);
         error_reporting($level);
     }
     
