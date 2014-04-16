@@ -305,7 +305,7 @@ class Help
         if (strlen($name) == 2) {
             $text .= $this->getHelpOptionParamShort($param);
         } else {
-            $text .= $this->getHelpOptionParamLong($name, $param);
+            $text .= $this->getHelpOptionParamLong($param);
         }
 
         if ($multi) {
