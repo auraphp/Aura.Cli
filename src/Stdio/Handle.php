@@ -23,7 +23,7 @@ class Handle
      *
      * The resource represented by the handle.
      * 
-     * @var resource 
+     * @var int|resource 
      * 
      */
     protected $resource;
