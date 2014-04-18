@@ -20,14 +20,12 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Cli/releases
 [![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/coverage.png?s=c7eb4d4a6dc0141c4a36fdd50c040ea0839d6e4e)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
 [![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
 
-This library has 100% code coverage with [PHPUnit][]. To run the tests at the
-command line, go to the _tests_ directory and issue `phpunit`.
-
-[phpunit]: http://phpunit.de/manual/
+To run the [PHPUnit][] tests at the command line, go to the _tests_ directory and issue `phpunit`.
 
 This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
 you notice compliance oversights, please send a patch via pull request.
 
+[PHPUnit]: http://phpunit.de/manual/
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
