@@ -47,9 +47,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         );
         $actual = $context->argv->get();
         $this->assertSame($expect, $actual);
-        
-        // get a nonexistent property
-        $this->assertNull($context->nosuchkey);
     }
     
     public function testGetopt()
@@ -121,5 +118,22 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($getopt->get('-f'));
         $this->assertTrue($getopt->get('--foo'));
+    }
+
+    public function testGithubIssue32()
+    {
+        $context = $this->newContext();
+        $getopt  = $context->getopt(array('f:'));
+        $actual = $context->getopt_factory->getGetoptParser()->getOptions();
+        $expect = array(
+            '-f' => (object) array(
+                'name' => '-f',
+                'alias' => null,
+                'multi' => false,
+                'param' => 'required',
+                'descr' => null,
+            ),
+        );
+        $this->assertEquals($expect, $actual);
     }
 }
