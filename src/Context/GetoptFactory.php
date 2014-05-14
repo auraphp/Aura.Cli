@@ -42,6 +42,11 @@ class GetoptFactory
         $this->getopt_parser = $getopt_parser;
     }
 
+    public function getGetoptParser()
+    {
+        return $this->getopt_parser;
+    }
+    
     /**
      * 
      * Returns a new Getopt instance.
