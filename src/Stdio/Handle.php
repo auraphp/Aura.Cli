@@ -134,7 +134,7 @@ class Handle
         // auto-determine; silence posix_isatty() errors regarding
         // non-standard resources, e.g. php://memory
         $level = error_reporting(0);
-        $this->posix = posix_isatty((int) $this->resource);
+        $this->posix = posix_isatty($this->resource);
         error_reporting($level);
     }
     
