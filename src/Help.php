@@ -232,7 +232,10 @@ class Help
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
         foreach ((array) $this->usage as $usage) {
-             $text .= "    <<ul>>$name<<reset>> {$usage}" . PHP_EOL;
+            if ($usage) {
+                $usage = " {$usage}";
+            }
+            $text .= "    <<ul>>$name<<reset>>{$usage}" . PHP_EOL;
         }
         return $text . PHP_EOL;
     }
