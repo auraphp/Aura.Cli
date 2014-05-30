@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli\Context;
 
@@ -14,47 +14,47 @@ use Aura\Cli\Exception;
 use StdClass;
 
 /**
- * 
+ *
  * Parses command line input for named option and numeric argument values.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class GetoptParser
 {
     /**
-     * 
+     *
      * Any parsing errors.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $errors;
 
     /**
-     * 
+     *
      * The command line input to be parsed.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $input;
 
     /**
-     * 
+     *
      * Use these option definitions when parsing input.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $options;
 
     /**
-     * 
+     *
      * The values parsed from the command line input.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $values;
 
@@ -66,11 +66,11 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Sets the options to be used when parsing input.
-     * 
+     *
      * @param array $options The array of option definitions.
-     * 
+     *
      */
     public function setOptions(array $options)
     {
@@ -82,12 +82,12 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Parses the input array according to the defined options.
-     * 
+     *
      * @return bool False if there were parsing errors, true if there were no
      * errors.
-     * 
+     *
      */
     public function parseInput(array $input = array())
     {
@@ -100,7 +100,7 @@ class GetoptParser
 
         // sequential argument count;
         $args = 0;
-        
+
         // loop through a copy of the input values to be parsed
         while ($this->input) {
 
@@ -122,24 +122,24 @@ class GetoptParser
                 $this->values[$args ++] = $arg;
             }
         }
-        
+
         // done
         return $this->errors ? false : true;
     }
 
     /**
-     * 
+     *
      * Gets a single option definition converted to an array.
-     * 
+     *
      * Looking for an undefined option will cause an error message, but will
      * otherwise proceed. Undefined short flags are treated as rejecting a
      * param, and undefined long options are treated as taking an optional
      * param.
-     * 
+     *
      * @param string $name The definition key to look for.
-     * 
+     *
      * @return StdClass An option struct.
-     * 
+     *
      */
     public function getOption($name)
     {
@@ -148,7 +148,7 @@ class GetoptParser
         } else {
             $option = $this->getOptionByAlias($name);
         }
-        
+
         if (! $option) {
             $this->errors[] = new Exception\OptionNotDefined(
                 "The option '$name' is not defined."
@@ -158,16 +158,16 @@ class GetoptParser
 
         return $option;
     }
-    
+
     /**
-     * 
+     *
      * Gets an option by its alias.
-     * 
+     *
      * @param string $alias The option alias.
-     * 
+     *
      * @return StdClass|null Returns the matching option struct, or null if no
      * option was found with that alias.
-     * 
+     *
      */
     protected function getOptionByAlias($alias)
     {
@@ -179,14 +179,14 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Sets the value for a long option.
-     * 
+     *
      * @param string $input The current input element, e.g. "--foo" or
      * "--bar=baz".
-     * 
+     *
      * @return bool|null
-     * 
+     *
      */
     protected function setLongOptionValue($input)
     {
@@ -198,14 +198,14 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Splits the long option input into name and value.
-     * 
+     *
      * @param string $input The current input element, e.g. "--foo" or
      * "--bar=baz".
-     * 
+     *
      * @return array An array of the long option name and value.
-     * 
+     *
      */
     protected function splitLongOptionInput($input)
     {
@@ -221,17 +221,17 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Does the long option require a param value?
-     * 
+     *
      * @param StdClass $option An option struct.
-     * 
+     *
      * @param mixed $value The option value.
-     * 
+     *
      * @param string $name The option name as passed.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function longOptionRequiresValue($option, $value, $name)
     {
@@ -245,17 +245,17 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Does the long option reject a param value?
-     * 
+     *
      * @param StdClass $option An option struct.
-     * 
+     *
      * @param mixed $value The option value.
-     * 
+     *
      * @param string $name The option name as passed.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function longOptionRejectsValue($option, $value, $name)
     {
@@ -269,13 +269,13 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Parses a short option or cluster of short options.
-     * 
+     *
      * @param string $name The current input element, e.g. "-f" or "-fbz".
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setShortFlagValue($name)
     {
@@ -292,13 +292,13 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Does the short option reject a value?
-     * 
+     *
      * @param StdClass $option An option struct.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function shortOptionRejectsValue($option)
     {
@@ -310,13 +310,13 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Does the short option capture the next input element as a value?
-     * 
+     *
      * @param StdClass $option An option struct.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function shortOptionCapturesValue($option)
     {
@@ -330,13 +330,13 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Does the short option require the next input element to be a value?
-     * 
+     *
      * @param StdClass $option An option struct.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function shortOptionRequiresValue($option, $name)
     {
@@ -350,13 +350,13 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Parses a cluster of short options.
-     * 
+     *
      * @param string $chars The short-option cluster (e.g. "-abcd").
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setShortFlagValues($chars)
     {
@@ -370,17 +370,17 @@ class GetoptParser
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * Sets an option value, adding to a value array for multi-values.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param mixed $value The option value.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setValue($option, $value)
     {
@@ -392,15 +392,15 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Adds to an array of multi-values for the option.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param mixed $value The value to add to the array of multi-values.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function addMultiValue($option, $value)
     {
@@ -411,15 +411,15 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Sets the single value for an option.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param mixed $value The value to set.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setSingleValue($option, $value)
     {
@@ -430,11 +430,11 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Returns the defined options.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getOptions()
     {
@@ -442,11 +442,11 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Returns the parsed values of named options and sequential arguments.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getValues()
     {
@@ -454,11 +454,11 @@ class GetoptParser
     }
 
     /**
-     * 
+     *
      * Returns the parsing errors.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getErrors()
     {

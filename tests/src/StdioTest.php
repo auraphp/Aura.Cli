@@ -7,15 +7,15 @@ use Aura\Cli\Stdio\Formatter;
 class StdioTest extends \PHPUnit_Framework_TestCase
 {
     protected $stdio;
-    
+
     protected $stdin;
-    
+
     protected $stdout;
-    
+
     protected $stderr;
-    
+
     protected $formatter;
-    
+
     protected function setUp()
     {
         parent::setUp();
@@ -89,7 +89,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         $actual = $this->stderr->fread(8192);
         $this->assertSame($expect . PHP_EOL, $actual);
     }
-    
+
     public function testInln()
     {
         $expect = 'foo bar baz' . PHP_EOL;
@@ -98,7 +98,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         $actual = $this->stdio->inln();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testIn()
     {
         $expect = 'foo bar baz';

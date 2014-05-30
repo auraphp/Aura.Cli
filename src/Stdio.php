@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
@@ -14,62 +14,62 @@ use Aura\Cli\Stdio\Handle;
 use Aura\Cli\Stdio\Formatter;
 
 /**
- * 
+ *
  * Provides a wrapper for standard input/output streams.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Stdio
 {
     /**
-     * 
+     *
      * A Handle object for standard input.
-     * 
+     *
      * @var Handle
-     * 
+     *
      */
     protected $stdin;
 
     /**
-     * 
+     *
      * A Handle object for standard output.
-     * 
+     *
      * @var Handle
-     * 
+     *
      */
     protected $stdout;
 
     /**
-     * 
+     *
      * A Handle object for standard error.
-     * 
+     *
      * @var Handle
-     * 
+     *
      */
     protected $stderr;
 
     /**
-     * 
+     *
      * A Formatter object to format output.
-     * 
+     *
      * @var Formatter
-     * 
+     *
      */
     protected $formatter;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param Handle $stdin A Handle object for standard input.
-     * 
+     *
      * @param Handle $stdout A Handle object for standard output.
-     * 
+     *
      * @param Handle $stderr A Handle object for standard error.
-     * 
+     *
      * @param Formatter $formatter A VT100 formatting object.
-     * 
+     *
      */
     public function __construct (
         Handle $stdin,
@@ -84,11 +84,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard input Handle object.
-     * 
+     *
      * @return Handle
-     * 
+     *
      */
     public function getStdin()
     {
@@ -96,11 +96,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard output Handle object.
-     * 
+     *
      * @return Handle
-     * 
+     *
      */
     public function getStdout()
     {
@@ -108,11 +108,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Returns the standard error Handle object.
-     * 
+     *
      * @return Handle
-     * 
+     *
      */
     public function getStderr()
     {
@@ -120,11 +120,11 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Gets user input from the command line and trims the end-of-line.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function in()
     {
@@ -132,12 +132,12 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Gets user input from the command line and leaves the end-of-line in
      * place.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function inln()
     {
@@ -145,13 +145,13 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Prints formatted text to standard output **without** a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard output.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     public function out($string = null)
     {
@@ -160,13 +160,13 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Prints formatted text to standard output **with** a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard output.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     public function outln($string = null)
     {
@@ -174,13 +174,13 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Prints formatted text to standard error **without** a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard error.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     public function err($string = null)
     {
@@ -189,13 +189,13 @@ class Stdio
     }
 
     /**
-     * 
+     *
      * Prints formatted text to standard error **with** a trailing newline.
-     * 
+     *
      * @param string $string The text to print to standard error.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     public function errln($string = null)
     {

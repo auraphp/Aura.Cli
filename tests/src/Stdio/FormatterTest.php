@@ -15,13 +15,13 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
     {
         // escape character
         $esc = chr(27);
-        
+
         // posix
         $text = '<<bold>>bold%percent<<reset>>';
         $expect = "{$esc}[1mbold%percent{$esc}[0m";
         $actual = $this->formatter->format($text, true);
         $this->assertSame($expect, $actual);
-        
+
         // non-posix
         $text = '<<bold>>bold%percent<<reset>>';
         $expect = "bold%percent";

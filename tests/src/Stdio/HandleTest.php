@@ -6,11 +6,11 @@ class HandleTest extends \PHPUnit_Framework_TestCase
     public function testGetters()
     {
         $handle = new Handle('php://memory', 'w+');
-        
+
         $expect = 'php://memory';
         $actual = $handle->getName();
         $this->assertSame($expect, $actual);
-        
+
         $expect = 'w+';
         $actual = $handle->getMode();
         $this->assertSame($expect, $actual);

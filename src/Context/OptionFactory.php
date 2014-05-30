@@ -4,16 +4,16 @@ namespace Aura\Cli\Context;
 class OptionFactory
 {
     /**
-     * 
+     *
      * Returns a new option struct from an option definition string and
      * description.
-     * 
+     *
      * @param string $string The option definition string.
-     * 
+     *
      * @param string $descr The option description.
-     * 
+     *
      * @return StdClass
-     * 
+     *
      */
     public function newInstance($string, $descr = null)
     {
@@ -21,7 +21,7 @@ class OptionFactory
             $string = $descr;
             $descr = null;
         }
-        
+
         $option = (object) array(
             'name'  => null,
             'alias' => null,
@@ -38,13 +38,13 @@ class OptionFactory
     }
 
     /**
-     * 
+     *
      * Given an undefined option name, returns a default option struct for it.
-     * 
+     *
      * @param string $name The undefined option name.
-     * 
+     *
      * @return StdClass An option struct.
-     * 
+     *
      */
     public function newUndefined($name)
     {
@@ -56,15 +56,15 @@ class OptionFactory
     }
 
     /**
-     * 
+     *
      * Sets the $param property on a new option struct.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param $string The option definition string.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setNewOptionParam($option, &$string)
     {
@@ -80,15 +80,15 @@ class OptionFactory
     }
 
     /**
-     * 
+     *
      * Sets the $multi property on a new option struct.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param $string The option definition string.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setNewOptionMulti($option, &$string)
     {
@@ -99,15 +99,15 @@ class OptionFactory
     }
 
     /**
-     * 
+     *
      * Sets the $name and $alias properties on a new option struct.
-     * 
+     *
      * @param StdClass $option The option struct.
-     * 
+     *
      * @param $string The option definition string.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function setNewOptionNameAlias($option, &$string)
     {
@@ -119,13 +119,13 @@ class OptionFactory
     }
 
    /**
-     * 
+     *
      * Normalizes the option name.
-     * 
+     *
      * @param string $name The option character or long name.
-     * 
+     *
      * @return The fixed name with a leading dash or dashes.
-     * 
+     *
      */
     protected function fixOptionName($name)
     {

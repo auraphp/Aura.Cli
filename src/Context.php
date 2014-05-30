@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
@@ -17,62 +17,62 @@ use Aura\Cli\Context\GetoptFactory;
 use Aura\Cli\Context\Server;
 
 /**
- * 
+ *
  * Collection point for information about the command line execution context.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class Context
 {
     /**
-     * 
+     *
      * Imported $argv values.
-     * 
+     *
      * @var Argv
-     * 
+     *
      */
     protected $argv;
 
     /**
-     * 
+     *
      * Imported $_ENV values.
-     * 
+     *
      * @var Env
-     * 
+     *
      */
     protected $env;
 
     /**
-     * 
+     *
      * A factory for Getopt objects.
-     * 
+     *
      * @var Getopt
-     * 
+     *
      */
     protected $getopt_factory;
-    
+
     /**
-     * 
+     *
      * Imported $_SERVER values.
-     * 
+     *
      * @var Server
-     * 
+     *
      */
     protected $server;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param Env $env Imported $_ENV values.
-     * 
+     *
      * @param Server $server Imported $_SERVER values.
-     * 
+     *
      * @param Argv $argv Imported $argv values.
-     * 
+     *
      * @param GetoptFactory $getopt_factory A factory for Getopt objects.
-     * 
+     *
      */
     public function __construct(
         Env $env,
@@ -87,27 +87,27 @@ class Context
     }
 
     /**
-     * 
+     *
      * Magic read for property objects.
-     * 
+     *
      * @param string $key The property to get.
-     * 
+     *
      * @return mixed A property object.
-     * 
+     *
      */
     public function __get($key)
     {
         return $this->$key;
     }
-    
+
     /**
-     * 
+     *
      * Returns a new Getopt instance.
-     * 
+     *
      * @param array $options Option definitions for the Getopt instance.
-     * 
+     *
      * @return Getopt
-     * 
+     *
      */
     public function getopt(array $options)
     {

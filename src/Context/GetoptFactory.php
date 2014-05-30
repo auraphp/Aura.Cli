@@ -1,41 +1,41 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli\Context;
 
 use Aura\Cli\Context\Getopt;
 
 /**
- * 
+ *
  * A factory to create Getopt objects.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  */
 class GetoptFactory
 {
     /**
-     * 
+     *
      * A getopt parser.
-     * 
+     *
      * @var GetoptParser
-     * 
+     *
      */
     protected $getopt_parser;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param GetoptParser $getopt_parser A getopt parser.
-     * 
+     *
      */
     public function __construct(GetoptParser $getopt_parser)
     {
@@ -46,17 +46,17 @@ class GetoptFactory
     {
         return $this->getopt_parser;
     }
-    
+
     /**
-     * 
+     *
      * Returns a new Getopt instance.
-     * 
+     *
      * @param array $input The command line input array, as from $argv.
-     * 
+     *
      * @param array $options An options defintion array.
-     * 
+     *
      * @return Getopt
-     * 
+     *
      */
     public function newInstance(array $input, array $options)
     {

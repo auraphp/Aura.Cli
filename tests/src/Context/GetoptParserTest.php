@@ -4,20 +4,20 @@ namespace Aura\Cli\Context;
 class GetoptParserTest extends \PHPUnit_Framework_TestCase
 {
     protected $getopt_parser;
-    
+
     protected function setUp()
     {
         $this->getopt_parser = new GetoptParser(new OptionFactory);
     }
-    
+
     public function testSetOptions()
     {
         $options = array(
-            'foo-bar,f*:', 
+            'foo-bar,f*:',
             'baz-dib,b::' => 'Description for baz-dib option.',
             'z,zim-gir',
         );
-        
+
         $this->getopt_parser->setOptions($options);
         $expect = array(
             '--foo-bar' => (object) array(
@@ -42,14 +42,14 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
                 'descr' => null,
             ),
         );
-        
+
         $actual = $this->getopt_parser->getOptions();
         $this->assertEquals($expect, $actual);
-        
+
         // get an aliased option
         $actual = $this->getopt_parser->getOption('--zim-gir');
         $this->assertEquals($expect['-z'], $actual);
-        
+
         // get an undefined short flag
         $actual = $this->getopt_parser->getOption('n');
         $expect = (object) array(
@@ -60,7 +60,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
             'descr' => null,
         );
         $this->assertEquals($expect, $actual);
-        
+
         // get an undefined long option
         $actual = $this->getopt_parser->getOption('--no-long');
         $expect = (object) array(
@@ -72,32 +72,32 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expect, $actual);
     }
-    
+
     public function testParse_noOptions()
     {
         $result = $this->getopt_parser->parseInput(array('abc', 'def'));
         $this->assertTrue($result);
-        
+
         $expect = array('abc', 'def');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_longRejected()
     {
         $options = array('foo-bar');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertTrue($result);
-        
+
         $expect = array('--foo-bar' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertFalse($result);
-        
+
         $errors = $this->getopt_parser->getErrors();
         $actual = $errors[0];
         $expect = 'Aura\Cli\Exception\OptionParamRejected';
@@ -105,22 +105,22 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $expect = "The option '--foo-bar' does not accept a parameter.";
         $this->assertSame($expect, $actual->getMessage());
     }
-    
+
     public function testParse_longRequired()
     {
         $options = array('foo-bar:');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertTrue($result);
-        
+
         $expect = array('--foo-bar' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertFalse($result);
-        
+
         $errors = $this->getopt_parser->getErrors();
         $actual = $errors[0];
         $expect = 'Aura\Cli\Exception\OptionParamRequired';
@@ -128,32 +128,32 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $expect = "The option '--foo-bar' requires a parameter.";
         $this->assertSame($expect, $actual->getMessage());
     }
-    
+
     public function testParse_longOptional()
     {
         $options = array('foo-bar::');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertTrue($result);
-        
+
         $expect = array('--foo-bar' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-        
+
         $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertTrue($result);
-        
+
         $expect = array('--foo-bar' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_longMultiple()
     {
         $options = array('foo-bar*::');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array(
             '--foo-bar',
             '--foo-bar',
@@ -162,47 +162,47 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
             '--foo-bar'
         ));
         $this->assertTrue($result);
-        
+
         $expect = array('--foo-bar' => array(true, true, 'baz', 'dib', true));
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_shortRejected()
     {
         $options = array('f');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => true, 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_shortRequired()
     {
         $options = array('f:');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-    
+
         $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertFalse($result);
-        
+
         $errors = $this->getopt_parser->getErrors();
         $actual = $errors[0];
         $expect = 'Aura\Cli\Exception\OptionParamRequired';
@@ -210,48 +210,48 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $expect = "The option '-f' requires a parameter.";
         $this->assertSame($expect, $actual->getMessage());
     }
-    
+
     public function testParse_shortOptional()
     {
         $options = array('f::');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => true);
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => 'baz');
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_shortMultiple()
     {
         $options = array('f*::');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
         $this->assertTrue($result);
-        
+
         $expect = array('-f' => array(true, true, 'baz', 'dib', true));
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_shortCluster()
     {
         $options = array('f', 'b', 'z');
         $this->getopt_parser->setOptions($options);
-        
+
         $result = $this->getopt_parser->parseInput(array('-fbz'));
         $this->assertTrue($result);
-        
+
         $expect = array(
             '-f' => true,
             '-b' => true,
@@ -260,15 +260,15 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
-    
+
     public function testParse_shortClusterRequired()
     {
         $options = array('f', 'b:', 'z');
         $this->getopt_parser->setOptions($options);
-    
+
         $result = $this->getopt_parser->parseInput(array('-fbz'));
         $this->assertFalse($result);
-        
+
         $errors = $this->getopt_parser->getErrors();
         $actual = $errors[0];
         $expect = 'Aura\Cli\Exception\OptionParamRequired';
@@ -276,7 +276,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $expect = "The option '-b' requires a parameter.";
         $this->assertSame($expect, $actual->getMessage());
     }
-    
+
     public function testParseAndGet()
     {
         $this->getopt_parser->setOptions(array('foo-bar:', 'b', 'z::'));
@@ -295,7 +295,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
             '456',
             'ghi',
         ));
-        
+
         // all values
         $expect = array(
             'abc',
@@ -310,7 +310,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
             '456',
             'ghi',
         );
-        
+
         // get all values
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);

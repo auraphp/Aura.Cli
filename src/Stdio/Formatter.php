@@ -1,36 +1,36 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli\Stdio;
 
 /**
- * 
+ *
  * Converts <<markup>> to VT100 display control codes for POSIX, or strips
  * the <<markup>> entirely for non-POSIX.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @author Paul M. Jones <pmjones@paul-m-jones.com>
- * 
+ *
  */
 class Formatter
 {
     /**
-     * 
+     *
      * Array of <<markup>> names to control code numbers.
-     * 
+     *
      * Based on the `ANSI/VT100 Terminal Control reference` at
      * <http://www.termsys.demon.co.uk/vtansi.htm>.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $codes = array(
         'reset'       => '0',
@@ -58,11 +58,11 @@ class Formatter
     );
 
     protected $regex;
-    
+
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      */
     public function __construct()
     {
@@ -70,19 +70,19 @@ class Formatter
                      . implode('|', array_keys($this->codes))
                      . ')(\s*))+)>>';
     }
-    
-    
+
+
     /**
-     * 
+     *
      * Converts <<markup>> in text to VT100 control codes for POSIX, or
      * strips them for non-POSIX.
-     * 
+     *
      * @param string $string The text to format.
-     * 
+     *
      * @param bool $posix Is the destination a POSIX terminal?
-     * 
+     *
      * @return string The coverted string.
-     * 
+     *
      */
     public function format($string, $posix)
     {
@@ -98,13 +98,13 @@ class Formatter
     }
 
     /**
-     * 
+     *
      * The callback to format <<markup>> for POSIX.
-     * 
+     *
      * @param array $matches The matched <<markup>>.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     protected function formatCallback(array $matches)
     {
