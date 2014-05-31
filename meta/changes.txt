@@ -1,1 +1,27 @@
-- Add PHP 5.5 to Travis build, update README
+General code cleanup, no API changes.
+
+* * *
+
+Fix PSR-2 spacing violations
+
+This fixes three instances where there were minor spacing violations of
+PSR-2. Specific rules are as follows:
+
+>In the argument list, there MUST NOT be a space before each comma, and
+>there MUST be one space after each comma
+
+This fix was applied to the AbstractCommand and OptionTest classes.
+
+>There MUST NOT be trailing whitespace at the end of non-blank lines.
+
+This fix was applied to the OptionFactory class.
+
+>Closures MUST be declared with a space after the function keyword, and
+>a space before and after the use keyword
+
+This fix was applied to the tests/bootstrap.php file.
+
+Remove trailing whitespace from docblock comments
+
+Depending on how you define a "blank line" having trailing whitespace on
+docblock comments is a violation of PSR-2.
