@@ -1,41 +1,41 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli;
 
 /**
- * 
+ *
  * Text formatting for VT100 terminals.
- * 
+ *
  * @package Aura.Cli
- * 
+ *
  * @author Clay Loveless <clay@killersoft.com>
- * 
+ *
  * @author Paul M. Jones <pmjones@paul-m-jones.com>
- * 
+ *
  */
 class Vt100
 {
     /**
-     * 
+     *
      * Array of format conversions for use on a variety of pre-set console
      * style combinations.
-     * 
+     *
      * Based on `ANSI VT100 Color/Style Codes` according to the
      * [VT100 User Guide](http://vt100.net/docs/vt100-ug) and the
      * [ANSI/VT100 Terminal Control reference](
      * http://www.termsys.demon.co.uk/vtansi.htm).
      * Inspired by [PEAR Console_Color](http://pear.php.net/Console_Color).
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $format = [
 
@@ -86,37 +86,37 @@ class Vt100
     ];
 
     /**
-     * 
+     *
      * The POSIX terminal flag.
-     * 
+     *
      * @var bool
-     * 
+     *
      * @see setPosix()
-     * 
+     *
      * @see getPosix()
-     * 
+     *
      */
     protected $posix = null;
 
     /**
-     * 
+     *
      * The PHP_OS value. Provided so we can fake the OS as needed.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $php_os = PHP_OS;
 
     /**
-     * 
+     *
      * Forces output to format for POSIX terminals, or to strip for non-POSIX
      * terminals; when null, will auto-determine if the terminal is POSIX.
-     * 
+     *
      * @param bool $flag True to force formatting, false to force stripping,
      * or null to auto-determine.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setPosix($flag)
     {
@@ -128,11 +128,11 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Gets the value of the POSIX terminal flag.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function getPosix()
     {
@@ -140,13 +140,13 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Sets the `$php_os` value.
-     * 
+     *
      * @param string $php_os The new PHP OS value.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setPhpOs($php_os)
     {
@@ -154,11 +154,11 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Gets the `$php_os` value.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getPhpOs()
     {
@@ -166,13 +166,13 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Converts VT100 %-markup in text to control codes.
-     * 
+     *
      * @param string $text The text to format.
-     * 
+     *
      * @return string The formatted text.
-     * 
+     *
      */
     public function format($text)
     {
@@ -180,13 +180,13 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Strips VT100 %-markup from text.
-     * 
+     *
      * @param string $text The text to strip %-markup from.
-     * 
+     *
      * @return string The plain text.
-     * 
+     *
      */
     public function strip($text)
     {
@@ -202,19 +202,19 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not.
-     * 
+     *
      * @param StdioResource $resource The file handle.
-     * 
+     *
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
-     * 
+     *
      * @return void
-     * 
+     *
      * @see writeln()
-     * 
+     *
      */
     public function write(StdioResource $resource, $text)
     {
@@ -228,19 +228,19 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Writes text to a file handle, converting to control codes if the handle
      * is a posix TTY, or to plain text if not, and then appends a newline.
-     * 
+     *
      * @param StdioResource $resource The file handle.
-     * 
+     *
      * @param string $text The text to write to the file handle, converting
      * %-markup if the handle is a posix TTY, or stripping markup if not.
-     * 
+     *
      * @return void
-     * 
+     *
      * @see write()
-     * 
+     *
      */
     public function writeln(StdioResource $resource, $text)
     {
@@ -249,13 +249,13 @@ class Vt100
     }
 
     /**
-     * 
+     *
      * Determines if a stream handle should be treated as a POSIX terminal.
-     * 
+     *
      * @param StdioResource $resource The stream handle.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function isPosix(StdioResource $resource)
     {

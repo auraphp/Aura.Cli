@@ -1,7 +1,7 @@
 Aura CLI
 ========
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png)](https://travis-ci.org/auraphp/Aura.Cli)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop)](https://travis-ci.org/auraphp/Aura.Cli)
 
 The Aura CLI package provides a system for creating and executing CLI command
 objects. It includes facilities for parsing command-line options and handling
