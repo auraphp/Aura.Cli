@@ -1,6 +1,6 @@
 {
     "name": "aura/cli",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "type": "aura-package",
     "description": "The Aura CLI package provides a system for creating and executing CLI command objects.  It includes facilities for parsing command-line(console) options and handling standard input/output.",
     "keywords": [
@@ -12,7 +12,7 @@
         "console"
     ],
     "homepage": "http://auraphp.com/Aura.Cli",
-    "time": "2013-09-09",
+    "time": "2014-05-31",
     "license": "BSD-2-Clause",
     "authors": [
         {
@@ -32,7 +32,7 @@
         {
             "name": "Akihito Koriyama",
             "email": "akihito.koriyama@gmail.com",
-            "homepage": ""
+            "homepage": "http://www.kumasystem.com"
         },
         {
             "name": "Chris Cornutt",
@@ -42,7 +42,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": ">=1.0.0"
+        "aura/installer-default": "1.0.*"
     },
     "autoload": {
         "psr-0": {
