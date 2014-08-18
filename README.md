@@ -57,7 +57,7 @@ $context = $cli_factory->newContext($GLOBALS);
 
 You can access the `$_ENV`, `$_SERVER`, and `$argv` values with the `$env`,
 `$server`, and `$argv` property objects, respectively. (Note that these
-properties are copies of those superglobals as they were are at the time of
+properties are copies of those superglobals as they were at the time of
 _Context_ instantiation.) You can pass an alternative default value if the
 related key is missing.
 
@@ -151,7 +151,7 @@ $f   = $getopt->get('-f'); // both -f and --foo have the same values
 ?>
 ```
 
-If you want to allow an option to passed multiple times, add a '*' to the end
+If you want to allow an option to be passed multiple times, add a '*' to the end
 of the option name.
 
 ```php
@@ -231,13 +231,13 @@ $a    = $getopt->get('-a'); // 1
 ?>
 ```
 
-> N.b.: If an short flag has an optional parameter, the argument immediately
-> after it will it will be treated as the option value, not as an argument.
+> N.b.: If a short flag has an optional parameter, the argument immediately
+> after it will be treated as the option value, not as an argument.
 
 
 ### Standard Input/Output Streams
 
-The _Stdio_ object to allows you to work with standard input/output streams.
+The _Stdio_ object allows you to work with standard input/output streams.
 (This is the command line equivalent of a web response object.)
 
 Instantiate a _Stdio_ object using the _CliFactory_.
