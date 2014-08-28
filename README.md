@@ -16,8 +16,8 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Cli/releases
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/quality-score.png?s=56a43ff755b286c04efaf81420465104bf5362f2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/coverage.png?s=c7eb4d4a6dc0141c4a36fdd50c040ea0839d6e4e)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
 [![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
 
 To run the [PHPUnit][] tests at the command line, go to the _tests_ directory and issue `phpunit`.
@@ -379,9 +379,9 @@ $stdio->outln($help->getHelp('my-command'));
 
 
 > - We keep the command name itself outside of the help class, because the command name may be mapped differently in different projects.
-> 
+>
 > - We pass a _GetoptParser_ to the _Help_ object so it can parse the option defintions.
-> 
+>
 > - We can get the option definitions out of the _Help_ object using `getOptions()`; this allows us to pass a _Help_ object into a hypothetical command object and reuse the definitions.
 
 The output will look something like this:
