@@ -10,7 +10,7 @@
         "options",
         "stdio"
     ],
-    "homepage": "https://github.com/auraphp/Aura.Cli/releases",
+    "homepage": "https://github.com/auraphp/Aura.Cli",
     "license": "BSD-2-Clause",
     "authors": [
         {
