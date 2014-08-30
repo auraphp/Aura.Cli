@@ -315,4 +315,20 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
     }
+
+    public function testMultipleWithAlias()
+    {
+        $options = array('f,foo*::');
+        $this->getopt_parser->setOptions($options);
+
+        $result = $this->getopt_parser->parseInput(array('-f', '-f', '-f', 'baz', '-f', 'dib', '-f'));
+        $this->assertTrue($result);
+
+        $expect = array(
+            '-f' => array(true, true, 'baz', 'dib', true),
+            '--foo' => array(true, true, 'baz', 'dib', true),
+        );
+        $actual = $this->getopt_parser->getValues();
+        $this->assertSame($expect, $actual);
+    }
 }
