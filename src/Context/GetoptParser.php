@@ -58,8 +58,22 @@ class GetoptParser
      */
     protected $values;
 
+    /**
+     *
+     * A factory to create option objects.
+     *
+     * @var OptionFactory
+     *
+     */
     protected $option_factory;
 
+    /**
+     *
+     * Constructor.
+     *
+     * @param OptionFactory $option_factory A factory to create option objects.
+     *
+     */
     public function __construct(OptionFactory $option_factory)
     {
         $this->option_factory = $option_factory;
@@ -334,6 +348,8 @@ class GetoptParser
      * Does the short option require the next input element to be a value?
      *
      * @param StdClass $option An option struct.
+     *
+     * @param string $name The option name.
      *
      * @return bool
      *

@@ -265,7 +265,7 @@ class Help
      *
      * Gets the formatted output for one option.
      *
-     * @param StdClass An option struct.
+     * @param StdClass $option An option struct.
      *
      * @return string
      *

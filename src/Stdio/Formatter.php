@@ -57,6 +57,13 @@ class Formatter
         'whitebg'     => '47',
     );
 
+    /**
+     *
+     * A regex for fomatting codes.
+     *
+     * @var string
+     *
+     */
     protected $regex;
 
     /**
