@@ -265,7 +265,7 @@ class Help
      *
      * Gets the formatted output for one option.
      *
-     * @param StdClass $option An option struct.
+     * @param \stdClass $option An option structure.
      *
      * @return string
      *
@@ -336,6 +336,8 @@ class Help
         if ($param == 'optional') {
             return " [<value>]";
         }
+
+        return "";
     }
 
     /**
@@ -356,6 +358,8 @@ class Help
         if ($param == 'optional') {
             return "[=<value>]";
         }
+
+        return "";
     }
 
     /**
@@ -374,5 +378,4 @@ class Help
         return "<<bold>>DESCRIPTION<<reset>>" . PHP_EOL
              . "    " . trim($this->descr) . PHP_EOL . PHP_EOL;
     }
-
 }

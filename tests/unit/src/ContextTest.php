@@ -1,8 +1,6 @@
 <?php
 namespace Aura\Cli;
 
-use Aura\Cli\CliFactory;
-
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
     protected function newContext(array $globals = array())
