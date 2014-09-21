@@ -1,12 +1,10 @@
 <?php
 namespace Aura\Cli\_Config;
 
-use Aura\Di\ContainerAssertionsTrait;
+use Aura\Di\ContainerTestCase;
 
-class CommonTest extends \PHPUnit_Framework_TestCase
+class CommonTest extends ContainerTestCase
 {
-    use ContainerAssertionsTrait;
-
     public function setUp()
     {
         $this->setUpContainer(array(
