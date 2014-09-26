@@ -210,13 +210,10 @@ class Table
      * @param array   $headers      Headers for the table.
      * @param array   $data         A two dimensional array with the table
      *                              data.
-     * @param boolean $returnObject Whether to return the Console_Table object
-     *                              instead of the rendered table.
      *
      * @static
      *
-     * @return Console_Table|string  A Console_Table object or the generated
-     *                               table.
+     * @return Table  A Table object
      */
     public static function fromArray($headers, $data)
     {
@@ -224,7 +221,7 @@ class Table
             return false;
         }
 
-        $instance = new static();
+        $instance = new static(new Formatter());
         $instance->setHeaders($headers);
 
         foreach ($data as $row) {
