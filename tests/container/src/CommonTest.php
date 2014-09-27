@@ -1,24 +1,24 @@
 <?php
 namespace Aura\Cli\_Config;
 
-use Aura\Di\ContainerAssertionsTrait;
+use Aura\Di\_Config\AbstractContainerTest;
 
-class CommonTest extends \PHPUnit_Framework_TestCase
+class CommonTest extends AbstractContainerTest
 {
-    use ContainerAssertionsTrait;
-
-    public function setUp()
+    protected function getConfigClasses()
     {
-        $this->setUpContainer(array(
+        return array(
             'Aura\Cli\_Config\Common',
-        ));
+        );
     }
 
-    public function test()
+    public function provideNewInstance()
     {
-        $this->assertNewInstance('Aura\Cli\Context\Argv');
-        $this->assertNewInstance('Aura\Cli\Context\Env');
-        $this->assertNewInstance('Aura\Cli\Context\Server');
-        $this->assertNewInstance('Aura\Cli\Stdio');
+        return array(
+            array('Aura\Cli\Context\Argv'),
+            array('Aura\Cli\Context\Env'),
+            array('Aura\Cli\Context\Server'),
+            array('Aura\Cli\Stdio'),
+        );
     }
 }
