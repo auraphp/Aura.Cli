@@ -140,7 +140,7 @@ $g   = $getopt->get('-g', []);
 ?>
 ```
 
-If you want alias one option name to another, comma-separate the two names.
+If you want to alias one option name to another, comma-separate the two names.
 The values will be stored under both names;
 
 ```php
