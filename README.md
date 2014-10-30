@@ -321,7 +321,7 @@ $options = ['verbose,v'];
 $getopt = $context->getopt($options);
 
 // do we have a name to say hello to?
-$name = $getopt->get(0);
+$name = $getopt->get(1);
 if (! $name) {
     // print an error
     $stdio->errln("Please give a name to say hello to.");
