@@ -386,7 +386,7 @@ $stdio->outln($help->getHelp('my-command'));
 
 > - We keep the command name itself outside of the help class, because the command name may be mapped differently in different projects.
 >
-> - We pass a _GetoptParser_ to the _Help_ object so it can parse the option defintions.
+> - We pass a _GetoptParser_ to the _Help_ object so it can parse the option definitions.
 >
 > - We can get the option definitions out of the _Help_ object using `getOptions()`; this allows us to pass a _Help_ object into a hypothetical command object and reuse the definitions.
 
