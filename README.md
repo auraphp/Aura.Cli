@@ -140,7 +140,7 @@ $g   = $getopt->get('-g', []);
 ?>
 ```
 
-If you want alias one option name to another, comma-separate the two names.
+If you want to alias one option name to another, comma-separate the two names.
 The values will be stored under both names;
 
 ```php
@@ -321,7 +321,7 @@ $options = ['verbose,v'];
 $getopt = $context->getopt($options);
 
 // do we have a name to say hello to?
-$name = $getopt->get(0);
+$name = $getopt->get(1);
 if (! $name) {
     // print an error
     $stdio->errln("Please give a name to say hello to.");
@@ -386,7 +386,7 @@ $stdio->outln($help->getHelp('my-command'));
 
 > - We keep the command name itself outside of the help class, because the command name may be mapped differently in different projects.
 >
-> - We pass a _GetoptParser_ to the _Help_ object so it can parse the option defintions.
+> - We pass a _GetoptParser_ to the _Help_ object so it can parse the option definitions.
 >
 > - We can get the option definitions out of the _Help_ object using `getOptions()`; this allows us to pass a _Help_ object into a hypothetical command object and reuse the definitions.
 
