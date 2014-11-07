@@ -1,21 +1,5 @@
-First 2.0 stable release.
+- TST: Update testing structure, disable auto-resolve in container tests
 
-- DOC: Add docblocks, update README.
+- DOC: Update README and docblocks
 
-- ADD: Method GetoptFactory::getGetoptParser()
-
-- FIX: #29, fixes color formatting
-
-- REF: Various refactorings to split up Getopt tasks, add GetoptFactory, extract OptionParser, etc
-
-- DEL: v1 config files
-
-- ADD: v2 config class files
-
-- CHG: When defining options, allow the '*' before *or* after the ':'
-
-- BRK: Rename OptionParser to GetoptParser
-
-- ADD: Help class
-
-- FIX: Getopt alias ordering
+- FIX: #5, for when posix_isatty() function does not exist
