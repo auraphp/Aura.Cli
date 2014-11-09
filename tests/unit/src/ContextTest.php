@@ -27,15 +27,32 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        // get a key
+        // get a server value
         $expect = 'gir';
         $actual = $context->server->get('zim', 'default');
         $this->assertSame($expect, $actual);
 
-        // get an alternative
+        // get an alternative server value
+        $expect = 'default';
+        $actual = $context->server->get('no-such-key', 'default');
+        $this->assertSame($expect, $actual);
+
+        // get an env key
+        $expect = 'bar';
+        $actual = $context->env->get('foo', 'default');
+        $this->assertSame($expect, $actual);
+
+        // get an alternative env key
         $expect = 'default';
         $actual = $context->env->get('no-such-key', 'default');
         $this->assertSame($expect, $actual);
+
+        // get from putenv()
+        putenv('PUTFOO=foo');
+        $expect = 'foo';
+        $actual = $context->env->get('PUTFOO');
+        $this->assertSame($expect, $actual);
+        $this->assertNull($context->env->get('PUTBAR'));
 
         // get all of one
         $expect = array(
