@@ -118,4 +118,9 @@ class Formatter
         $str = preg_replace('/(\s+)/msi', ';', $matches[1]);
         return chr(27) . '[' . strtr($str, $this->codes) . 'm';
     }
+
+    public function removeColors($string)
+    {
+        return preg_replace('<' . $this->regex . '>', '', $string);
+    }
 }
