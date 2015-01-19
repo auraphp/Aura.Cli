@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Cli
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -98,6 +96,8 @@ class GetoptParser
     /**
      *
      * Parses the input array according to the defined options.
+     *
+     * @param array $input The input array.
      *
      * @return bool False if there were parsing errors, true if there were no
      * errors.
