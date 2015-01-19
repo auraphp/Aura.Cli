@@ -54,6 +54,13 @@ class Common extends Config
         );
 
         /**
+         * Aura\Cli\Help
+         */
+        $di->params['Aura\Cli\Help'] = array(
+            'option_factory' => $di->lazyNew('Aura\Cli\Context\OptionFactory'),
+        );
+
+        /**
          * Aura\Cli\Stdio
          */
         $di->params['Aura\Cli\Stdio'] = array(

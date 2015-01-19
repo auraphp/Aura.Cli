@@ -26,6 +26,7 @@ class CommonTest extends AbstractContainerTest
             array('Aura\Cli\Context\GetoptFactory'),
             array('Aura\Cli\Context\GetoptParser'),
             array('Aura\Cli\Context\Server'),
+            array('Aura\Cli\Help'),
             array('Aura\Cli\Stdio'),
         );
     }
