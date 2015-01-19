@@ -1,5 +1,3 @@
-- TST: Update testing structure, disable auto-resolve in container tests
+- FIX: Context\Env::get() now additionally examines getenv() for values; fixes #47
 
-- DOC: Update README and docblocks
-
-- FIX: #5, for when posix_isatty() function does not exist
+- FIX: add explicit Context configs for non-auto-resolved DI
