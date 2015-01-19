@@ -20,8 +20,11 @@ class CommonTest extends AbstractContainerTest
     public function provideNewInstance()
     {
         return array(
+            array('Aura\Cli\Context'),
             array('Aura\Cli\Context\Argv'),
             array('Aura\Cli\Context\Env'),
+            array('Aura\Cli\Context\GetoptFactory'),
+            array('Aura\Cli\Context\GetoptParser'),
             array('Aura\Cli\Context\Server'),
             array('Aura\Cli\Stdio'),
         );
