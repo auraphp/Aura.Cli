@@ -78,25 +78,5 @@ class Common extends Config
             )),
             'formatter' => $di->lazyNew('Aura\Cli\Stdio\Formatter'),
         );
-
-        /**
-         * Aura\Cli\Context
-         */
-        $di->params['Aura\Cli\Context'] = array(
-            'env' => $di->lazyNew('Aura\Cli\Context\Env'),
-            'server' => $di->lazyNew('Aura\Cli\Context\Server'),
-            'argv' => $di->lazyNew('Aura\Cli\Context\Argv'),
-            'getopt_factory' => $di->lazyNew('Aura\Cli\Context\GetoptFactory'),
-        );
-
-        /**
-         * Aura\Cli\Context\GetoptFactory
-         */
-        $di->params['Aura\Cli\Context\GetoptFactory']['getopt_parser'] = $di->lazyNew('Aura\Cli\Context\GetoptParser');
-
-        /**
-         * Aura\Cli\Context\GetoptParser
-         */
-        $di->params['Aura\Cli\Context\GetoptParser']['option_factory'] = $di->lazyNew('Aura\Cli\Context\OptionFactory');
     }
 }
