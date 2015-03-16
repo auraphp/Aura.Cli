@@ -1,1 +1,1 @@
-- FIX: add explicit Help config for non-auto-resolved DI
+This is a hygiene release to update documentation and support files.
