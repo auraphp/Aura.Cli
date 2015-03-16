@@ -40,7 +40,8 @@ class AbstractValues
 
     /**
      *
-     * Returns a value.
+     * Returns a value by key, an alternative value if that key does not exist,
+     * or all values if no key is passed.
      *
      * @param string $key The key, if any, to get the value of; if null, will
      * return all values.
@@ -49,7 +50,7 @@ class AbstractValues
      * requested key does not exist.
      *
      * @return mixed The requested value, or the alternative default
-     * value.
+     * value; or, if no key was passed, all values.
      *
      */
     public function get($key = null, $alt = null)
