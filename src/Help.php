@@ -224,18 +224,54 @@ class Help
      */
     protected function getHelpUsage($name)
     {
-        if (! $this->usage) {
+        $usages = $this->getUsage();
+        if (! $usages) {
             return;
         }
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
-        foreach ((array) $this->usage as $usage) {
+        foreach ((array) $usages as $usage) {
             if ($usage) {
                 $usage = " {$usage}";
             }
             $text .= "    <<ul>>$name<<reset>>{$usage}" . PHP_EOL;
         }
         return $text . PHP_EOL;
+    }
+
+    protected function getUsage()
+    {
+        $usage = $this->usage;
+        if (! $this->usage) {
+            $usage = $this->getHelpArguments();
+        }
+        return $usage;
+    }
+
+    protected function getHelpArguments()
+    {
+        $args = array();
+        foreach ($this->options as $string => $descr) {
+            $option = $this->option_factory->newInstance($string, $descr);
+            $this->addHelpArgument($args, $option);
+        }
+        return implode(' ', $args);
+    }
+
+    protected function addHelpArgument(&$args, $option)
+    {
+        if ($option->name) {
+            // an argument, not an option
+            return;
+        }
+
+        $arg =  '<' . $option->alias . '>';
+
+        if ($option->param == 'argument-optional') {
+            $arg = "[{$arg}]";
+        }
+
+        $args[] = $arg;
     }
 
     /**
@@ -254,7 +290,7 @@ class Help
         $text = "<<bold>>OPTIONS<<reset>>" . PHP_EOL;
         foreach ($this->options as $string => $descr) {
             $option = $this->option_factory->newInstance($string, $descr);
-            $text .= $this->getHelpOption($option). PHP_EOL;
+            $text .= $this->getHelpOption($option);
         }
         return $text;
     }
@@ -270,6 +306,11 @@ class Help
      */
     protected function getHelpOption($option)
     {
+        if (! $option->name) {
+            // it's an argument
+            return '';
+        }
+
         $text = "    "
               . $this->getHelpOptionParam($option->name, $option->param, $option->multi)
               . PHP_EOL;
@@ -285,7 +326,7 @@ class Help
         }
 
         return $text
-             . "        " . trim($option->descr) . PHP_EOL;
+             . "        " . trim($option->descr) . PHP_EOL . PHP_EOL;
     }
 
     /**
