@@ -63,6 +63,16 @@ EOT
     <<ul>>fake<<reset>> <arg1>
     <<ul>>fake<<reset>> <arg1> <arg2>
 
+<<bold>>ARGUMENTS<<reset>>
+    foo
+        No description.
+
+    bar
+        Arg bar is required.
+
+    baz
+        Arg baz is optional.
+
 <<bold>>DESCRIPTION<<reset>>
     A long description of the command. Now is the time for all good men to come
     to the aid of their country. The quick brown fox jumps over the lazy dog.
@@ -116,6 +126,16 @@ EOT
 
 <<bold>>USAGE<<reset>>
     <<ul>>fake<<reset>> <foo> <bar> [<baz>]
+
+<<bold>>ARGUMENTS<<reset>>
+    foo
+        No description.
+
+    bar
+        Arg bar is required.
+
+    baz
+        Arg baz is optional.
 
 <<bold>>DESCRIPTION<<reset>>
     A long description of the command. Now is the time for all good men to come

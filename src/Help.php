@@ -182,6 +182,7 @@ class Help
     {
         $help = $this->getHelpSummary($name)
               . $this->getHelpUsage($name)
+              . $this->getHelpArguments($name)
               . $this->getHelpDescr()
               . $this->getHelpOptions()
         ;
@@ -243,22 +244,22 @@ class Help
     {
         $usage = $this->usage;
         if (! $this->usage) {
-            $usage = $this->getHelpArguments();
+            $usage = $this->getUsageArguments();
         }
         return $usage;
     }
 
-    protected function getHelpArguments()
+    protected function getUsageArguments()
     {
         $args = array();
         foreach ($this->options as $string => $descr) {
             $option = $this->option_factory->newInstance($string, $descr);
-            $this->addHelpArgument($args, $option);
+            $this->addUsageArgument($args, $option);
         }
         return implode(' ', $args);
     }
 
-    protected function addHelpArgument(&$args, $option)
+    protected function addUsageArgument(&$args, $option)
     {
         if ($option->name) {
             // an argument, not an option
@@ -274,6 +275,34 @@ class Help
         $args[] = $arg;
     }
 
+    protected function getHelpArguments()
+    {
+        $args = array();
+        foreach ($this->options as $string => $descr) {
+            $option = $this->option_factory->newInstance($string, $descr);
+            if (! $option->name) {
+                $args[] = $option;
+            }
+        }
+
+        if (! $args) {
+            return;
+        }
+
+        $text = '';
+        foreach ($args as $arg) {
+            $text .= "    {$arg->alias}" . PHP_EOL;
+            if ($arg->descr) {
+                $text .= "        {$arg->descr}";
+            } else {
+                $text .= "        No description.";
+            }
+            $text .= PHP_EOL . PHP_EOL;
+        }
+
+        return "<<bold>>ARGUMENTS<<reset>>" . PHP_EOL
+             . "    " . trim($text) . PHP_EOL . PHP_EOL;
+    }
     /**
      *
      * Gets the formatted options output.
