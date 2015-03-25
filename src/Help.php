@@ -183,6 +183,7 @@ class Help
         $help = $this->getHelpSummary($name)
               . $this->getHelpUsage($name)
               . $this->getHelpDescr()
+              . $this->getHelpArguments($name)
               . $this->getHelpOptions()
         ;
 
@@ -224,12 +225,13 @@ class Help
      */
     protected function getHelpUsage($name)
     {
-        if (! $this->usage) {
+        $usages = $this->getUsage();
+        if (! $usages) {
             return;
         }
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
-        foreach ((array) $this->usage as $usage) {
+        foreach ((array) $usages as $usage) {
             if ($usage) {
                 $usage = " {$usage}";
             }
@@ -238,6 +240,69 @@ class Help
         return $text . PHP_EOL;
     }
 
+    protected function getUsage()
+    {
+        $usage = $this->usage;
+        if (! $this->usage) {
+            $usage = $this->getUsageArguments();
+        }
+        return $usage;
+    }
+
+    protected function getUsageArguments()
+    {
+        $args = array();
+        foreach ($this->options as $string => $descr) {
+            $option = $this->option_factory->newInstance($string, $descr);
+            $this->addUsageArgument($args, $option);
+        }
+        return implode(' ', $args);
+    }
+
+    protected function addUsageArgument(&$args, $option)
+    {
+        if ($option->name) {
+            // an argument, not an option
+            return;
+        }
+
+        $arg =  '<' . $option->alias . '>';
+
+        if ($option->param == 'argument-optional') {
+            $arg = "[{$arg}]";
+        }
+
+        $args[] = $arg;
+    }
+
+    protected function getHelpArguments()
+    {
+        $args = array();
+        foreach ($this->options as $string => $descr) {
+            $option = $this->option_factory->newInstance($string, $descr);
+            if (! $option->name) {
+                $args[] = $option;
+            }
+        }
+
+        if (! $args) {
+            return;
+        }
+
+        $text = '';
+        foreach ($args as $arg) {
+            $text .= "    <{$arg->alias}>" . PHP_EOL;
+            if ($arg->descr) {
+                $text .= "        {$arg->descr}";
+            } else {
+                $text .= "        No description.";
+            }
+            $text .= PHP_EOL . PHP_EOL;
+        }
+
+        return "<<bold>>ARGUMENTS<<reset>>" . PHP_EOL
+             . "    " . trim($text) . PHP_EOL . PHP_EOL;
+    }
     /**
      *
      * Gets the formatted options output.
@@ -254,7 +319,7 @@ class Help
         $text = "<<bold>>OPTIONS<<reset>>" . PHP_EOL;
         foreach ($this->options as $string => $descr) {
             $option = $this->option_factory->newInstance($string, $descr);
-            $text .= $this->getHelpOption($option). PHP_EOL;
+            $text .= $this->getHelpOption($option);
         }
         return $text;
     }
@@ -270,6 +335,11 @@ class Help
      */
     protected function getHelpOption($option)
     {
+        if (! $option->name) {
+            // it's an argument
+            return '';
+        }
+
         $text = "    "
               . $this->getHelpOptionParam($option->name, $option->param, $option->multi)
               . PHP_EOL;
@@ -285,7 +355,7 @@ class Help
         }
 
         return $text
-             . "        " . trim($option->descr) . PHP_EOL;
+             . "        " . trim($option->descr) . PHP_EOL . PHP_EOL;
     }
 
     /**

@@ -88,7 +88,16 @@ class GetoptParser
     {
         $this->options = array();
         foreach ($options as $string => $descr) {
-            $option = $this->option_factory->newInstance($string, $descr);
+            $this->setOption($string, $descr);
+        }
+    }
+
+    public function setOption($string, $descr)
+    {
+        $option = $this->option_factory->newInstance($string, $descr);
+        if (! $option->name) {
+            $this->options[] = $option;
+        } else {
             $this->options[$option->name] = $option;
         }
     }

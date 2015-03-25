@@ -13,13 +13,23 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
     public function testSetOptions()
     {
         $options = array(
+            '#foo',
             'foo-bar,f*:',
+            '#bar' => 'Argument bar required.',
             'baz-dib,b::' => 'Description for baz-dib option.',
+            '#baz?' => 'Argument baz optional.',
             'z,zim-gir',
         );
 
         $this->getopt_parser->setOptions($options);
         $expect = array(
+            0 => (object) array(
+                'name'  => null,
+                'alias' => 'foo',
+                'multi' => false,
+                'param' => 'argument-required',
+                'descr' => null,
+            ),
             '--foo-bar' => (object) array(
                 'name'  => '--foo-bar',
                 'alias' => '-f',
@@ -27,12 +37,26 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
                 'param' => 'required',
                 'descr' => null,
             ),
+            1 => (object) array(
+                'name'  => null,
+                'alias' => 'bar',
+                'multi' => false,
+                'param' => 'argument-required',
+                'descr' => 'Argument bar required.',
+            ),
             '--baz-dib' => (object) array(
                 'name'  => '--baz-dib',
                 'alias' => '-b',
                 'multi' => false,
                 'param' => 'optional',
                 'descr' => 'Description for baz-dib option.',
+            ),
+            2 => (object) array(
+                'name'  => null,
+                'alias' => 'baz',
+                'multi' => false,
+                'param' => 'argument-optional',
+                'descr' => 'Argument baz optional.',
             ),
             '-z' => (object) array(
                 'name'  => '-z',
@@ -279,7 +303,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
 
     public function testParseAndGet()
     {
-        $this->getopt_parser->setOptions(array('foo-bar:', 'b', 'z::'));
+        $this->getopt_parser->setOptions(array('#foo', 'foo-bar:', '#bar', 'b', '#baz?', 'z::'));
         $this->getopt_parser->parseInput(array(
             'abc',
             '--foo-bar=zim',

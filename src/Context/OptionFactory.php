@@ -36,6 +36,8 @@ class OptionFactory
             $descr = null;
         }
 
+        $string = trim($string);
+
         $option = (object) array(
             'name'  => null,
             'alias' => null,
@@ -44,11 +46,29 @@ class OptionFactory
             'descr' => $descr,
         );
 
+        if (substr($string, 0, 1) == '#') {
+            $this->setArgument($option, $string);
+            return $option;
+        }
+
         $this->setNewOptionMulti($option, $string);
         $this->setNewOptionParam($option, $string);
         $this->setNewOptionMulti($option, $string);
         $this->setNewOptionNameAlias($option, $string);
         return $option;
+    }
+
+    protected function setArgument($option, $string)
+    {
+        $string = ltrim($string, '# -');
+
+        $option->param = 'argument-required';
+        if (substr($string, -1) == '?') {
+            $option->param = 'argument-optional';
+            $string = rtrim($string, '? -');
+        }
+
+        $option->alias = $string;
     }
 
     /**
