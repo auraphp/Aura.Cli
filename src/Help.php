@@ -183,7 +183,7 @@ class Help
         $help = $this->getHelpSummary($name)
               . $this->getHelpUsage($name)
               . $this->getHelpDescr()
-              . $this->getHelpArguments($name)
+              . $this->getHelpArguments()
               . $this->getHelpOptions()
         ;
 
@@ -225,6 +225,17 @@ class Help
      */
     protected function getHelpUsage($name)
     {
+        // hack to maintain back-compat. basically, if there's nothing else,
+        // there shouldn't be automatic usage displayed either.
+        $empty = ! $this->usage
+              && ! $this->options
+              && ! $this->summary
+              && ! $this->descr;
+
+        if ($empty) {
+            return '';
+        }
+
         $usages = $this->getUsage();
         if (! $usages) {
             return;
