@@ -58,6 +58,17 @@ class OptionFactory
         return $option;
     }
 
+    /**
+     *
+     * Sets an option as an argument, to be ignored when parsing options.
+     *
+     * @param StdClass $option The option struct.
+     *
+     * @param string $string The argument name.
+     *
+     * @return null
+     *
+     */
     protected function setArgument($option, $string)
     {
         $string = ltrim($string, '# -');

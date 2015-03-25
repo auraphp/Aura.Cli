@@ -92,7 +92,16 @@ class GetoptParser
         }
     }
 
-    public function setOption($string, $descr)
+    /**
+     *
+     * Sets one option to be used when parsing input.
+     *
+     * @param string $string The option definition string.
+     *
+     * @param string $descr The option help description.
+     *
+     */
+    protected function setOption($string, $descr)
     {
         $option = $this->option_factory->newInstance($string, $descr);
         if (! $option->name) {

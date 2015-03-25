@@ -143,7 +143,7 @@ class Help
 
     /**
      *
-     * Sets the usage line(s).
+     * Sets the custom usage line(s).
      *
      * @param string|array $usage The usage line(s).
      *
@@ -231,7 +231,7 @@ class Help
         }
 
         $text = "<<bold>>USAGE<<reset>>" . PHP_EOL;
-        foreach ((array) $usages as $usage) {
+        foreach ($usages as $usage) {
             if ($usage) {
                 $usage = " {$usage}";
             }
@@ -240,15 +240,29 @@ class Help
         return $text . PHP_EOL;
     }
 
+    /**
+     *
+     * Returns the custom usage line(s), or the default usage line.
+     *
+     * @return array
+     *
+     */
     protected function getUsage()
     {
         $usage = $this->usage;
         if (! $this->usage) {
             $usage = $this->getUsageArguments();
         }
-        return $usage;
+        return (array) $usage;
     }
 
+    /**
+     *
+     * Returns the arguments for the default usage line.
+     *
+     * @return string
+     *
+     */
     protected function getUsageArguments()
     {
         $args = array();
@@ -259,6 +273,15 @@ class Help
         return implode(' ', $args);
     }
 
+    /**
+     *
+     * Adds a default usage argument.
+     *
+     * @param array $args The default usage arguments.
+     *
+     * @param StdClass $option An option struct.
+     *
+     */
     protected function addUsageArgument(&$args, $option)
     {
         if ($option->name) {
@@ -275,6 +298,13 @@ class Help
         $args[] = $arg;
     }
 
+    /**
+     *
+     * Returns the formatted argument descriptions.
+     *
+     * @return string
+     *
+     */
     protected function getHelpArguments()
     {
         $args = array();
@@ -303,6 +333,7 @@ class Help
         return "<<bold>>ARGUMENTS<<reset>>" . PHP_EOL
              . "    " . trim($text) . PHP_EOL . PHP_EOL;
     }
+
     /**
      *
      * Gets the formatted options output.
