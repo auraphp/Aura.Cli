@@ -182,8 +182,8 @@ class Help
     {
         $help = $this->getHelpSummary($name)
               . $this->getHelpUsage($name)
-              . $this->getHelpArguments($name)
               . $this->getHelpDescr()
+              . $this->getHelpArguments($name)
               . $this->getHelpOptions()
         ;
 
@@ -291,7 +291,7 @@ class Help
 
         $text = '';
         foreach ($args as $arg) {
-            $text .= "    {$arg->alias}" . PHP_EOL;
+            $text .= "    <{$arg->alias}>" . PHP_EOL;
             if ($arg->descr) {
                 $text .= "        {$arg->descr}";
             } else {
