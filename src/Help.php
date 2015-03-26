@@ -35,7 +35,7 @@ class Help
      * @var OptionFactory
      *
      */
-    protected $option_factory = array();
+    protected $option_factory;
 
     /**
      *
