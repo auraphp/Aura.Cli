@@ -357,10 +357,10 @@ class MyCommandHelp extends Help
     protected function init()
     {
         $this->setSummary('A single-line summary.');
-        $this->setUsage('<arg1> <arg2>');
+        $this->setUsage('<arg1> [<arg2>]');
         $this->setOptions(array(
-            'f,foo' => "The -f/--foo option description",
-            'bar::' => "The --bar option description",
+            'f,foo' => "The -f/--foo option description.",
+            'bar::' => "The --bar option description.",
         ));
         $this->setDescr("A multi-line description of the command.");
     }
@@ -397,7 +397,7 @@ SUMMARY
     my-command -- A single-line summary.
 
 USAGE
-    my-command <arg1> <arg2>
+    my-command <arg1> [<arg2>]
 
 DESCRIPTION
     A multi-line description of the command.
@@ -410,6 +410,61 @@ OPTIONS
     --bar[=<value>]
         The --bar option description.
 ```
+
+As a side note, the array of options passed to `setOptions()` may contain argument descriptions as well. These are in the format `#argname` (to indicate a required argument) and `#argname?` (to indicate an optional argument). They may additionally be used as keys, with corresponding description values. Their presence in a _Getopt_ definition array is ignored, but the _Help_ object will read them and generate output for them automatically.
+
+For example, the following code (notice the lack of a `setUsage()` call)...
+
+```php
+<?php
+use Aura\Cli\CliFactory;
+use Aura\Cli\Context\OptionFactory;
+use Aura\Cli\Help;
+
+$cli_factory = new CliFactory;
+$stdio = $cli_factory->newStdio();
+
+$help = new Help(new OptionFactory);
+$this->setSummary('A single-line summary.');
+$help->setOptions(array(
+    'f,foo' => "The -f/--foo option description.",
+    'bar::' => "The --bar option description.",
+    '#arg1' => "The description for argument 1.",
+    '#arg2?' => "The description for argument 2.",
+));
+$this->setDescr("A multi-line description of the command.");
+
+$stdio->outln($help->getHelp('my-command'));
+?>
+
+... will generate the following output:
+
+```
+SUMMARY
+    my-command -- A single-line summary.
+
+USAGE
+    my-command <arg1> [<arg2>]
+
+DESCRIPTION
+    A multi-line description of the command.
+
+ARGUMENTS
+    <foo>
+        The description for argument 1.
+
+    <bar>
+        The description for argument 2.
+
+OPTIONS
+    -f
+    --foo
+        The -f/--foo option description.
+
+    --bar[=<value>]
+        The --bar option description.
+```
+
 
 ### Formatter Cheat Sheet
 
