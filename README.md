@@ -429,6 +429,7 @@ $this->setDescr("A multi-line description of the command.");
 
 $stdio->outln($help->getHelp('my-command'));
 ?>
+```
 
 ... will generate the following output:
 
