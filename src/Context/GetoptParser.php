@@ -215,7 +215,7 @@ class GetoptParser
      * Sets the value for a long option.
      *
      * @param string $input The current input element, e.g. "--foo" or
-     * "--bar=baz".
+     * "--bar=baz" or "--bar baz".
      *
      * @return bool|null
      *
@@ -224,6 +224,11 @@ class GetoptParser
     {
         list($name, $value) = $this->splitLongOptionInput($input);
         $option = $this->getOption($name);
+
+        if ($this->longOptionRequiresValue($option, $value)) {
+            $value = array_shift($this->input);
+        }
+
         return $this->longOptionRequiresValue($option, $value, $name)
             || $this->longOptionRejectsValue($option, $value, $name)
             || $this->setValue($option, trim($value) === '' ? true : $value);
@@ -265,12 +270,14 @@ class GetoptParser
      * @return bool
      *
      */
-    protected function longOptionRequiresValue($option, $value, $name)
+    protected function longOptionRequiresValue($option, $value, $name=null)
     {
         if ($option->param == 'required' && trim($value) === '') {
-            $this->errors[] = new Exception\OptionParamRequired(
-                "The option '$name' requires a parameter."
-            );
+            if ($name) {
+                $this->errors[] = new Exception\OptionParamRequired(
+                    "The option '$name' requires a parameter."
+                );
+            }
             return true;
         }
         return false;

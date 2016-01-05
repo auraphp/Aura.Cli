@@ -135,6 +135,7 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $options = array('foo-bar:');
         $this->getopt_parser->setOptions($options);
 
+        // '=' as separator
         $result = $this->getopt_parser->parseInput(array('--foo-bar=baz'));
         $this->assertTrue($result);
 
@@ -142,6 +143,15 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $actual = $this->getopt_parser->getValues();
         $this->assertSame($expect, $actual);
 
+        // ' ' as separator
+        $result = $this->getopt_parser->parseInput(array('--foo-bar', 'baz'));
+        $this->assertTrue($result);
+
+        $expect = array('--foo-bar' => 'baz');
+        $actual = $this->getopt_parser->getValues();
+        $this->assertSame($expect, $actual);
+
+        // missing required value
         $result = $this->getopt_parser->parseInput(array('--foo-bar'));
         $this->assertFalse($result);
 
