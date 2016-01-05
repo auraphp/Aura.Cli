@@ -196,7 +196,7 @@ method and the argument position number:
 
 ```php
 <?php
-$getopt = $context->getopt();
+$getopt = $context->getopt($options);
 
 // if the script was invoked with:
 // php script.php arg1 arg2 arg3 arg4
