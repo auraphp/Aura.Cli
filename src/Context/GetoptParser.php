@@ -270,10 +270,10 @@ class GetoptParser
      * @return bool
      *
      */
-    protected function longOptionRequiresValue($option, $value, $name=null)
+    protected function longOptionRequiresValue($option, $value, $name = null)
     {
         if ($option->param == 'required' && trim($value) === '') {
-            if ($name) {
+            if ($name !== null) {
                 $this->errors[] = new Exception\OptionParamRequired(
                     "The option '$name' requires a parameter."
                 );
