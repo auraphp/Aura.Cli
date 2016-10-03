@@ -1,1 +1,1 @@
-Hygiene release: update the license year, remove branch alias, and update docs.
+Hygiene release: update license year, remove branch alias, and update docs.
