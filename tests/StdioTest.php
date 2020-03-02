@@ -4,7 +4,7 @@ namespace Aura\Cli;
 use Aura\Cli\Stdio\Handle;
 use Aura\Cli\Stdio\Formatter;
 
-class StdioTest extends \PHPUnit_Framework_TestCase
+class StdioTest extends \PHPUnit\Framework\TestCase
 {
     protected $stdio;
 
@@ -16,7 +16,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
 
     protected $formatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stdin  = new Handle('php://memory', 'r+');
@@ -31,7 +31,7 @@ class StdioTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

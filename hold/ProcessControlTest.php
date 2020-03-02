@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli;
 
-class ProcessControlTest extends \PHPUnit_Framework_TestCase
+class ProcessControlTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
