@@ -1,11 +1,11 @@
 <?php
 namespace Aura\Cli\Context;
 
-class GetoptParserTest extends \PHPUnit\Framework\TestCase
+class GetoptParserTest extends \PHPUnit_Framework_TestCase
 {
     protected $getopt_parser;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->getopt_parser = new GetoptParser(new OptionFactory);
     }
