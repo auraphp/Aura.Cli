@@ -3,7 +3,7 @@ namespace Aura\Cli;
 
 use Aura\Cli\Context\OptionFactory;
 
-class HelpTest extends \PHPUnit\Framework\TestCase
+class HelpTest extends \PHPUnit_Framework_TestCase
 {
     protected $help;
 
@@ -20,7 +20,7 @@ class HelpTest extends \PHPUnit\Framework\TestCase
         'baz*::' => "A baz option.",
     );
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->help = new Help(new OptionFactory);
     }

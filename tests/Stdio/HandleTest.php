@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli\Stdio;
 
-class HandleTest extends \PHPUnit\Framework\TestCase
+class HandleTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {

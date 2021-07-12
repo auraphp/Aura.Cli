@@ -1,11 +1,11 @@
 <?php
 namespace Aura\Cli\Stdio;
 
-class FormatterTest extends \PHPUnit\Framework\TestCase
+class FormatterTest extends \PHPUnit_Framework_TestCase
 {
     protected $formatter;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->formatter = new Formatter;

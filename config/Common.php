@@ -1,12 +1,12 @@
 <?php
 namespace Aura\Cli\_Config;
 
-use Aura\Di\ContainerConfig as Config;
+use Aura\Di\Config;
 use Aura\Di\Container;
 
 class Common extends Config
 {
-    public function define(Container $di): void
+    public function define(Container $di)
     {
         /**
          * Aura\Cli\Context
