@@ -311,6 +311,23 @@ class GetoptParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual->getMessage());
     }
 
+    public function testParse_shortClusterOptional()
+    {
+        $options = array('f', 'z', 'b::');
+        $this->getopt_parser->setOptions($options);
+
+        $result = $this->getopt_parser->parseInput(array('-fzb', 'foo_arg'));
+        $this->assertTrue($result);
+
+        $expect = array(
+            '-f' => true,
+            '-z' => true,
+            '-b' => 'foo_arg',
+        );
+        $actual = $this->getopt_parser->getValues();
+        $this->assertSame($expect, $actual);
+    }
+
     public function testParseAndGet()
     {
         $this->getopt_parser->setOptions(array('#foo', 'foo-bar:', '#bar', 'b', '#baz?', 'z::'));
