@@ -1,11 +1,11 @@
 <?php
 namespace Aura\Cli;
 
-class CliFactoryTest extends \PHPUnit_Framework_TestCase
+class CliFactoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $cli_factory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cli_factory = new CliFactory;
     }

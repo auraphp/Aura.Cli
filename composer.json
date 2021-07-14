@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=7.2.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,12 +36,21 @@
         }
     },
     "require-dev": {
-        "aura/di": "~2.0"
+        "phpunit/phpunit": "^8.5",
+        "aura/di": "~4.0"
     },
     "autoload-dev": {
         "psr-4": {
             "Aura\\Cli\\": "tests/",
             "Aura\\Di\\": "vendor/aura/di/tests/"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"
+    },
+    "scripts-descriptions": {
+        "test": "Run unit tests",
+        "coverage": "Generate test coverage report"
     }
 }

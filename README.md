@@ -8,7 +8,9 @@ independent _Help_ object for describing commands.
 
 ### Installation
 
-This library requires PHP 5.3 or later; we recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
+This library requires PHP 7.2 or later; we recommend using the latest available version of PHP as a matter of principle. If you are interested in using this package for older PHP versions, use version 2.x for PHP 5.3+.
+
+It has no userland dependencies.
 
 It is installable and autoloadable via Composer as [aura/cli](https://packagist.org/packages/aura/cli).
 
@@ -20,7 +22,7 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Cli/releases
 [![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
 [![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
 
-To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
+To run the unit tests at the command line, issue `composer install` and then `composer test` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`.
 
 This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
 you notice compliance oversights, please send a patch via pull request.
