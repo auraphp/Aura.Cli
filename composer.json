@@ -44,5 +44,13 @@
             "Aura\\Cli\\": "tests/",
             "Aura\\Di\\": "vendor/aura/di/tests/"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"
+    },
+    "scripts-descriptions": {
+        "test": "Run unit tests",
+        "coverage": "Generate test coverage report"
     }
 }
