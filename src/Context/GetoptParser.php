@@ -226,7 +226,7 @@ class GetoptParser
         $option = $this->getOption($name);
 
         if ($this->longOptionRequiresValue($option, $value)) {
-            $value = array_shift($this->input);
+            $value = (string) array_shift($this->input);
         }
 
         return $this->longOptionRequiresValue($option, $value, $name)
@@ -249,12 +249,12 @@ class GetoptParser
         $pos = strpos($input, '=');
         if ($pos === false) {
             $name = $input;
-            $value = null;
+            $value = '';
         } else {
             $name = substr($input, 0, $pos);
             $value = substr($input, $pos + 1);
         }
-        return array($name, $value);
+        return array($name, (string) $value);
     }
 
     /**
@@ -263,7 +263,7 @@ class GetoptParser
      *
      * @param StdClass $option An option struct.
      *
-     * @param mixed $value The option value.
+     * @param string $value The option value.
      *
      * @param string $name The option name as passed.
      *
