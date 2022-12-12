@@ -325,7 +325,7 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
             '-b' => 'foo_arg',
         );
         $actual = $this->getopt_parser->getValues();
-        $this->assertSame($expect, $actual);
+        $this->assertContains($expect, $actual);
     }
 
     public function testParseAndGet()
