@@ -409,6 +409,7 @@ class GetoptParser
             if (! $this->shortOptionRequiresValue($option, $name)) {
                 $this->setValue($option, true);
             }
+            $this->setShortFlagValue($name);
         }
     }
 
