@@ -98,7 +98,7 @@ its values will be stored in an array.
 
 ```php
 <?php
-$options = array(
+$options = [
     'a',        // short flag -a, parameter is not allowed
     'b:',       // short flag -b, parameter is required
     'c::',      // short flag -c, parameter is optional
@@ -106,7 +106,7 @@ $options = array(
     'bar:',     // long option --bar, parameter is required
     'baz::',    // long option --baz, parameter is optional
     'g*::',     // short flag -g, parameter is optional, multi-pass
-);
+];
 
 $getopt = $context->getopt($options);
 ?>
@@ -139,9 +139,9 @@ The values will be stored under both names;
 ```php
 <?php
 // alias -f to --foo
-$options = array(
+$options = [
     'foo,f:',  // long option --foo or short flag -f, parameter required
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -155,10 +155,10 @@ of the option name.
 
 ```php
 <?php
-$options = array(
+$options = [
     'f*',
     'foo*:'
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -213,10 +213,10 @@ Defined options will be removed from the arguments automatically.
 
 ```php
 <?php
-$options = array(
+$options = [
     'a',
     'foo:',
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -351,10 +351,10 @@ class MyCommandHelp extends Help
     {
         $this->setSummary('A single-line summary.');
         $this->setUsage('<arg1> [<arg2>]');
-        $this->setOptions(array(
+        $this->setOptions([
             'f,foo' => "The -f/--foo option description.",
             'bar::' => "The --bar option description.",
-        ));
+        ]);
         $this->setDescr("A multi-line description of the command.");
     }
 }
@@ -419,12 +419,12 @@ $stdio = $cli_factory->newStdio();
 
 $help = new Help(new OptionFactory);
 $this->setSummary('A single-line summary.');
-$help->setOptions(array(
+$help->setOptions([
     'f,foo' => "The -f/--foo option description.",
     'bar::' => "The --bar option description.",
     '#arg1' => "The description for argument 1.",
     '#arg2?' => "The description for argument 2.",
-));
+]);
 $this->setDescr("A multi-line description of the command.");
 
 $stdio->outln($help->getHelp('my-command'));
