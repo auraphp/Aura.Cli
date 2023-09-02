@@ -8,7 +8,7 @@ independent _Help_ object for describing commands.
 
 ### Installation
 
-This library requires PHP 7.2 or later; we recommend using the latest available version of PHP as a matter of principle. If you are interested in using this package for older PHP versions, use version 2.x for PHP 5.3+.
+This library requires PHP 7.2 or later; we recommend using the latest available version of PHP as a matter of principle.
 
 It has no userland dependencies.
 
