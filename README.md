@@ -8,7 +8,7 @@ independent _Help_ object for describing commands.
 
 ### Installation
 
-This library requires PHP 7.2 or later; we recommend using the latest available version of PHP as a matter of principle. If you are interested in using this package for older PHP versions, use version 2.x for PHP 5.3+.
+This library requires PHP 7.2 or later; we recommend using the latest available version of PHP as a matter of principle.
 
 It has no userland dependencies.
 
@@ -18,9 +18,7 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Cli/releases
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli/)
-[![Build Status](https://travis-ci.org/auraphp/Aura.Cli.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli)
+[![Continuous Integration](https://github.com/auraphp/Aura.Cli/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/auraphp/Aura.Cli/actions/workflows/continuous-integration.yml)
 
 To run the unit tests at the command line, issue `composer install` and then `composer test` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`.
 
@@ -100,7 +98,7 @@ its values will be stored in an array.
 
 ```php
 <?php
-$options = array(
+$options = [
     'a',        // short flag -a, parameter is not allowed
     'b:',       // short flag -b, parameter is required
     'c::',      // short flag -c, parameter is optional
@@ -108,7 +106,7 @@ $options = array(
     'bar:',     // long option --bar, parameter is required
     'baz::',    // long option --baz, parameter is optional
     'g*::',     // short flag -g, parameter is optional, multi-pass
-);
+];
 
 $getopt = $context->getopt($options);
 ?>
@@ -141,9 +139,9 @@ The values will be stored under both names;
 ```php
 <?php
 // alias -f to --foo
-$options = array(
+$options = [
     'foo,f:',  // long option --foo or short flag -f, parameter required
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -157,10 +155,10 @@ of the option name.
 
 ```php
 <?php
-$options = array(
+$options = [
     'f*',
     'foo*:'
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -215,10 +213,10 @@ Defined options will be removed from the arguments automatically.
 
 ```php
 <?php
-$options = array(
+$options = [
     'a',
     'foo:',
-);
+];
 
 $getopt = $context->getopt($options);
 
@@ -353,10 +351,10 @@ class MyCommandHelp extends Help
     {
         $this->setSummary('A single-line summary.');
         $this->setUsage('<arg1> [<arg2>]');
-        $this->setOptions(array(
+        $this->setOptions([
             'f,foo' => "The -f/--foo option description.",
             'bar::' => "The --bar option description.",
-        ));
+        ]);
         $this->setDescr("A multi-line description of the command.");
     }
 }
@@ -421,12 +419,12 @@ $stdio = $cli_factory->newStdio();
 
 $help = new Help(new OptionFactory);
 $this->setSummary('A single-line summary.');
-$help->setOptions(array(
+$help->setOptions([
     'f,foo' => "The -f/--foo option description.",
     'bar::' => "The --bar option description.",
     '#arg1' => "The description for argument 1.",
     '#arg2?' => "The description for argument 2.",
-));
+]);
 $this->setDescr("A multi-line description of the command.");
 
 $stdio->outln($help->getHelp('my-command'));
