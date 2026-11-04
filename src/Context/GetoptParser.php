@@ -360,7 +360,8 @@ class GetoptParser
     protected function shortOptionCapturesValue($option)
     {
         $value = reset($this->input);
-        $is_value = ! empty($value)
+        $is_empty =  empty($value) && strlen($value) === 0;
+        $is_value = ! $is_empty
             && ($option->param == 'required'
                 || substr($value, 0, 1) != '-');
         if ($is_value) {
