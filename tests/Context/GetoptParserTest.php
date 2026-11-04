@@ -224,25 +224,28 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
 
     public function testParse_shortRequired()
     {
-        $options = array('f:');
-        $this->getopt_parser->setOptions($options);
+        foreach (array('baz', '0', 0) as $value) {
+            $options = array('f:');
+            $this->getopt_parser->setOptions($options);
 
-        $result = $this->getopt_parser->parseInput(array('-f', 'baz'));
-        $this->assertTrue($result);
+            $result = $this->getopt_parser->parseInput(array('-f', $value));
+            $this->assertTrue($result);
 
-        $expect = array('-f' => 'baz');
-        $actual = $this->getopt_parser->getValues();
-        $this->assertSame($expect, $actual);
+            $expect = array('-f' => $value);
+            $actual = $this->getopt_parser->getValues();
+            $this->assertSame($expect, $actual);
 
-        $result = $this->getopt_parser->parseInput(array('-f'));
-        $this->assertFalse($result);
+            $result = $this->getopt_parser->parseInput(array('-f'));
+            $this->assertFalse($result);
 
-        $errors = $this->getopt_parser->getErrors();
-        $actual = $errors[0];
-        $expect = 'Aura\Cli\Exception\OptionParamRequired';
-        $this->assertInstanceOf($expect, $actual);
-        $expect = "The option '-f' requires a parameter.";
-        $this->assertSame($expect, $actual->getMessage());
+            $errors = $this->getopt_parser->getErrors();
+            $actual = $errors[0];
+            $expect = 'Aura\Cli\Exception\OptionParamRequired';
+            $this->assertInstanceOf($expect, $actual);
+            $expect = "The option '-f' requires a parameter.";
+            $this->assertSame($expect, $actual->getMessage());
+
+        }
     }
 
     public function testParse_shortOptional()
