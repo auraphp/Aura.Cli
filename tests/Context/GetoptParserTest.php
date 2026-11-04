@@ -248,6 +248,19 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testParse_shortRequiredHyphenPrefixedValue()
+    {
+        $options = array('n:');
+        $this->getopt_parser->setOptions($options);
+
+        $result = $this->getopt_parser->parseInput(array('-n', '-5'));
+        $this->assertTrue($result);
+
+        $expect = array('-n' => '-5');
+        $actual = $this->getopt_parser->getValues();
+        $this->assertSame($expect, $actual);
+    }
+
     public function testParse_shortOptional()
     {
         $options = array('f::');

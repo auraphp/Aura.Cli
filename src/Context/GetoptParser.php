@@ -361,7 +361,9 @@ class GetoptParser
     {
         $value = reset($this->input);
         $is_empty =  empty($value) && strlen($value) === 0;
-        $is_value = ! $is_empty && substr($value, 0, 1) != '-';
+        $is_value = ! $is_empty
+            && ($option->param == 'required'
+                || substr($value, 0, 1) != '-');
         if ($is_value) {
             $this->setValue($option, array_shift($this->input));
             return true;
