@@ -123,7 +123,11 @@ class GetoptParser
      */
     public function parseInput(array $input = array())
     {
-        $this->input = $input;
+        // treat null elements as empty strings, so later string functions
+        // do not receive null (deprecated as of PHP 8.1)
+        $this->input = array_map(function ($value) {
+            return $value === null ? '' : $value;
+        }, $input);
         $this->errors = array();
         $this->values = array();
 
