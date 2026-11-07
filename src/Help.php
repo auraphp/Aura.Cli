@@ -48,6 +48,15 @@ class Help
 
     /**
      *
+     * Custom sections to append after the options, as title => text.
+     *
+     * @var array
+     *
+     */
+    protected $sections = array();
+
+    /**
+     *
      * A single-line summary for the command.
      *
      * @var string
@@ -171,6 +180,35 @@ class Help
 
     /**
      *
+     * Adds a custom section to the end of the help output, after the
+     * options. Adding a section with an existing title replaces it.
+     *
+     * @param string $title The section title, e.g. 'EXAMPLES'.
+     *
+     * @param string|array $text The section text; one line per array element.
+     *
+     * @return null
+     *
+     */
+    public function addSection($title, $text)
+    {
+        $this->sections[$title] = $text;
+    }
+
+    /**
+     *
+     * Gets the custom sections.
+     *
+     * @return array The custom sections, as title => text.
+     *
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     *
      * Gets the formatted help output.
      *
      * @param string $name The command name.
@@ -185,6 +223,7 @@ class Help
               . $this->getHelpDescr()
               . $this->getHelpArguments()
               . $this->getHelpOptions()
+              . $this->getHelpSections()
         ;
 
         if (! $help) {
@@ -487,5 +526,29 @@ class Help
 
         return "<<bold>>DESCRIPTION<<reset>>" . PHP_EOL
              . "    " . trim($this->descr) . PHP_EOL . PHP_EOL;
+    }
+
+    /**
+     *
+     * Gets the formatted output for the custom sections.
+     *
+     * @return string
+     *
+     */
+    protected function getHelpSections()
+    {
+        $text = '';
+        foreach ($this->sections as $title => $body) {
+            if (! is_array($body)) {
+                $body = preg_split('/\R/', trim($body));
+            }
+            $text .= "<<bold>>{$title}<<reset>>" . PHP_EOL;
+            foreach ($body as $line) {
+                $line = rtrim($line);
+                $text .= ($line === '' ? '' : "    {$line}") . PHP_EOL;
+            }
+            $text .= PHP_EOL;
+        }
+        return $text;
     }
 }
