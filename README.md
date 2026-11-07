@@ -231,7 +231,28 @@ $a    = $getopt->get('-a'); // 1
 ```
 
 > N.b.: If a short flag has an optional parameter, the argument immediately
-> after it will be treated as the option value, not as an argument.
+> after it will be treated as the option value, not as an argument, unless it
+> begins with `-`. If a short flag has a required parameter, the argument
+> immediately after it is always treated as the value, even if it begins
+> with `-`.
+
+```php
+<?php
+$options = [
+    'a',    // short flag -a, parameter is not allowed
+    'b:',   // short flag -b, parameter is required
+    'c::',  // short flag -c, parameter is optional
+];
+
+$getopt = $context->getopt($options);
+
+// php script.php -b -5     => -b is '-5'
+// php script.php -b 0      => -b is '0'
+// php script.php -c foo    => -c is 'foo'
+// php script.php -c -a     => -c is true, -a is true
+// php script.php -c -5     => -c is true, and '-5' is an undefined option error
+?>
+```
 
 
 ### Standard Input/Output Streams
