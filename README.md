@@ -480,6 +480,32 @@ OPTIONS
         The --bar option description.
 ```
 
+You can also append custom sections, such as EXAMPLES or SEE ALSO, with
+`addSection()`. They appear after the options, in the order they were added.
+The text may be a string or an array of lines; adding a section with an
+existing title replaces it.
+
+```php
+<?php
+$help->addSection('EXAMPLES', [
+    'my-command foo',
+    'my-command foo bar',
+]);
+$help->addSection('SEE ALSO', 'other-command(1)');
+?>
+```
+
+... will append the following to the help output:
+
+```
+EXAMPLES
+    my-command foo
+    my-command foo bar
+
+SEE ALSO
+    other-command(1)
+```
+
 
 ### Formatter Cheat Sheet
 
