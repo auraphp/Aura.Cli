@@ -261,6 +261,43 @@ class GetoptParserTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
+    public function testParse_nullInputIsTreatedAsEmptyString()
+    {
+        // record deprecation notices instead of letting them pass silently
+        $deprecations = array();
+        set_error_handler(function ($errno, $errstr) use (&$deprecations) {
+            $deprecations[] = $errstr;
+            return true;
+        }, E_DEPRECATED);
+
+        try {
+            // required: null is not a value, so the option is missing its param
+            $this->getopt_parser->setOptions(array('f:'));
+            $required_result = $this->getopt_parser->parseInput(array('-f', null));
+            $required_errors = $this->getopt_parser->getErrors();
+            $required_values = $this->getopt_parser->getValues();
+
+            // optional: null is not a value, so the option is just a flag
+            $this->getopt_parser->setOptions(array('f::'));
+            $optional_result = $this->getopt_parser->parseInput(array('-f', null));
+            $optional_values = $this->getopt_parser->getValues();
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame(array(), $deprecations);
+
+        $this->assertFalse($required_result);
+        $this->assertInstanceOf(
+            'Aura\Cli\Exception\OptionParamRequired',
+            $required_errors[0]
+        );
+        $this->assertSame(array(0 => ''), $required_values);
+
+        $this->assertTrue($optional_result);
+        $this->assertSame(array('-f' => true, 0 => ''), $optional_values);
+    }
+
     public function testParse_shortOptional()
     {
         $options = array('f::');
