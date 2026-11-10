@@ -1,0 +1,10 @@
+{
+    "title": "Aura.Cli 4.x",
+    "content": [
+        "getting-started.md",
+        "getopt.md",
+        "stdio.md",
+        "commands.md",
+        "help.md"
+    ]
+}
