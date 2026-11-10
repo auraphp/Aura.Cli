@@ -81,12 +81,20 @@ The _ProgressBar_ methods are ...
 
 - `finish()` to draw the bar at 100% and end the line;
 
-- `getProgress()` and `getTotal()` to return the steps done and the total.
+- `getProgress()` and `getTotal()` to return the steps done and the total;
 
-Calling `advance()` or `setProgress()` before `start()` starts the bar. Each
-bar keeps its own start time, so you can run several bars one after another.
+- `render()` to return the bar line for the current state as a string,
+  without printing it.
+
+Calling `advance()` or `setProgress()` before `start()` starts the bar.
+Calling `finish()` a second time does nothing until you call `start()` again,
+which resets the bar and its timer. Each bar keeps its own start time, so you
+can run several bars one after another.
+
 The "remaining" estimate is based on the average time per step so far, and
-shows `--` until the first step is done.
+shows `--` until the first step is done. A total of `0` draws a full bar.
+
+### Width
 
 The bar is 30 characters wide by default; pass a different width as the third
 constructor argument:
@@ -97,10 +105,59 @@ $progress = new ProgressBar($stdio, count($files), 50);
 ?>
 ```
 
+A negative total, or a width less than 1, throws an
+`InvalidArgumentException`.
+
+### Terminals and Redirected Output
+
 When standard output is not a POSIX terminal (for example, when it is piped to
 a file or another program, or on Windows), the in-place redraws are skipped
 and `finish()` prints only the final line, so logs are not filled with
 carriage returns.
+
+On a terminal the bar redraws its own line with a carriage return, so do not
+print anything else to the terminal between `start()` and `finish()`; the
+next redraw would overwrite it, or it would be printed in the middle of the
+bar. Print messages before `start()` or after `finish()` instead.
+
+### Testing
+
+To test code that uses a progress bar, write to `php://memory` handles and pass
+a clock as the fourth constructor argument. The clock is a callable that
+returns the current time in seconds; it defaults to `microtime(true)`. Pass
+`true` as the fourth _Handle_ argument to force terminal output, or `false`
+to force redirected output.
+
+```php
+<?php
+use Aura\Cli\Stdio;
+use Aura\Cli\Stdio\Formatter;
+use Aura\Cli\Stdio\Handle;
+use Aura\Cli\Stdio\ProgressBar;
+
+$stdout = new Handle('php://memory', 'w+', null, false);
+$stdio = new Stdio(
+    new Handle('php://memory', 'r'),
+    $stdout,
+    new Handle('php://memory', 'w+'),
+    new Formatter
+);
+
+$now = 0;
+$clock = function () use (&$now) {
+    return $now;
+};
+
+$progress = new ProgressBar($stdio, 4, 10, $clock);
+$progress->start();
+$now = 8;
+$progress->finish();
+
+$stdout->rewind();
+echo $stdout->fread();
+// [==========] 100%  4/4 remaining: 0 sec.  elapsed: 8 sec.
+?>
+```
 
 ## Formatter Cheat Sheet
 
