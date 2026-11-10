@@ -170,4 +170,99 @@ EOT
 EOT;
         $this->assertSame($expect, $actual);
     }
+
+    public function testAddAndGetSections()
+    {
+        $this->assertSame(array(), $this->help->getSections());
+
+        $this->help->addSection('EXAMPLES', 'fake build');
+        $this->help->addSection('SEE ALSO', array('other(1)'));
+
+        $expect = array(
+            'EXAMPLES' => 'fake build',
+            'SEE ALSO' => array('other(1)'),
+        );
+        $this->assertSame($expect, $this->help->getSections());
+    }
+
+    public function testGetHelpWithSections()
+    {
+        $this->help->setSummary("A fake comand.");
+        $this->help->setUsage('<target>');
+        $this->help->setOptions(array(
+            'v,verbose' => "Verbose output.",
+        ));
+
+        // array text: one line per element
+        $this->help->addSection('EXAMPLES', array(
+            'fake build -v',
+            'fake build --verbose',
+        ));
+
+        // string text: split into lines; relative indentation is kept
+        $this->help->addSection('SEE ALSO', "other(1)\n\n  another(1)\n");
+
+        $actual = $this->help->getHelp('fake');
+        $expect = <<<EOT
+<<bold>>SUMMARY<<reset>>
+    <<bold>>fake<<reset>> -- A fake comand.
+
+<<bold>>USAGE<<reset>>
+    <<ul>>fake<<reset>> <target>
+
+<<bold>>OPTIONS<<reset>>
+    -v
+    --verbose
+        Verbose output.
+
+<<bold>>EXAMPLES<<reset>>
+    fake build -v
+    fake build --verbose
+
+<<bold>>SEE ALSO<<reset>>
+    other(1)
+
+      another(1)
+
+EOT;
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testAddSectionReplacesSameTitle()
+    {
+        $this->help->addSection('EXAMPLES', 'first');
+        $this->help->addSection('NOTES', 'a note');
+        $this->help->addSection('EXAMPLES', 'second');
+
+        // replaced in place, so the original order is kept
+        $expect = array(
+            'EXAMPLES' => 'second',
+            'NOTES' => 'a note',
+        );
+        $this->assertSame($expect, $this->help->getSections());
+
+        $actual = $this->help->getHelp('fake');
+        $expect = <<<EOT
+<<bold>>EXAMPLES<<reset>>
+    second
+
+<<bold>>NOTES<<reset>>
+    a note
+
+EOT;
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testGetHelpWithOnlySections()
+    {
+        $this->help->addSection('EXAMPLES', 'fake build');
+
+        $actual = $this->help->getHelp('fake');
+        $expect = <<<EOT
+<<bold>>EXAMPLES<<reset>>
+    fake build
+
+EOT;
+        $this->assertSame($expect, $actual);
+    }
 }
