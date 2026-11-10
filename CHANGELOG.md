@@ -2,7 +2,7 @@
 
 ## 4.0.0
 
-Requires PHP 7.2 or later; tested up to PHP 8.2.
+Requires PHP 7.2 or later; tested up to PHP 8.5.
 
 ### Added
 
