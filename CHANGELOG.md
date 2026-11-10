@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+### Added
+
+- `Aura\Cli\Stdio\ProgressBar` draws a progress bar with the percentage,
+  step count, estimated time remaining, and elapsed time. Use `start()`,
+  `advance()`, `setProgress()`, and `finish()`. On a POSIX terminal it redraws
+  in place; otherwise only the final line is printed.
+
 ## 4.0.0
 
 Requires PHP 7.2 or later; tested up to PHP 8.5.

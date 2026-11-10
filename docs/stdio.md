@@ -45,6 +45,63 @@ $stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ?>
 ```
 
+## Progress Bar
+
+The _ProgressBar_ object draws a progress bar on standard output for a task
+with a known number of steps.
+
+```php
+<?php
+use Aura\Cli\Stdio\ProgressBar;
+
+$files = glob('/path/to/files/*');
+$progress = new ProgressBar($stdio, count($files));
+
+$progress->start();
+foreach ($files as $file) {
+    // ... process the file ...
+    $progress->advance();
+}
+$progress->finish();
+?>
+```
+
+While it runs, the bar is redrawn in place on a single line:
+
+    [==========>                   ] 33%  10/30 remaining: 20 sec.  elapsed: 10 sec.
+
+The _ProgressBar_ methods are ...
+
+- `start()` to set the progress to zero, start the timer, and draw the bar;
+
+- `advance($step = 1)` to move forward by `$step` steps;
+
+- `setProgress($progress)` to set the number of steps done directly; the value
+  is kept between zero and the total;
+
+- `finish()` to draw the bar at 100% and end the line;
+
+- `getProgress()` and `getTotal()` to return the steps done and the total.
+
+Calling `advance()` or `setProgress()` before `start()` starts the bar. Each
+bar keeps its own start time, so you can run several bars one after another.
+The "remaining" estimate is based on the average time per step so far, and
+shows `--` until the first step is done.
+
+The bar is 30 characters wide by default; pass a different width as the third
+constructor argument:
+
+```php
+<?php
+$progress = new ProgressBar($stdio, count($files), 50);
+?>
+```
+
+When standard output is not a POSIX terminal (for example, when it is piped to
+a file or another program, or on Windows), the in-place redraws are skipped
+and `finish()` prints only the final line, so logs are not filled with
+carriage returns.
+
 ## Formatter Cheat Sheet
 
 On POSIX terminals, `<<markup>>` strings will change the display
