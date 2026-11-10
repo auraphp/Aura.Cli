@@ -45,6 +45,134 @@ $stdio->errln('Output will stay red until a formatting change.<<reset>>');
 ?>
 ```
 
+## Progress Bar
+
+The _ProgressBar_ object draws a progress bar on standard output for a task
+with a known number of steps.
+
+```php
+<?php
+use Aura\Cli\Stdio\ProgressBar;
+
+$files = glob('/path/to/files/*');
+$progress = new ProgressBar($stdio, count($files));
+
+$progress->start();
+foreach ($files as $file) {
+    // ... process the file ...
+    $progress->advance();
+}
+$progress->finish();
+?>
+```
+
+While it runs, the bar is redrawn in place on a single line:
+
+    [======>             ] 33%  10/30  elapsed 0:10  left 0:20
+
+The _ProgressBar_ methods are ...
+
+- `start()` to set the progress to zero, start the timer, and draw the bar;
+
+- `advance($step = 1)` to move forward by `$step` steps;
+
+- `setProgress($progress)` to set the number of steps done directly; the value
+  is kept between zero and the total;
+
+- `finish()` to draw the bar at 100% and end the line;
+
+- `getProgress()` and `getTotal()` to return the steps done and the total;
+
+- `render()` to return the bar line for the current state as a string,
+  without printing it.
+
+Calling `advance()` or `setProgress()` before `start()` starts the bar.
+Calling `finish()` a second time does nothing until you call `start()` again,
+which resets the bar and its timer. Each bar keeps its own start time, so you
+can run several bars one after another.
+
+Times are shown as `m:ss`, or `h:mm:ss` from one hour. The "left" estimate is
+based on the average time per step so far, and shows `--` until the first
+step is done. A total of `0` draws a full bar.
+
+### Width
+
+The bar is 20 characters wide by default; pass a different width as the third
+constructor argument:
+
+```php
+<?php
+$progress = new ProgressBar($stdio, count($files), 40);
+?>
+```
+
+The whole line is the bar width plus the text after it. With the default
+width it stays under 80 characters for totals up to 99,999 and times under 10
+hours. Keep the line narrower than the terminal: a line that wraps cannot be
+redrawn in place, so each update would print a new row instead.
+
+A negative total, or a width less than 1, throws an
+`InvalidArgumentException`.
+
+### Terminals and Redirected Output
+
+The bar is redrawn in place when standard output is an interactive terminal,
+including a Windows console; it checks this with `Handle::isTty()`, which
+uses `stream_isatty()`. When standard output is not a terminal (for example,
+when it is piped to a file or another program), the in-place redraws are
+skipped and `finish()` prints only the final line, so logs are not filled with
+carriage returns. Some terminal emulators that are not native consoles, such
+as mintty in Git Bash, are not detected as terminals, so they also get only
+the final line.
+
+Note that `Handle::isTty()` is separate from `Handle::isPosix()`: the
+formatter markup is still only converted to control codes on POSIX
+terminals, and stripped on Windows.
+
+On a terminal the bar redraws its own line with a carriage return, so do not
+print anything else to the terminal between `start()` and `finish()`; the
+next redraw would overwrite it, or it would be printed in the middle of the
+bar. Print messages before `start()` or after `finish()` instead.
+
+### Testing
+
+To test code that uses a progress bar, write to `php://memory` handles and pass
+a clock as the fourth constructor argument. The clock is a callable that
+returns the current time in seconds; it defaults to `microtime(true)`. Pass
+`true` as the fifth _Handle_ argument to force terminal output, or `false`
+to force redirected output.
+
+```php
+<?php
+use Aura\Cli\Stdio;
+use Aura\Cli\Stdio\Formatter;
+use Aura\Cli\Stdio\Handle;
+use Aura\Cli\Stdio\ProgressBar;
+
+$stdout = new Handle('php://memory', 'w+', null, null, false);
+$stdio = new Stdio(
+    new Handle('php://memory', 'r'),
+    $stdout,
+    new Handle('php://memory', 'w+'),
+    new Formatter
+);
+
+$now = 0;
+$clock = function () use (&$now) {
+    return $now;
+};
+
+$progress = new ProgressBar($stdio, 4, 10, $clock);
+$progress->start();
+$now = 8;
+$progress->finish();
+
+$stdout->rewind();
+echo $stdout->fread();
+// [==========] 100%  4/4  elapsed 0:08  left 0:00
+?>
+```
+
 ## Formatter Cheat Sheet
 
 On POSIX terminals, `<<markup>>` strings will change the display
