@@ -32,6 +32,14 @@ $stdio = $cli_factory->newStdio();
 $options = ['verbose,v'];
 $getopt = $context->getopt($options);
 
+// were the options passed correctly?
+if ($getopt->hasErrors()) {
+    foreach ($getopt->getErrors() as $error) {
+        $stdio->errln($error->getMessage());
+    }
+    exit(Status::USAGE);
+}
+
 // do we have a name to say hello to?
 $name = $getopt->get(1);
 if (! $name) {

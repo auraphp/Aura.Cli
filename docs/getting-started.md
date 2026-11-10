@@ -41,12 +41,15 @@ $env    = $context->env->get();
 $server = $context->server->get();
 $argv   = $context->argv->get();
 
-// equivalent to:
-// $value = isset($_ENV['key']) ? $_ENV['key'] : null;
+// the value of $_ENV['key'], or null if it is missing
 $value = $context->env->get('key');
 
-// equivalent to:
-// $value = isset($_ENV['key']) ? $_ENV['key'] : 'other_value';
+// the value of $_ENV['key'], or 'other_value' if it is missing
 $value = $context->env->get('key', 'other_value');
 ?>
 ```
+
+When a key is missing from the `$_ENV` copy, `$context->env->get()` also
+checks the process environment with `getenv()` before returning the
+alternative value. This finds environment variables even when `$_ENV` is not
+populated, for example when `variables_order` in `php.ini` leaves out `E`.
