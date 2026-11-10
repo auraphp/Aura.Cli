@@ -5,9 +5,13 @@
 ### Added
 
 - `Aura\Cli\Stdio\ProgressBar` draws a progress bar with the percentage,
-  step count, estimated time remaining, and elapsed time. Use `start()`,
-  `advance()`, `setProgress()`, and `finish()`. On a POSIX terminal it redraws
-  in place; otherwise only the final line is printed.
+  step count, elapsed time, and estimated time left. Use `start()`,
+  `advance()`, `setProgress()`, and `finish()`. On a terminal, including a
+  Windows console, it redraws in place; otherwise only the final line is
+  printed.
+- `Handle::isTty()` tells whether the handle is an interactive terminal,
+  using `stream_isatty()`. Unlike `isPosix()`, it is also true for a Windows
+  console. A new fifth constructor argument forces the value for testing.
 
 ## 4.0.0
 

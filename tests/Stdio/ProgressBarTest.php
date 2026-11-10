@@ -17,9 +17,9 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $this->time = 1000.0;
     }
 
-    protected function newProgressBar($total, $posix, $width = 10)
+    protected function newProgressBar($total, $tty, $width = 10)
     {
-        $this->stdout = new Handle('php://memory', 'w+', null, $posix);
+        $this->stdout = new Handle('php://memory', 'w+', null, null, $tty);
         $this->stdio = new Stdio(
             new Handle('php://memory', 'r+'),
             $this->stdout,
@@ -46,7 +46,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar = $this->newProgressBar(30, true);
         $bar->start();
 
-        $expect = "\r[>         ] 0%  0/30 remaining: --  elapsed: 0 sec.";
+        $expect = "\r[>         ] 0%  0/30  elapsed 0:00  left --";
         $this->assertSame($expect, $this->getOutput());
     }
 
@@ -57,8 +57,8 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $this->time += 10;
         $bar->advance(10);
 
-        $expect = "\r[>         ] 0%  0/30 remaining: --  elapsed: 0 sec."
-                . "\r[===>      ] 33%  10/30 remaining: 20 sec.  elapsed: 10 sec.";
+        $expect = "\r[>         ] 0%  0/30  elapsed 0:00  left --"
+                . "\r[===>      ] 33%  10/30  elapsed 0:10  left 0:20";
         $this->assertSame($expect, $this->getOutput());
         $this->assertSame(10, $bar->getProgress());
     }
@@ -69,9 +69,9 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar->start();
         $this->time += 100;
         $bar->advance();
-        $long = "[=====>    ] 50%  1/2 remaining: 100 sec.  elapsed: 100 sec.";
+        $long = "[=====>    ] 50%  1/2  elapsed 1:40  left 1:40";
         $bar->setProgress(0);
-        $short = "[>         ] 0%  0/2 remaining: --  elapsed: 100 sec.";
+        $short = "[>         ] 0%  0/2  elapsed 1:40  left --";
 
         $output = $this->getOutput();
         $lines = explode("\r", $output);
@@ -90,7 +90,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar->finish();
 
         $output = $this->getOutput();
-        $expect = "\r[==========] 100%  4/4 remaining: 0 sec.  elapsed: 8 sec."
+        $expect = "\r[==========] 100%  4/4  elapsed 0:08  left 0:00"
                 . PHP_EOL;
         $this->assertStringEndsWith($expect, $output);
         $this->assertSame(4, $bar->getProgress());
@@ -116,7 +116,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
 
         $this->time += 6;
         $bar->finish();
-        $expect = "[==========] 100%  3/3 remaining: 0 sec.  elapsed: 6 sec."
+        $expect = "[==========] 100%  3/3  elapsed 0:06  left 0:00"
                 . PHP_EOL;
         $this->assertSame($expect, $this->getOutput());
     }
@@ -129,7 +129,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $output = $this->getOutput();
         $this->assertSame(2, substr_count($output, "\r"));
         $this->assertStringEndsWith(
-            "[=====>    ] 50%  5/10 remaining: 0 sec.  elapsed: 0 sec.",
+            "[=====>    ] 50%  5/10  elapsed 0:00  left 0:00",
             $output
         );
     }
@@ -148,7 +148,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar = $this->newProgressBar(0, true);
         $bar->start();
         $this->assertSame(
-            "\r[==========] 100%  0/0 remaining: --  elapsed: 0 sec.",
+            "\r[==========] 100%  0/0  elapsed 0:00  left --",
             $this->getOutput()
         );
     }
@@ -162,8 +162,8 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $second->start();
         $this->time += 5;
 
-        $this->assertStringEndsWith('elapsed: 55 sec.', $first->render());
-        $this->assertStringEndsWith('elapsed: 5 sec.', $second->render());
+        $this->assertStringContainsString('elapsed 0:55', $first->render());
+        $this->assertStringContainsString('elapsed 0:05', $second->render());
     }
 
     public function testRestart()
@@ -176,7 +176,55 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar->start();
 
         $this->assertSame(0, $bar->getProgress());
-        $this->assertStringEndsWith('elapsed: 0 sec.', $bar->render());
+        $this->assertStringContainsString('elapsed 0:00', $bar->render());
+    }
+
+    public function testLongTimes()
+    {
+        $bar = $this->newProgressBar(4, false);
+        $bar->start();
+        $this->time += 3725;
+        $bar->advance();
+
+        $this->assertStringEndsWith(
+            'elapsed 1:02:05  left 3:06:15',
+            $bar->render()
+        );
+    }
+
+    public function testDefaultWidthFitsEightyColumns()
+    {
+        $stdio = new Stdio(
+            new Handle('php://memory', 'r+'),
+            new Handle('php://memory', 'w+', null, null, false),
+            new Handle('php://memory', 'w+'),
+            new Formatter
+        );
+        $time = 0;
+        $clock = function () use (&$time) {
+            return $time;
+        };
+        $bar = new ProgressBar($stdio, 99999, 20, $clock);
+        $bar->start();
+        $time = 35999;
+        $bar->advance();
+
+        $this->assertLessThan(80, strlen($bar->render()));
+    }
+
+    public function testPosixWithoutTtyDoesNotRedraw()
+    {
+        $this->stdout = new Handle('php://memory', 'w+', null, true, false);
+        $stdio = new Stdio(
+            new Handle('php://memory', 'r+'),
+            $this->stdout,
+            new Handle('php://memory', 'w+'),
+            new Formatter
+        );
+        $bar = new ProgressBar($stdio, 2);
+        $bar->start();
+        $bar->advance();
+        $this->assertSame('', $this->getOutput());
     }
 
     public function testGetTotal()
@@ -201,7 +249,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
     {
         $stdio = new Stdio(
             new Handle('php://memory', 'r+'),
-            new Handle('php://memory', 'w+', null, false),
+            new Handle('php://memory', 'w+', null, null, false),
             new Handle('php://memory', 'w+'),
             new Formatter
         );
@@ -210,7 +258,7 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $bar->advance();
 
         $this->assertStringStartsWith(
-            '[===============>              ] 50%  1/2',
+            '[==========>         ] 50%  1/2',
             $bar->render()
         );
     }

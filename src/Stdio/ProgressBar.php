@@ -15,11 +15,15 @@ use InvalidArgumentException;
  *
  * Draws a progress bar on standard output, such as:
  *
- *     [==========>                   ] 33%  10/30 remaining: 20 sec.  elapsed: 10 sec.
+ *     [======>             ] 33%  10/30  elapsed 0:10  left 0:20
  *
- * On a POSIX terminal the bar is redrawn in place on each update. Otherwise
- * (for example when output is piped to a file) the updates are skipped and
- * only the final line is printed by `finish()`.
+ * On a terminal (including a Windows console) the bar is redrawn in place on
+ * each update. Otherwise (for example when output is piped to a file) the
+ * updates are skipped and only the final line is printed by `finish()`.
+ *
+ * With the default width the line stays under 80 characters for totals up
+ * to 99,999 and times under 10 hours. A line wider than the terminal wraps,
+ * and then cannot be redrawn in place.
  *
  * @package Aura.Cli
  *
@@ -118,7 +122,7 @@ class ProgressBar
     public function __construct(
         Stdio $stdio,
         $total,
-        $width = 30,
+        $width = 20,
         ?callable $clock = null
     ) {
         $total = (int) $total;
@@ -276,16 +280,39 @@ class ProgressBar
                  : max(0, $this->now() - $this->start_time);
 
         if ($this->progress > 0) {
-            $remaining = (int) round(
+            $left = $this->formatTime(
                 $elapsed / $this->progress * ($this->total - $this->progress)
             );
-            $remaining .= ' sec.';
         } else {
-            $remaining = '--';
+            $left = '--';
         }
 
         return "[{$bar}] {$percent}%  {$this->progress}/{$this->total}"
-             . " remaining: {$remaining}  elapsed: " . (int) $elapsed . ' sec.';
+             . "  elapsed " . $this->formatTime($elapsed)
+             . "  left {$left}";
+    }
+
+    /**
+     *
+     * Formats a number of seconds as m:ss, or h:mm:ss from one hour.
+     *
+     * @param float $seconds The number of seconds.
+     *
+     * @return string
+     *
+     */
+    protected function formatTime($seconds)
+    {
+        $seconds = (int) round($seconds);
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+        $seconds = $seconds % 60;
+
+        if ($hours > 0) {
+            return sprintf('%d:%02d:%02d', $hours, $minutes, $seconds);
+        }
+
+        return sprintf('%d:%02d', $minutes, $seconds);
     }
 
     /**
@@ -317,7 +344,7 @@ class ProgressBar
      */
     protected function isTerminal()
     {
-        return (bool) $this->stdio->getStdout()->isPosix();
+        return (bool) $this->stdio->getStdout()->isTty();
     }
 
     /**

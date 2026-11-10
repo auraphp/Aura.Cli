@@ -68,7 +68,7 @@ $progress->finish();
 
 While it runs, the bar is redrawn in place on a single line:
 
-    [==========>                   ] 33%  10/30 remaining: 20 sec.  elapsed: 10 sec.
+    [======>             ] 33%  10/30  elapsed 0:10  left 0:20
 
 The _ProgressBar_ methods are ...
 
@@ -91,29 +91,43 @@ Calling `finish()` a second time does nothing until you call `start()` again,
 which resets the bar and its timer. Each bar keeps its own start time, so you
 can run several bars one after another.
 
-The "remaining" estimate is based on the average time per step so far, and
-shows `--` until the first step is done. A total of `0` draws a full bar.
+Times are shown as `m:ss`, or `h:mm:ss` from one hour. The "left" estimate is
+based on the average time per step so far, and shows `--` until the first
+step is done. A total of `0` draws a full bar.
 
 ### Width
 
-The bar is 30 characters wide by default; pass a different width as the third
+The bar is 20 characters wide by default; pass a different width as the third
 constructor argument:
 
 ```php
 <?php
-$progress = new ProgressBar($stdio, count($files), 50);
+$progress = new ProgressBar($stdio, count($files), 40);
 ?>
 ```
+
+The whole line is the bar width plus the text after it. With the default
+width it stays under 80 characters for totals up to 99,999 and times under 10
+hours. Keep the line narrower than the terminal: a line that wraps cannot be
+redrawn in place, so each update would print a new row instead.
 
 A negative total, or a width less than 1, throws an
 `InvalidArgumentException`.
 
 ### Terminals and Redirected Output
 
-When standard output is not a POSIX terminal (for example, when it is piped to
-a file or another program, or on Windows), the in-place redraws are skipped
-and `finish()` prints only the final line, so logs are not filled with
-carriage returns.
+The bar is redrawn in place when standard output is an interactive terminal,
+including a Windows console; it checks this with `Handle::isTty()`, which
+uses `stream_isatty()`. When standard output is not a terminal (for example,
+when it is piped to a file or another program), the in-place redraws are
+skipped and `finish()` prints only the final line, so logs are not filled with
+carriage returns. Some terminal emulators that are not native consoles, such
+as mintty in Git Bash, are not detected as terminals, so they also get only
+the final line.
+
+Note that `Handle::isTty()` is separate from `Handle::isPosix()`: the
+formatter markup is still only converted to control codes on POSIX
+terminals, and stripped on Windows.
 
 On a terminal the bar redraws its own line with a carriage return, so do not
 print anything else to the terminal between `start()` and `finish()`; the
@@ -125,7 +139,7 @@ bar. Print messages before `start()` or after `finish()` instead.
 To test code that uses a progress bar, write to `php://memory` handles and pass
 a clock as the fourth constructor argument. The clock is a callable that
 returns the current time in seconds; it defaults to `microtime(true)`. Pass
-`true` as the fourth _Handle_ argument to force terminal output, or `false`
+`true` as the fifth _Handle_ argument to force terminal output, or `false`
 to force redirected output.
 
 ```php
@@ -135,7 +149,7 @@ use Aura\Cli\Stdio\Formatter;
 use Aura\Cli\Stdio\Handle;
 use Aura\Cli\Stdio\ProgressBar;
 
-$stdout = new Handle('php://memory', 'w+', null, false);
+$stdout = new Handle('php://memory', 'w+', null, null, false);
 $stdio = new Stdio(
     new Handle('php://memory', 'r'),
     $stdout,
@@ -155,7 +169,7 @@ $progress->finish();
 
 $stdout->rewind();
 echo $stdout->fread();
-// [==========] 100%  4/4 remaining: 0 sec.  elapsed: 8 sec.
+// [==========] 100%  4/4  elapsed 0:08  left 0:00
 ?>
 ```
 
