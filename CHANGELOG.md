@@ -1,15 +1,39 @@
 # CHANGELOG
 
-## Unreleased
+## 4.0.0
+
+Requires PHP 7.2 or later; tested up to PHP 8.2.
+
+### Added
+
+- `Help::addSection()` and `Help::getSections()` append custom sections, such
+  as EXAMPLES or SEE ALSO, to the help output. They are printed after the
+  options in the order they were added. The text may be a string or an array
+  of lines, and adding a section with an existing title replaces it.
+
+### Fixed
+
+- A short option with a required parameter now takes the next argument as its
+  value even when that argument begins with `-`, so `-b -5` sets `-b` to `-5`.
+- A short option that takes a parameter now captures a next argument of `0` or
+  `'0'` as its value instead of ignoring it.
+- A short option with an optional parameter inside a cluster, such as `-ab`,
+  is now set.
+- `parseInput()` treats `null` elements as empty strings, avoiding the
+  deprecation notices PHP 8.1 raises when `null` is passed to string
+  functions.
+
+### Removed
+
+- The `config/` directory and its `Aura\Cli\_Config\Common` Aura.Di container
+  config, along with the `extra.aura` block in `composer.json`. Wire the
+  objects yourself, or use `CliFactory`.
+- The hand-rolled `autoload.php`; use the Composer autoloader.
 
 ### Changed
 
-- Removed the `config/` directory and its `Aura\Cli\_Config\Common` Aura.Di
-  container config, along with the `extra.aura` block in `composer.json`.
-  Wire the objects yourself, or use `CliFactory`.
-- Removed the hand-rolled `autoload.php`; use the Composer autoloader.
-- Moved the documentation out of the README into `docs/`.
-- Renamed `CHANGES.md` to `CHANGELOG.md`.
+- The documentation moved out of the README into `docs/`.
+- `CHANGES.md` is renamed to `CHANGELOG.md`.
 
 ## 4.0.0-alpha1
 
