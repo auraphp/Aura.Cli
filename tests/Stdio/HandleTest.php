@@ -27,4 +27,17 @@ class HandleTest extends \PHPUnit\Framework\TestCase
         $handle = new Handle('php://memory', 'w+', null, false);
         $this->assertFalse($handle->isPosix());
     }
+
+    public function testForceTty()
+    {
+        $handle = new Handle('php://memory', 'w+', 'win', null, true);
+        $this->assertFalse($handle->isPosix());
+        $this->assertTrue($handle->isTty());
+    }
+
+    public function testMemoryIsNotTty()
+    {
+        $handle = new Handle('php://memory', 'w+');
+        $this->assertFalse($handle->isTty());
+    }
 }

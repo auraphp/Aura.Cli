@@ -61,3 +61,44 @@ if ($getopt->get('--verbose')) {
 exit(Status::SUCCESS);
 ?>
 ```
+
+## Showing Progress
+
+For a command that works through a list of items, use a
+[_ProgressBar_](stdio.md#progress-bar) to show how far along it is. Save the
+following in a file named `count-lines` and invoke it with
+`php count-lines file1 [file2 ...]`.
+
+```php
+<?php
+use Aura\Cli\CliFactory;
+use Aura\Cli\Status;
+use Aura\Cli\Stdio\ProgressBar;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$cli_factory = new CliFactory;
+$context = $cli_factory->newContext($GLOBALS);
+$stdio = $cli_factory->newStdio();
+
+// all arguments after the script name are files
+$files = array_slice($context->argv->get(), 1);
+if (! $files) {
+    $stdio->errln("Please give at least one file.");
+    exit(Status::USAGE);
+}
+
+$lines = 0;
+$progress = new ProgressBar($stdio, count($files));
+$progress->start();
+foreach ($files as $file) {
+    $lines += count(file($file));
+    $progress->advance();
+}
+$progress->finish();
+
+// print the result after finish(), so the bar does not overwrite it
+$stdio->outln("{$lines} lines in " . count($files) . " files.");
+exit(Status::SUCCESS);
+?>
+```

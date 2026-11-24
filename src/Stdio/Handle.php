@@ -64,6 +64,15 @@ class Handle
 
     /**
      *
+     * Is this an interactive terminal (on any OS)?
+     *
+     * @var bool
+     *
+     */
+    protected $tty;
+
+    /**
+     *
      * Constructor.
      *
      * @param string $name The resource to open, typically a PHP stream
@@ -75,14 +84,22 @@ class Handle
      *
      * @param bool $posix Force this POSIX flag; generally for testing.
      *
+     * @param bool $tty Force this terminal flag; generally for testing.
+     *
      */
-    public function __construct($name, $mode, $php_os = null, $posix = null)
-    {
+    public function __construct(
+        $name,
+        $mode,
+        $php_os = null,
+        $posix = null,
+        $tty = null
+    ) {
         $this->name = $name;
         $this->mode = $mode;
         $this->resource = fopen($this->name, $this->mode);
         $this->setPhpOs($php_os);
         $this->setPosix($posix);
+        $this->setTty($tty);
     }
 
     /**
@@ -136,6 +153,31 @@ class Handle
             $this->posix = posix_isatty($this->resource);
             error_reporting($level);
         }
+    }
+
+    /**
+     *
+     * Sets `$tty`.
+     *
+     * @param mixed $tty If boolean, forces the $tty value; otherwise, uses
+     * `stream_isatty()` to auto-determine the value.
+     *
+     * @return null
+     *
+     */
+    protected function setTty($tty)
+    {
+        if (is_bool($tty)) {
+            $this->tty = $tty;
+            return;
+        }
+
+        // silence stream_isatty() errors regarding non-standard resources,
+        // e.g. php://memory
+        $level = error_reporting(0);
+        $this->tty = is_resource($this->resource)
+                  && stream_isatty($this->resource);
+        error_reporting($level);
     }
 
     /**
@@ -237,5 +279,19 @@ class Handle
     public function isPosix()
     {
         return $this->posix;
+    }
+
+    /**
+     *
+     * Does the resource represent an interactive terminal? Unlike
+     * `isPosix()`, this is also true for a Windows console. It says nothing
+     * about support for VT100 formatting codes.
+     *
+     * @return bool
+     *
+     */
+    public function isTty()
+    {
+        return $this->tty;
     }
 }
