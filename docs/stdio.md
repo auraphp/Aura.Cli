@@ -87,8 +87,9 @@ The _ProgressBar_ methods are ...
   without printing it.
 
 Calling `advance()` or `setProgress()` before `start()` starts the bar.
-Calling `finish()` a second time does nothing until you call `start()` again,
-which resets the bar and its timer. Each bar keeps its own start time, so you
+Once the bar is finished, calling `advance()`, `setProgress()`, or `finish()`
+again does nothing until you call `start()` again, which resets the bar and
+its timer. Each bar keeps its own start time, so you
 can run several bars one after another.
 
 Times are shown as `m:ss`, or `h:mm:ss` from one hour. The "left" estimate is

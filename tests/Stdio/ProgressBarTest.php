@@ -106,6 +106,18 @@ class ProgressBarTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($once, $this->getOutput());
     }
 
+    public function testUpdatesAfterFinishDoNothing()
+    {
+        $bar = $this->newProgressBar(4, true);
+        $bar->start();
+        $bar->finish();
+        $once = $this->getOutput();
+        $bar->advance();
+        $bar->setProgress(1);
+        $this->assertSame($once, $this->getOutput());
+        $this->assertSame(4, $bar->getProgress());
+    }
+
     public function testNonTerminalSkipsRedrawsAndPrintsFinalLine()
     {
         $bar = $this->newProgressBar(3, false);

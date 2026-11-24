@@ -183,6 +183,7 @@ class ProgressBar
      *
      * Sets the number of steps done and redraws the bar; starts the bar if
      * it has not been started. The value is kept between 0 and the total.
+     * Does nothing once the bar is finished, until it is restarted.
      *
      * @param int $progress The number of steps done.
      *
@@ -191,6 +192,10 @@ class ProgressBar
      */
     public function setProgress($progress)
     {
+        if ($this->finished) {
+            return;
+        }
+
         if ($this->start_time === null) {
             $this->start();
         }
